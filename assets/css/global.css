@@ -1,0 +1,12 @@
+      /* Styles for Safari */
+       @media (min-width: 1920px) and (max-width: 10000.99px) { .is-safari .header_parallax__container  {   margin-top: -113px; }}
+       @media (min-width: 1600px) and (max-width: 1919.99px) { .is-safari .header_parallax__container  {   margin-top: -113px; } .is-safari .hero-fullscreen h1 {font-size: 80px;}}
+       @media (min-width: 1400px) and (max-width: 1599.99px) { .is-safari .header_parallax__container  {   margin-top: -75px; }}
+       @media (min-width: 1200px) and (max-width: 1399.99px) { .is-safari .header_parallax__container  {   margin-top: -80px; }}
+       @media (min-width: 1023px) and (max-width: 1199.99px) { .is-safari .header_parallax__container  {   margin-top: -71px; }}
+       @media (min-width:769px) and (max-width:1022px) { .is-safari .header_parallax__container  {   margin-top: -68px !important; }}
+       @media (max-width:767px) { .is-safari .header_parallax__container  {   margin-top: -68px !important; }}
+
+       @media (max-device-width:600px) and (-webkit-device-pixel-ratio: 3) { .header_parallax__container  {   margin-top: -68px !important; }}
+       @media (max-device-width:600px) and (-webkit-device-pixel-ratio: 2) { .header_parallax__container  {   margin-top: -62px !important; }}
+     

@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://www.artic.com.qa/sitemap

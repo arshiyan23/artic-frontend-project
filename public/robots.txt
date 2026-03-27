@@ -1,0 +1,4 @@
+User-agent: *
+Disallow: 
+Disallow: /cgi-bin/
+Sitemap: https://red-mushroom-0be886010.5.azurestaticapps.net/sitemap
