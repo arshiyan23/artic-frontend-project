@@ -137,7 +137,8 @@
           </div>
           <div class="col-xxl-6 col-xl-6 col-md-6 col-sm-12">
             <ul class="nav social-media justify-content-md-between" role="none">
-              <template v-for="(social, index) in social.linkset[0].item" :key="index">
+            <template v-if="social && social.linkset && social.linkset.length">
+            <template v-for="(item, index) in social?.linkset?.[0]?.item || []" :key="index">
                 <li class="d-flex seprator-li" v-if="index !== 0">|</li>
                 <li class="d-flex">
                   <NuxtLink :to="social.href || '/'" target="_blank"
@@ -147,6 +148,7 @@
                     <span class="sr-only">&nbsp;</span>
                   </NuxtLink>
                 </li>
+                </template>
               </template>
             </ul>
           </div>
