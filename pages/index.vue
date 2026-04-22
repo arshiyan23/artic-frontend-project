@@ -1,7 +1,9 @@
 <template>
   <Head>
-      <Title>{{ homepage.data.metatag[0].attributes.content }}</Title>
-      <Meta name="description" :content="homepage.data.metatag[1].attributes.content" />
+      <Title>
+        {{ homepage?.data?.metatag?.[0]?.attributes?.content || '' }}
+      </Title>
+      <Meta name="description" :content="homepage?.data?.metatag?.[1]?.attributes?.content || ''"/>
     </Head>
     
   <div class="homemain" ref="main">
@@ -55,7 +57,7 @@
                     <div class="post-box aos-init">
                       <div class="text-start">
                         <h4 class="arfs-7 mb-0 text-secondary color-white pb-2 pt-2 introduction_text" tabindex="0">
-                          {{homepage.data.field_sections[0].field_title}}</h4>
+                          {{ homepage?.data?.field_sections?.[0]?.field_title || '' }}</h4>
                       </div>
 
                       <div class="lineleft gsmHeightZF">
@@ -70,7 +72,7 @@
                       <div class="col-lg-12">
                         <div class="post-box border-bottom border-transparent">
                           <p tabindex="0" class="animated-text gsapTextFade introduction-heading">
-                            {{ homepage.data.field_sections[0].field_description }}
+                            {{ homepage?.data?.field_sections?.[0]?.field_title || '' }}
                           </p>
                           <div class="d-flex justify-content-left align-self-start ">
                             <NuxtLink to="/about-us" class="know-more"  data-aos-delay="400"
@@ -139,7 +141,7 @@
             <!-- Our Core Businesses -->
             <!-- =================== -->
             <section id="featured-services" class="featured-services pb-0 pt-0">
-              <div class="container">
+              <div v-if="businesses?.data?.length" class="container">
                 <div class="row gy-4">
                   <!-- above section bottom part of line -->
                   <div class="text-start ">
@@ -163,9 +165,9 @@
 
                     <div class="service-item position-relative  gsapY100">
                       <div class="pl-0 ps-md-2 " data-aos-anchor-placement="bottom-bottom">
-                        <h4 tabindex="0" class="ardf-2">{{ businesses.data[0].name }}</h4>
+                        <h4 tabindex="0" class="ardf-2">{{ businesses?.data?.[0]?.name || '' }}</h4>
                         <p tabindex="0" class="arfs-6" role="heading" aria-level="2">{{
-                          businesses.data[0].description.value
+                          businesses?.data?.[0]?.description?.value || ''
                           }}</p>
                       </div>
                     </div>
@@ -174,9 +176,9 @@
                   <div class="col-xl-3 col-md-6 d-flex fs gsapY200">
                     <div class="service-item position-relative border-start ">
                       <div class="service-data " data-aos-anchor-placement="bottom-bottom">
-                        <h4 tabindex="0" class="ardf-2">{{ businesses.data[1].name }}</h4>
+                        <h4 tabindex="0" class="ardf-2">{{ businesses?.data?.[1]?.name || '' }}</h4>
                         <p tabindex="0" class="arfs-6" role="heading" aria-level="2">{{
-                          businesses.data[1].description.value
+                          businesses?.data?.[1]?.description?.value || ''
                           }}</p>
                       </div>
                     </div>
@@ -185,9 +187,9 @@
                   <div class="col-xl-3 col-md-6 d-flex fs gsapY300">
                     <div class="service-item position-relative border-start ">
                       <div class="service-data " data-aos-anchor-placement="bottom-bottom">
-                        <h4 tabindex="0" class="ardf-2">{{ businesses.data[2].name }}</h4>
+                        <h4 tabindex="0" class="ardf-2">{{ businesses?.data?.[2]?.name || '' }}</h4>
                         <p tabindex="0" class="arfs-6" role="heading" aria-level="2">{{
-                          businesses.data[2].description.value
+                          businesses?.data?.[2]?.description?.value || ''
                           }}</p>
                       </div>
                     </div>
@@ -196,9 +198,9 @@
                   <div class="col-xl-3 col-md-6 d-flex fs gsapY400">
                     <div class="service-item position-relative border-start ">
                       <div class="service-data " data-aos-anchor-placement="bottom-bottom">
-                        <h4 tabindex="0" class="ardf-2">{{ businesses.data[3].name }}</h4>
+                        <h4 tabindex="0" class="ardf-2">{{ businesses?.data?.[3]?.name || '' }}</h4>
                         <p tabindex="0" class="arfs-6" role="heading" aria-level="2">{{
-                          businesses.data[3].description.value
+                          businesses?.data?.[3]?.description?.value || ''
                           }}</p>
                       </div>
                     </div>
@@ -342,12 +344,16 @@
               <div class="container">
                 <h2 tabindex="0" class="arfs-2 text-sm-center gsapYPartners200"
                   style="background-color: #E09235; color: #ffffff;">Our Partners</h2>
-                <div class="our-partners-boxes">
-                  <div tabindex="0" class="up-single-box gsapYPartners200" v-for="(partner,index) in partners.data"
-                    :key="index" :aria-label="partner.field_partners_logo.field_media_image?.meta.alt">
-                    <NuxtImg role="img"  :quality="75" loading="lazy" class="img-fluid"
+                <div class="our-partners-boxes" v-if="partners?.data?.length">
+                  <div
+                    v-for="(partner,index) in partners.data"
+                    :key="index"
+                    class="up-single-box"
+                  >
+                    <NuxtImg
                       :src="imgBaseURL + partner?.field_partners_logo?.field_media_image?.uri?.url"
-                      :alt="partner.field_partners_logo.field_media_image?.meta.alt" />
+                      :alt="partner?.field_partners_logo?.field_media_image?.meta?.alt"
+                    />
                   </div>
                 </div>
               </div>
@@ -477,14 +483,14 @@
 
                   <div class="col-lg-9 ps-lg-0">
                     <div class="row">
-                      <div class="col-lg-6 aos-init mt-lg-5 mt-3 pe-lg-4">
+                      <div class="col-lg-6 aos-init mt-lg-5 mt-3 pe-lg-4 v-if="legacyy?.data?.length > 1">
                         <div class="post-box">
                           <div class="post-img pb-4 pb-lg-5 gsapPaperSlideEffect vice-chairman-IMG">
                             <NuxtImg role="img" tabindex="0" width="100%" height="100%" loading="lazy"
                               aria-label="Vice Chairman Image"
-                              :src="legacyy.data[1].field_our_legacy_member_image.field_media_image?.image_style_uri?.home_our_leadership"
+                              :src="legacyy?.data?.[1]?.field_our_legacy_member_image.field_media_image?.image_style_uri?.home_our_leadership"
                               class="img-fluid"
-                              :alt="legacyy.data[1].field_our_legacy_member_image.field_media_image?.meta?.alt" />
+                              :alt="legacyy?.data?.[1]?.field_our_legacy_member_image.field_media_image?.meta?.alt" />
                           </div>
                           <p tabindex="0" class="pt-0 mt-0  ">{{ legacyy.data[1].field_message }}</p>
                           <div class="continue-reading text-left mt-3">
@@ -501,7 +507,7 @@
                           </div>
                         </div>
                       </div>
-                      <div class="col-lg-6 aos-init mt-lg-5 mt-3 ps-lg-4">
+                      <div class="col-lg-6 aos-init mt-lg-5 mt-3 ps-lg-4 v-if="legacyy?.data?.length > 1"">
                         <div class="post-box">
                           <div class="post-img pb-4 pb-lg-5  gsapPaperSlideEffect ceo-IMG">
                             <NuxtImg role="img" tabindex="0" loading="lazy" class="img-fluid"
@@ -526,7 +532,7 @@
                         </div>
                       </div>
                       <div class="row">
-                        <div class="col-lg-6 aboutusbtn d-flex pt-5 justify-content-lg-end justify-sm-start ">
+                        <div class="col-lg-6 aboutusbtn d-flex pt-5 justify-content-lg-end justify-sm-start v-if="legacyy?.data?.length > 1">
                           <NuxtLink to="/about-us" class="btn-white align-self-start me-lg-5">
                             <span>More About Us</span>
                             <i class="bi bi-arrow-right" role="presentation"></i>
@@ -640,7 +646,7 @@
    <div id="globalPresense">
     <Popup :isVisible="isOpen" class="globeModal" @close="closePopup1" tabindex="0">
       <div class="row globpopup">
-        <div class="col-xxl-6 col-xl-6 col-lg-6 col-md-12 col-sm-12 popupglob">
+        <div class="col-xxl-6 col-xl-6 col-lg-6 col-md-12 col-sm-12 popupglob v-if="legacyy?.data?.length > 1">
           <h1 class="fs-4 text-primary mb-4" tabindex="0">{{ selectedMapData.name }}</h1>
           <!-- <UButton color="gray" variant="ghost" icon="i-heroicons-x-mark-20-solid" class="-my-1" @click="isOpen = false" /> -->
           <p tabindex="0">{{ selectedMapData.city }}, {{ selectedMapData.country }}</p>
@@ -648,11 +654,11 @@
           <a :href="selectedMapData.website?.uri" target="_blank" class="fs-6 color-primary font-weight-medium">Visit
             Website</a>
           <div class="nextpreviousbutton">
-            <button @click="movePrev"><img src="/assets/icons/arrow-bl-media.svg" rel="preload"  ></button>
-            <button @click="moveNext"><img src="/assets/icons/arrow-br-media.svg" rel="preload"  ></button>
+            <button @click="movePrev"><img src="/assets/icons/arrow-bl-media.svg" rel="preload v-if="legacyy?.data?.length > 1"  ></button>
+            <button @click="moveNext"><img src="/assets/icons/arrow-br-media.svg" rel="preload v-if="legacyy?.data?.length > 1"  ></button>
           </div>
         </div>
-        <div class="col-xxl-6 col-xl-6 col-lg-6 col-md-12 col-sm-12 img-popup" tabindex="0">
+        <div class="col-xxl-6 col-xl-6 col-lg-6 col-md-12 col-sm-12 img-popup" tabindex="0 v-if="legacyy?.data?.length > 1">
           <div class="globe_img_container" :style="{ backgroundImage: `url(${selectedMapData.image_url})` }">
           </div>
           <!-- <img :src="selectedMapData.image_url" :alt="selectedMapData.image_alt" class="h-100" /> -->
@@ -786,12 +792,29 @@
     },
     body: combinedReqData
   })
-  homepage.value = JSON.parse(combined.value.herobanner.body);
-  portfolios.value = JSON.parse(combined.value.portfolio.body);
-  businesses.value = JSON.parse(combined.value.ourcorebusinesses.body);
-  news.value = JSON.parse(combined.value.news.body);
-  partners.value = JSON.parse(combined.value.ourpartners.body);
-  legacyy.value = JSON.parse(combined.value.boardmembers.body);
+homepage.value = combined.value?.herobanner?.body
+  ? JSON.parse(combined.value.herobanner.body)
+  : { data: {} };
+
+portfolios.value = combined.value?.portfolio?.body
+  ? JSON.parse(combined.value.portfolio.body)
+  : { data: [] };
+
+businesses.value = combined.value?.ourcorebusinesses?.body
+  ? JSON.parse(combined.value.ourcorebusinesses.body)
+  : { data: [] };
+
+news.value = combined.value?.news?.body
+  ? JSON.parse(combined.value.news.body)
+  : { data: [] };
+
+partners.value = combined.value?.ourpartners?.body
+  ? JSON.parse(combined.value.ourpartners.body)
+  : { data: [] };
+
+legacyy.value = combined.value?.boardmembers?.body
+  ? JSON.parse(combined.value.boardmembers.body)
+  : { data: [] };
 
   // Refs
   const title = ref < HTMLElement | null > (null);
