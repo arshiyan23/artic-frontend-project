@@ -434,7 +434,7 @@
                       <div class="col-lg-7">
                         <div class="d-flex h-100 align-items-end w-100">
                           <div class="post-box mt-5 mb-sm-0 mb-4 h-auto w-100 strategic_approach_content">
-                            <div v-for="(strategic,index) in homepage.data.field_sections[4].field_startegic_approach"
+                            <div v-for="(strategic,index) in homepage?.data?.field_sections?.[4].field_startegic_approach"
                               :key="index">
                               <p tabindex="0" class="mt-5 pt-1 ">
                                 {{ strategic }}
@@ -481,20 +481,20 @@
                     </div>
                   </div>
 
-                  <div class="col-lg-9 ps-lg-0">
+                  <div  class="col-lg-9 ps-lg-0"  v-if="legacyy?.data?.length >= 3">
                     <div class="row">
                       <div class="col-lg-6 aos-init mt-lg-5 mt-3 pe-lg-4 v-if="legacyy?.data?.length > 1">
                         <div class="post-box">
                           <div class="post-img pb-4 pb-lg-5 gsapPaperSlideEffect vice-chairman-IMG">
                             <NuxtImg role="img" tabindex="0" width="100%" height="100%" loading="lazy"
                               aria-label="Vice Chairman Image"
-                              :src="legacyy?.data?.[1]?.field_our_legacy_member_image.field_media_image?.image_style_uri?.home_our_leadership"
+                              :src="legacyy?.data?.[1]?.field_our_legacy_member_image.field_media_image?.image_style_uri?.home_our_leadership || ''"
                               class="img-fluid"
                               :alt="legacyy?.data?.[1]?.field_our_legacy_member_image.field_media_image?.meta?.alt" />
                           </div>
-                          <p tabindex="0" class="pt-0 mt-0  ">{{ legacyy.data[1].field_message }}</p>
+                          <p tabindex="0" class="pt-0 mt-0  ">{{ legacyy?.data?.[1]?.field_message || '' }}</p>
                           <div class="continue-reading text-left mt-3">
-                            <button @click="showPopup(legacyy.data[1], $event)"
+                            <button @click="showPopup(legacyy?.data?.[1], $event)"
                               aria-label="Click here to Continue reading" class="d-flex align-items-center">
                               Continue reading
                               <img width="12" height="11" src="/assets/img/continue-reading-arrow.svg"
@@ -502,8 +502,8 @@
                             </button>
                           </div>
                           <div class="member-info px-0 text-end pt-4 pt-lg-5 "tabindex="0">
-                            <h5>{{ legacyy.data[1].field_board_member_name }}</h5><span>{{
-                              legacyy.data[1].field_designation}}</span>
+                            <h5>{{ legacyy?.data?.[1].field_board_member_name }}</h5><span>{{
+                              legacyy?.data?.[1].field_designation}}</span>
                           </div>
                         </div>
                       </div>
@@ -511,22 +511,22 @@
                         <div class="post-box">
                           <div class="post-img pb-4 pb-lg-5  gsapPaperSlideEffect ceo-IMG">
                             <NuxtImg role="img" tabindex="0" loading="lazy" class="img-fluid"
-                              :src="legacyy.data[2].field_our_legacy_member_image.field_media_image?.image_style_uri?.home_our_leadership"
+                              :src="legacyy?.data?.[2].field_our_legacy_member_image.field_media_image?.image_style_uri?.home_our_leadership || ''"
                               :aria-label="'Managing Director & CEO Image'"
-                              :alt="legacyy.data[2].field_our_legacy_member_image.field_media_image?.meta?.alt" />
+                              :alt="legacyy?.data?.[2].field_our_legacy_member_image.field_media_image?.meta?.alt" />
                           </div>
 
-                          <p tabindex="0" class="pt-0 mt-0  " >{{ legacyy.data[2].field_message }}</p>
+                          <p tabindex="0" class="pt-0 mt-0  " >{{ legacyy?.data?.[2].field_message }}</p>
                           <div class="continue-reading text-left mt-3" >
                             <button  tabindex="0" aria-label="Click here to Continue reading"
-                              @click="showPopup(legacyy.data[2], $event)" class="d-flex align-items-center">
+                              @click="showPopup(legacyy?.data?.[2], $event)" class="d-flex align-items-center">
                               Continue reading
                               <img src="/assets/img/continue-reading-arrow.svg" alt="" class="ml-2" rel="preload"  />
                             </button>
                           </div>
                           <div class="member-info px-0 text-end pt-3 pt-lg-5 "  tabindex="0">
-                            <h5>{{ legacyy.data[2].field_board_member_name }}</h5>
-                            <span>{{ legacyy.data[2].field_designation }}</span>
+                            <h5>{{ legacyy?.data?.[2].field_board_member_name }}</h5>
+                            <span>{{ legacyy?.data?.[2].field_designation }}</span>
                           </div>
 
                         </div>

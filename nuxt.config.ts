@@ -23,7 +23,7 @@ export default defineNuxtConfig({
     public: {
       API_BASE_URL: process.env.API_BASE_URL || 'https://artic-apis.ddev.site',
       IMG_BASE_URL: process.env.IMG_BASE_URL || 'https://artic-apis.ddev.site',
-      FRONTEND_BASE_URL: process.env.FRONTEND_BASE_URL || 'http://localhost:3004',
+      FRONTEND_BASE_URL: process.env.FRONTEND_BASE_URL || 'http://localhost:3001',
       API_AUTH_KEY: process.env.API_AUTH_KEY || '',
       gtagId: 'G-TTNXS1ZH7X'
     }
