@@ -73,7 +73,7 @@ const scrollToTop = () => {
         <!-- SITE MENU -->
         <ul>
           <li
-            v-for="(fMenu, index) in (footerMenu?.linkset?.?.item || [])"
+            v-for="(fMenu, index) in (footerMenu?.linkset?.item || [])"
             :key="index"
           >
             <NuxtLink :to="fMenu.href">

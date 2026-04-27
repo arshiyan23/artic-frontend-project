@@ -39,6 +39,7 @@
                         </h2>
                       </div>
                       <table class="w-100">
+                        <tbody>
                         <tr>
                           <td tabindex="0">
                             <p>Author: {{pressRelease?.data?.field_author}}</p>
@@ -123,6 +124,7 @@
                             <hr class="gsapX-line3">
                           </td>
                         </tr>
+                      </tbody>
                       </table>
                     </div>
                   </div>

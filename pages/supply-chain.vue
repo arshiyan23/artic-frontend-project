@@ -136,9 +136,12 @@
                         <div >
                           <div class="post-box mapdown" >
                             <p tabindex="-1" class="mt-4 pt-1 mt-m-20 pt-m papdescontact">
-                            <p tabindex="0" v-html="supplyChainContact?.data?.field_sections[0]?.field_address?.value">
+                            <!-- <p tabindex="0" v-html="supplyChainContact?.data?.field_sections[0]?.field_address?.value"> -->
+                              <p tabindex="-1" class="mt-4 pt-1 mt-m-20 pt-m papdescontact">
+                                <div v-html="supplyChainContact?.data?.field_sections[0]?.field_address?.value"></div>
+                              </p>
                             </p>
-                            </p>
+                            
                             <hr>
                             <p tabindex="0">
                               <span>Email: </span>

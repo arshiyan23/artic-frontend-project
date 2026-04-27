@@ -4,7 +4,7 @@
         {{ homepage?.data?.metatag?.[0]?.attributes?.content || '' }}
       </Title>
       <Meta name="description" :content="homepage?.data?.metatag?.[1]?.attributes?.content || ''"/>
-    </Head>
+  </Head>
     
   <div class="homemain" ref="main">
     <div id="smooth-wrapper">
@@ -13,7 +13,6 @@
         <div class="aos-all">
           <section id="hero-fullscreen" class="px-0 pt-10 pb-0 hero-fullscreen d-flex align-items-center h-100">
             <div class="container mw-100 px-0">
-
               <div class="video-text">
                 <h1 class="pt-0 ardf-1 page-main-heading" tabindex="0">
                   <span ref="title" class="color-primary">{{ homepage.data.field_banner_title }}</span>
@@ -223,7 +222,7 @@
                 </div>
 
                 <div class="row gy-5 pt-5">
-                  <div v-for="(portfolio,index) in portfolios.data.slice(0,6)" :key="index"
+                  <div v-for="(portfolio, index) in (portfolios?.data?.slice(0, 6) || [])" :key="index"
                     class="m-t m-b col-xl-4 mb-4 col-md-6 d-flex">
                     <div class="portfolio-member  overflow-hidden">
 
@@ -481,9 +480,10 @@
                     </div>
                   </div>
 
-                  <div  class="col-lg-9 ps-lg-0"  v-if="legacyy?.data?.length >= 3">
+                  <!-- <div  class="col-lg-9 ps-lg-0"  v-if="legacyy?.data?.length >= 3"> -->
+                    <div  class="col-lg-9 ps-lg-0"  v-if="Array.isArray(legacyy?.data) && legacyy.data.length >= 3">
                     <div class="row">
-                      <div class="col-lg-6 aos-init mt-lg-5 mt-3 pe-lg-4 v-if="legacyy?.data?.length > 1">
+                      <div class="col-lg-6 aos-init mt-lg-5 mt-3 pe-lg-4" v-if="legacyy?.data?.length > 1">
                         <div class="post-box">
                           <div class="post-img pb-4 pb-lg-5 gsapPaperSlideEffect vice-chairman-IMG">
                             <NuxtImg role="img" tabindex="0" width="100%" height="100%" loading="lazy"
@@ -507,7 +507,7 @@
                           </div>
                         </div>
                       </div>
-                      <div class="col-lg-6 aos-init mt-lg-5 mt-3 ps-lg-4 v-if="legacyy?.data?.length > 1"">
+                      <div class="col-lg-6 aos-init mt-lg-5 mt-3 ps-lg-4 v-if="legacyy?.data?.length > 1">
                         <div class="post-box">
                           <div class="post-img pb-4 pb-lg-5  gsapPaperSlideEffect ceo-IMG">
                             <NuxtImg role="img" tabindex="0" loading="lazy" class="img-fluid"
@@ -532,7 +532,7 @@
                         </div>
                       </div>
                       <div class="row">
-                        <div class="col-lg-6 aboutusbtn d-flex pt-5 justify-content-lg-end justify-sm-start v-if="legacyy?.data?.length > 1">
+                        <div class="col-lg-6 aboutusbtn d-flex pt-5 justify-content-lg-end justify-sm-start" v-if="legacyy?.data?.length > 1">
                           <NuxtLink to="/about-us" class="btn-white align-self-start me-lg-5">
                             <span>More About Us</span>
                             <i class="bi bi-arrow-right" role="presentation"></i>
@@ -654,8 +654,8 @@
           <a :href="selectedMapData.website?.uri" target="_blank" class="fs-6 color-primary font-weight-medium">Visit
             Website</a>
           <div class="nextpreviousbutton">
-            <button @click="movePrev"><img src="/assets/icons/arrow-bl-media.svg" rel="preload v-if="legacyy?.data?.length > 1"  ></button>
-            <button @click="moveNext"><img src="/assets/icons/arrow-br-media.svg" rel="preload v-if="legacyy?.data?.length > 1"  ></button>
+            <button @click="movePrev"><img v-if="legacyy?.data?.length > 1" src="/assets/icons/arrow-bl-media.svg" rel="preload"></button>
+            <button @click="moveNext"><img v-if="legacyy?.data?.length > 1" src="/assets/icons/arrow-bl-media.svg" rel="preload"></button>
           </div>
         </div>
         <div class="col-xxl-6 col-xl-6 col-lg-6 col-md-12 col-sm-12 img-popup" tabindex="0 v-if="legacyy?.data?.length > 1">
@@ -785,93 +785,225 @@
     }
   ];
   // Combined api call
-  const { data: combined } = await useFetch(apiBaseURL + '/subrequests?_format=json', {
-    method: "POST",
-    headers: {
-      "Authorization": `Basic ${apiAuthKey}`
-    },
-    body: combinedReqData
-  })
-homepage.value = combined.value?.herobanner?.body
-  ? JSON.parse(combined.value.herobanner.body)
-  : { data: {} };
+//   const { data: combined } = await useFetch(apiBaseURL + '/subrequests?_format=json', {
+//     method: "POST",
+//     headers: {
+//       "Authorization": `Basic ${apiAuthKey}`
+//     },
+//     body: combinedReqData
+//   })
+// homepage.value = combined.value?.herobanner?.body
+//   ? JSON.parse(combined.value.herobanner.body)
+//   : { data: {} };
 
-portfolios.value = combined.value?.portfolio?.body
-  ? JSON.parse(combined.value.portfolio.body)
-  : { data: [] };
+// portfolios.value = combined.value?.portfolio?.body
+//   ? JSON.parse(combined.value.portfolio.body)
+//   : { data: [] };
 
-businesses.value = combined.value?.ourcorebusinesses?.body
-  ? JSON.parse(combined.value.ourcorebusinesses.body)
-  : { data: [] };
+// businesses.value = combined.value?.ourcorebusinesses?.body
+//   ? JSON.parse(combined.value.ourcorebusinesses.body)
+//   : { data: [] };
 
-news.value = combined.value?.news?.body
-  ? JSON.parse(combined.value.news.body)
-  : { data: [] };
+// news.value = combined.value?.news?.body
+//   ? JSON.parse(combined.value.news.body)
+//   : { data: [] };
 
-partners.value = combined.value?.ourpartners?.body
-  ? JSON.parse(combined.value.ourpartners.body)
-  : { data: [] };
+// partners.value = combined.value?.ourpartners?.body
+//   ? JSON.parse(combined.value.ourpartners.body)
+//   : { data: [] };
 
-legacyy.value = combined.value?.boardmembers?.body
-  ? JSON.parse(combined.value.boardmembers.body)
-  : { data: [] };
+// legacyy.value = combined.value?.boardmembers?.body
+//   ? JSON.parse(combined.value.boardmembers.body)
+//   : { data: [] };
 
-  // Refs
-  const title = ref < HTMLElement | null > (null);
-  const subtitle = ref < HTMLElement | null > (null);
+//   // Refs
+//   const title = ref < HTMLElement | null > (null);
+//   const subtitle = ref < HTMLElement | null > (null);
 
-  const main: any = ref(null);
-  let ctx: any = null;
+//   const main: any = ref(null);
+//   let ctx: any = null;
+
+try {
+  homepage.value = combined.value?.herobanner?.body
+    ? JSON.parse(combined.value.herobanner.body)
+    : { data: {} };
+
+  portfolios.value = combined.value?.portfolio?.body
+    ? JSON.parse(combined.value.portfolio.body)
+    : { data: [] };
+
+  businesses.value = combined.value?.ourcorebusinesses?.body
+    ? JSON.parse(combined.value.ourcorebusinesses.body)
+    : { data: [] };
+
+  news.value = combined.value?.news?.body
+    ? JSON.parse(combined.value.news.body)
+    : { data: [] };
+
+  partners.value = combined.value?.ourpartners?.body
+    ? JSON.parse(combined.value.ourpartners.body)
+    : { data: [] };
+
+  legacyy.value = combined.value?.boardmembers?.body
+    ? JSON.parse(combined.value.boardmembers.body)
+    : { data: [] };
+} catch (error) {
+  console.error("Error parsing API response:", error);
+  // Fallback to default values in case of an error
+  homepage.value = { data: {} };
+  portfolios.value = { data: [] };
+  businesses.value = { data: [] };
+  news.value = { data: [] };
+  partners.value = { data: [] };
+  legacyy.value = { data: [] };
+}
+
+// Refs
+// const title = ref<HTMLElement | null>(null);
+// const subtitle = ref<HTMLElement | null>(null);
+
+// const main = ref<HTMLElement | null>(null);
+// let ctx: any = null;
+
+
+
+//   const moveNext = () => {
+//   let markerData=homepage.value.data.field_sections[2].field_map_markers_data;
+//   let testArray=markerData.sort((a: { field_country: string; }, b: { field_country: any; }) => a.field_country.localeCompare(b.field_country))
+  
+//   selectedCurrentKey.value=selectedMapData.value.id;
+  
+//   if(selectedCurrentKey.value==(testArray.length-1)){
+//     selectedCurrentKey.value=0;
+//   }else{
+//     selectedCurrentKey.value=selectedCurrentKey.value+1;
+//   }
+//   selectedMapData.value={
+//     id:selectedCurrentKey.value,
+//     city:testArray[selectedCurrentKey.value].field_city_name,
+//     country:testArray[selectedCurrentKey.value].field_country,
+//     name:testArray[selectedCurrentKey.value].field_property_name,
+//     lat:testArray[selectedCurrentKey.value].field_latitude,
+//     long:testArray[selectedCurrentKey.value].field_longitude,
+//     image_alt:testArray[selectedCurrentKey.value].field_image.field_media_image.meta.alt,
+//     image_url:testArray[selectedCurrentKey.value].field_image.field_media_image.image_style_uri.map_image,
+//     website:testArray[selectedCurrentKey.value].field_website_link
+//   };
+  
+// };
+// const movePrev = () => {
+//   let markerData=homepage.value.data.field_sections[2].field_map_markers_data;
+//   let testArray=markerData.sort((a: { field_country: string; }, b: { field_country: any; }) => a.field_country.localeCompare(b.field_country))
+
+//   selectedCurrentKey.value=selectedMapData.value.id;
+  
+//   if(selectedCurrentKey.value==0){
+//     selectedCurrentKey.value=testArray.length-1;
+//   }else{
+//     selectedCurrentKey.value=selectedCurrentKey.value-1;
+//   }
+  
+//   selectedMapData.value={
+//     id:selectedCurrentKey.value,
+//     city:testArray[selectedCurrentKey.value].field_city_name,
+//     country:testArray[selectedCurrentKey.value].field_country,
+//     name:testArray[selectedCurrentKey.value].field_property_name,
+//     lat:testArray[selectedCurrentKey.value].field_latitude,
+//     long:testArray[selectedCurrentKey.value].field_longitude,
+//     image_alt:testArray[selectedCurrentKey.value].field_image.field_media_image.meta.alt,
+//     image_url:testArray[selectedCurrentKey.value].field_image.field_media_image.image_style_uri.map_image,
+//     website:testArray[selectedCurrentKey.value].field_website_link
+//   };
+  
+// };
 
 const moveNext = () => {
-  let markerData=homepage.value.data.field_sections[2].field_map_markers_data;
-  let testArray=markerData.sort((a: { field_country: string; }, b: { field_country: any; }) => a.field_country.localeCompare(b.field_country))
-  
-  selectedCurrentKey.value=selectedMapData.value.id;
-  
-  if(selectedCurrentKey.value==(testArray.length-1)){
-    selectedCurrentKey.value=0;
-  }else{
-    selectedCurrentKey.value=selectedCurrentKey.value+1;
-  }
-  selectedMapData.value={
-    id:selectedCurrentKey.value,
-    city:testArray[selectedCurrentKey.value].field_city_name,
-    country:testArray[selectedCurrentKey.value].field_country,
-    name:testArray[selectedCurrentKey.value].field_property_name,
-    lat:testArray[selectedCurrentKey.value].field_latitude,
-    long:testArray[selectedCurrentKey.value].field_longitude,
-    image_alt:testArray[selectedCurrentKey.value].field_image.field_media_image.meta.alt,
-    image_url:testArray[selectedCurrentKey.value].field_image.field_media_image.image_style_uri.map_image,
-    website:testArray[selectedCurrentKey.value].field_website_link
-  };
-  
-};
-const movePrev = () => {
-  let markerData=homepage.value.data.field_sections[2].field_map_markers_data;
-  let testArray=markerData.sort((a: { field_country: string; }, b: { field_country: any; }) => a.field_country.localeCompare(b.field_country))
+  const markerData = homepage.value?.data?.field_sections?.[2]?.field_map_markers_data;
 
-  selectedCurrentKey.value=selectedMapData.value.id;
-  
-  if(selectedCurrentKey.value==0){
-    selectedCurrentKey.value=testArray.length-1;
-  }else{
-    selectedCurrentKey.value=selectedCurrentKey.value-1;
+  if (!markerData || !Array.isArray(markerData)) {
+    console.error("Marker data is not available or invalid.");
+    return;
   }
-  
-  selectedMapData.value={
-    id:selectedCurrentKey.value,
-    city:testArray[selectedCurrentKey.value].field_city_name,
-    country:testArray[selectedCurrentKey.value].field_country,
-    name:testArray[selectedCurrentKey.value].field_property_name,
-    lat:testArray[selectedCurrentKey.value].field_latitude,
-    long:testArray[selectedCurrentKey.value].field_longitude,
-    image_alt:testArray[selectedCurrentKey.value].field_image.field_media_image.meta.alt,
-    image_url:testArray[selectedCurrentKey.value].field_image.field_media_image.image_style_uri.map_image,
-    website:testArray[selectedCurrentKey.value].field_website_link
-  };
-  
+
+  const testArray = markerData.sort((a, b) => {
+    if (!a.field_country || !b.field_country) {
+      console.warn("Missing field_country in marker data.");
+      return 0;
+    }
+    return a.field_country.localeCompare(b.field_country);
+  });
+
+  selectedCurrentKey.value = selectedMapData.value?.id ?? 0;
+
+  if (selectedCurrentKey.value === testArray.length - 1) {
+    selectedCurrentKey.value = 0;
+  } else {
+    selectedCurrentKey.value += 1;
+  }
+
+  const currentMarker = testArray[selectedCurrentKey.value];
+  if (currentMarker) {
+    selectedMapData.value = {
+      id: selectedCurrentKey.value,
+      city: currentMarker.field_city_name,
+      country: currentMarker.field_country,
+      name: currentMarker.field_property_name,
+      lat: currentMarker.field_latitude,
+      long: currentMarker.field_longitude,
+      image_alt: currentMarker.field_image?.field_media_image?.meta?.alt || "",
+      image_url: currentMarker.field_image?.field_media_image?.image_style_uri?.map_image || "",
+      website: currentMarker.field_website_link || "",
+    };
+  }
 };
+
+const movePrev = () => {
+  const markerData = homepage.value?.data?.field_sections?.[2]?.field_map_markers_data;
+
+  if (!markerData || !Array.isArray(markerData)) {
+    console.error("Marker data is not available or invalid.");
+    return;
+  }
+
+  const testArray = markerData.sort((a, b) => {
+    if (!a.field_country || !b.field_country) {
+      console.warn("Missing field_country in marker data.");
+      return 0;
+    }
+    return a.field_country.localeCompare(b.field_country);
+  });
+
+  selectedCurrentKey.value = selectedMapData.value?.id ?? 0;
+
+  if (selectedCurrentKey.value === 0) {
+    selectedCurrentKey.value = testArray.length - 1;
+  } else {
+    selectedCurrentKey.value -= 1;
+  }
+
+  const currentMarker = testArray[selectedCurrentKey.value];
+  if (currentMarker) {
+    selectedMapData.value = {
+      id: selectedCurrentKey.value,
+      city: currentMarker.field_city_name,
+      country: currentMarker.field_country,
+      name: currentMarker.field_property_name,
+      lat: currentMarker.field_latitude,
+      long: currentMarker.field_longitude,
+      image_alt: currentMarker.field_image?.field_media_image?.meta?.alt || "",
+      image_url: currentMarker.field_image?.field_media_image?.image_style_uri?.map_image || "",
+      website: currentMarker.field_website_link || "",
+    };
+  }
+};
+
+
+const { data: legacyData } = await useFetch('/api/legacy')
+console.log('legacyy:', legacyy.value)
+// console.log('error:', error.value)
+const secondLeader = computed(() => {
+ return legacyy?.value?.data?.[1] || null
+});
 
   // Animation on mount
 onMounted(async () => {

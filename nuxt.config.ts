@@ -1,7 +1,7 @@
 import viteCompression from 'vite-plugin-compression'
 
 export default defineNuxtConfig({
-  ssr: true,
+  ssr: false,
 
   // ❌ REMOVE this (Nuxt 3 doesn’t use target)
   // target: 'static',
