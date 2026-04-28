@@ -501,7 +501,7 @@
 <script setup lang="ts">
   import { onMounted, onUnmounted, nextTick, ref } from 'vue';
   import { useRoute, useRouter } from 'vue-router';
-  import PopupComponent from '../../components/Popup.vue';
+  import PopupComponent from '../../../components/Popup.vue';
   import { z } from 'zod'
   import type { FormSubmitEvent } from '#ui/types';
 
