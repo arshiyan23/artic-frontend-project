@@ -11,6 +11,7 @@
     "postinstall": "nuxt prepare"
   },
   "dependencies": {
+    "@nuxt/image": "^1.7.0",
     "@averjs/nuxt-compression": "^1.2.2",
     "@dargmuesli/nuxt-cookie-control": "^8.4.2",
     "@nuxt/ui": "^2.15.2",
@@ -31,7 +32,6 @@
     "zod": "^3.23.8"
   },
   "devDependencies": {
-    "@nuxt/image": "^1.7.0",
     "@types/bootstrap": "^5.2.10",
     "@types/node": "^20.11.30",
     "eslint": "^8.49.0",
