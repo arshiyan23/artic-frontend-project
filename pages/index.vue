@@ -785,13 +785,13 @@
     }
   ];
   // Combined api call
-//   const { data: combined } = await useFetch(apiBaseURL + '/subrequests?_format=json', {
-//     method: "POST",
-//     headers: {
-//       "Authorization": `Basic ${apiAuthKey}`
-//     },
-//     body: combinedReqData
-//   })
+   const { data: combined } = await useFetch(apiBaseURL + '/subrequests?_format=json', {
+     method: "POST",
+     headers: {
+       "Authorization": `Basic ${apiAuthKey}`
+     },
+     body: combinedReqData
+   })
 // homepage.value = combined.value?.herobanner?.body
 //   ? JSON.parse(combined.value.herobanner.body)
 //   : { data: {} };
