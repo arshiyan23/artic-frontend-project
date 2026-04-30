@@ -1,9 +1,8 @@
 steps:
-  # Step 1: Install dependencies using 'npm install', which works without a package-lock.json.
-  # We are still using the correct Node.js v22 image.
+  # Step 1: Install dependencies using 'npm install'.
   - name: "node:22"
     entrypoint: "npm"
-    args: [ "install" ] # THIS IS THE FIX
+    args: [ "install" ]
     id: "Install Dependencies"
 
   # Step 2: Build the Nuxt application.
@@ -12,7 +11,7 @@ steps:
     args: [ "run", "build" ]
     id: "Run Nuxt Build"
 
-  # Step 3: Deploy the built source to Cloud Run.
+  # Step 3: Deploy, but explicitly tell Cloud Run to check port 3000.
   - name: "gcr.io/google.com/cloudsdktool/cloud-sdk"
     entrypoint: "gcloud"
     args:
@@ -26,6 +25,7 @@ steps:
       - "--region"
       - "us-central1"
       - "--allow-unauthenticated"
+      - "--port=3000" # THIS IS THE FINAL FIX
     id: "Deploy Frontend Service"
 options:
   logging: CLOUD_LOGGING_ONLY
