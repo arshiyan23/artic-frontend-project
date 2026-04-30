@@ -1,37 +1,50 @@
 steps:
-  # Step 1: Install dependencies using Node.js v22, but IGNORE the broken postinstall script.
+  # Step 1: Install dependencies
   - name: "node:22"
     entrypoint: "npm"
-    args: [ "install", "--ignore-scripts" ]
+    args: ["install", "--ignore-scripts"]
     id: "Install Dependencies"
 
-  # Step 2: Manually run the 'nuxt prepare' script now that all dependencies are installed.
+  # Step 2: Nuxt prepare
   - name: "node:22"
     entrypoint: "./node_modules/.bin/nuxt"
-    args: [ "prepare" ]
+    args: ["prepare"]
     id: "Prepare Nuxt App"
 
-  # Step 3: Run the final build, also using the correct Node.js version.
+  # Step 3: Nuxt build
   - name: "node:22"
     entrypoint: "npm"
-    args: [ "run", "build" ]
+    args: ["run", "build"]
     id: "Run Nuxt Build"
 
-  # Step 4: Deploy the built source. This command updates the service and
-  # PRESERVES the existing environment variables you set in the UI.
+  # Step 4: Build Docker image
+  - name: "gcr.io/cloud-builders/docker"
+    args:
+      - "build"
+      - "-t"
+      - "gcr.io/$PROJECT_ID/frontend-service:$COMMIT_SHA"
+      - "."
+    id: "Build Docker Image"
+
+  # Step 5: Push Docker image to Container Registry
+  - name: "gcr.io/cloud-builders/docker"
+    args:
+      - "push"
+      - "gcr.io/$PROJECT_ID/frontend-service:$COMMIT_SHA"
+    id: "Push Docker Image"
+
+  # Step 6: Deploy to Cloud Run using the image
   - name: "gcr.io/google.com/cloudsdktool/cloud-sdk"
     entrypoint: "gcloud"
     args:
       - "run"
       - "deploy"
       - "frontend-service"
-      - "--source"
-      - "."
-      - "--platform"
-      - "managed"
-      - "--region"
-      - "us-central1"
+      - "--image=gcr.io/$PROJECT_ID/frontend-service:$COMMIT_SHA"
+      - "--platform=managed"
+      - "--region=us-central1"
       - "--allow-unauthenticated"
     id: "Deploy Frontend Service"
+
 options:
   logging: CLOUD_LOGGING_ONLY
