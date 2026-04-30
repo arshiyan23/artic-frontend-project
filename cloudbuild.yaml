@@ -1,32 +1,40 @@
 steps:
-  # Step 1: Install dependencies
-  - name: "node:22"
-    entrypoint: "npm"
-    args: [ "install" ]
-    id: "Install Dependencies"
+  # Step 1: Build the Docker container, passing the env vars as build arguments.
+  - name: "gcr.io/cloud-builders/docker"
+    args:
+      - "build"
+      - "--tag=us-central1-docker.pkg.dev/$PROJECT_ID/cloud-run-source-deploy/f\
+        rontend-service:final"
+      - "--build-arg=API_BASE_URL=https://backend-service-qylp2g3ica-uc.a.run.a\
+        pp"
+      - "--build-arg=API_AUTH_KEY=not-a-real-key"
+      - "."
+    id: "Build"
 
-  # Step 2: Build the Nuxt application
-  - name: "node:22"
-    entrypoint: "npm"
-    args: [ "run", "build" ]
-    id: "Run Nuxt Build"
+  # Step 2: Push the container image to Artifact Registry.
+  - name: "gcr.io/cloud-builders/docker"
+    args:
+      [
+        "push",
+        "us-central1-docker.pkg.dev/$PROJECT_ID/cloud-run-source-deploy/front\
+          end-service:final",
+      ]
+    id: "Push"
 
-  # Step 3: Deploy with all necessary flags, including the environment variables.
+  # Step 3: Deploy the specific image to Cloud Run, also setting the runtime env vars.
   - name: "gcr.io/google.com/cloudsdktool/cloud-sdk"
     entrypoint: "gcloud"
     args:
       - "run"
       - "deploy"
       - "frontend-service"
-      - "--source"
-      - "."
-      - "--platform"
-      - "managed"
-      - "--region"
-      - "us-central1"
+      - "--image=us-central1-docker.pkg.dev/$PROJECT_ID/cloud-run-source-deploy\
+        /frontend-service:final"
+      - "--region=us-central1"
+      - "--platform=managed"
       - "--allow-unauthenticated"
       - "--set-env-vars=API_BASE_URL=https://backend-service-qylp2g3ica-uc.a.ru\
-        n.app,API_AUTH_KEY=not-a-real-key" # THIS IS THE FINAL FIX
-    id: "Deploy Frontend Service"
+        n.app,API_AUTH_KEY=not-a-real-key"
+    id: "Deploy"
 options:
   logging: CLOUD_LOGGING_ONLY
