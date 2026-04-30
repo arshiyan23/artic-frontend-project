@@ -1,17 +1,24 @@
 steps:
-  # Step 1: Use the official Google Cloud Node.js builder.
-  # This runs 'npm ci' which is a faster, more reliable version of 'npm install' for CI/CD.
-  # This builder has the complete environment needed for 'nuxt prepare' to succeed.
-  - name: "gcr.io/cloud-builders/npm"
-    args: [ "ci" ]
-    id: "Install Dependencies"
+  # Step 1: Use a standard linux environment to install NVM and Node.js v18
+  # This creates a reliable environment with the exact Node version we need.
+  - name: "ubuntu"
+    entrypoint: "bash"
+    args:
+      - "-c"
+      - |
+        apt-get update && apt-get install -y curl
+        curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash
+        export NVM_DIR="/root/.nvm"
+        [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+        nvm install 18
+        nvm use 18
+        npm ci
+        npm run build
+    id: "Build Nuxt Application"
 
-  # Step 2: Use the same official builder to run the Nuxt build.
-  - name: "gcr.io/cloud-builders/npm"
-    args: [ "run", "build" ]
-    id: "Run Nuxt Build"
-
-  # Step 3: Deploy the built source to Cloud Run.
+  # Step 2: Deploy to Cloud Run from the source directory.
+  # gcloud will find the .output directory created in the previous step
+  # and deploy it correctly.
   - name: "gcr.io/google.com/cloudsdktool/cloud-sdk"
     entrypoint: "gcloud"
     args:
