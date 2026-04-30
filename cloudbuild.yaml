@@ -1,17 +1,24 @@
 steps:
-  # Step 1: Install dependencies using the correct Node.js version.
+  # Step 1: Install dependencies using Node.js v22, but IGNORE the broken postinstall script.
   - name: "node:22"
     entrypoint: "npm"
-    args: [ "install" ]
+    args: [ "install", "--ignore-scripts" ]
     id: "Install Dependencies"
 
-  # Step 2: Build the Nuxt application.
+  # Step 2: Manually run the 'nuxt prepare' script now that all dependencies are installed.
+  - name: "node:22"
+    entrypoint: "./node_modules/.bin/nuxt"
+    args: [ "prepare" ]
+    id: "Prepare Nuxt App"
+
+  # Step 3: Run the final build, also using the correct Node.js version.
   - name: "node:22"
     entrypoint: "npm"
     args: [ "run", "build" ]
     id: "Run Nuxt Build"
 
-  # Step 3: Deploy. This is the final, correct version.
+  # Step 4: Deploy the built source. This command updates the service and
+  # PRESERVES the existing environment variables you set in the UI.
   - name: "gcr.io/google.com/cloudsdktool/cloud-sdk"
     entrypoint: "gcloud"
     args:
