@@ -1,0 +1,40 @@
+steps:
+  # 1. Install dependencies
+  - name: "node:20-alpine"
+    entrypoint: npm
+    args: [ "ci" ]
+
+  # 2. Build the Docker image
+  - name: "gcr.io/cloud-builders/docker"
+    args:
+      [
+        "build",
+        "-t",
+        "gcr.io/$PROJECT_ID/arctic-frontend-project:$COMMIT_SHA",
+        ".",
+      ]
+
+  # 3. Push the Docker image to Container Registry
+  - name: "gcr.io/cloud-builders/docker"
+    args: [ "push", "gcr.io/$PROJECT_ID/arctic-frontend-project:$COMMIT_SHA" ]
+
+  # 4. Deploy to Cloud Run (Optional - adjust region and service name as needed)
+  - name: "gcr.io/google.com/cloudsdktool/cloud-sdk"
+    entrypoint: gcloud
+    args:
+      - "run"
+      - "deploy"
+      - "arctic-frontend"
+      - "--image"
+      - "gcr.io/$PROJECT_ID/arctic-frontend-project:$COMMIT_SHA"
+      - "--region"
+      - "us-central1"
+      - "--platform"
+      - "managed"
+      - "--allow-unauthenticated"
+
+images:
+  - "gcr.io/$PROJECT_ID/arctic-frontend-project:$COMMIT_SHA"
+
+options:
+  logging: CLOUD_LOGGING_ONLY
