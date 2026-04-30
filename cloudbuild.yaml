@@ -1,40 +1,34 @@
 steps:
-  # Step 1: Build the Docker container, passing the env vars as build arguments.
-  - name: "gcr.io/cloud-builders/docker"
-    args:
-      - "build"
-      - "--tag=us-central1-docker.pkg.dev/$PROJECT_ID/cloud-run-source-deploy/f\
-        rontend-service:final"
-      - "--build-arg=API_BASE_URL=https://backend-service-qylp2g3ica-uc.a.run.a\
-        pp"
-      - "--build-arg=API_AUTH_KEY=not-a-real-key"
-      - "."
-    id: "Build"
+  # Step 1: Install dependencies using the correct Node.js version.
+  - name: "node:22"
+    entrypoint: "npm"
+    args: [ "install" ]
+    id: "Install Dependencies"
 
-  # Step 2: Push the container image to Artifact Registry.
-  - name: "gcr.io/cloud-builders/docker"
-    args:
-      [
-        "push",
-        "us-central1-docker.pkg.dev/$PROJECT_ID/cloud-run-source-deploy/front\
-          end-service:final",
-      ]
-    id: "Push"
+  # Step 2: Build the Nuxt application.
+  - name: "node:22"
+    entrypoint: "npm"
+    args: [ "run", "build" ]
+    id: "Run Nuxt Build"
 
-  # Step 3: Deploy the specific image to Cloud Run, also setting the runtime env vars.
+  # Step 3: Deploy. This is the final, correct version.
   - name: "gcr.io/google.com/cloudsdktool/cloud-sdk"
     entrypoint: "gcloud"
     args:
       - "run"
       - "deploy"
       - "frontend-service"
-      - "--image=us-central1-docker.pkg.dev/$PROJECT_ID/cloud-run-source-deploy\
-        /frontend-service:final"
-      - "--region=us-central1"
-      - "--platform=managed"
+      - "--source"
+      - "."
+      - "--platform"
+      - "managed"
+      - "--region"
+      - "us-central1"
       - "--allow-unauthenticated"
-      - "--set-env-vars=API_BASE_URL=https://backend-service-qylp2g3ica-uc.a.ru\
-        n.app,API_AUTH_KEY=not-a-real-key"
-    id: "Deploy"
+      # THIS IS THE FINAL FIX: Set HOST=0.0.0.0 to make the container accessible
+      # from the outside, and ensure the other variables are also present.
+      - "--set-env-vars=HOST=0.0.0.0,API_BASE_URL=https://backend-service-qylp2\
+        g3ica-uc.a.run.app,API_AUTH_KEY=not-a-real-key"
+    id: "Deploy Frontend Service"
 options:
   logging: CLOUD_LOGGING_ONLY
