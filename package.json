@@ -11,6 +11,7 @@
     "postinstall": "nuxt prepare"
   },
   "dependencies": {
+    "@nuxt/image": "^1.7.0",
     "@averjs/nuxt-compression": "^1.2.2",
     "@dargmuesli/nuxt-cookie-control": "^8.4.2",
     "@nuxt/ui": "^2.15.2",
@@ -24,6 +25,7 @@
     "nuxt": "^3.10.3",
     "nuxt-cookie-control": "^1.9.93",
     "sass": "^1.72.0",
+    "serve": "^14.2.6",
     "three": "^0.163.0",
     "vue": "^3.4.21",
     "vue-router": "^4.3.0",
@@ -31,7 +33,6 @@
     "zod": "^3.23.8"
   },
   "devDependencies": {
-    "@nuxt/image": "^1.7.0",
     "@types/bootstrap": "^5.2.10",
     "@types/node": "^20.11.30",
     "eslint": "^8.49.0",
