@@ -1,30 +1,34 @@
 steps:
-  # Step 1: Install dependencies using the specific Node.js 18 builder
-  - name: "gcr.io/cloud-builders/npm:18"
+  # Step 1: Install Node.js v18, install dependencies, and run the Nuxt build.
+  # This uses a standard 'node' image and runs a series of commands.
+  # This is the most robust way to ensure the correct Node.js version is used.
+  - name: "node:18"
+    entrypoint: "npm"
     args: [ "install" ]
     id: "Install Dependencies"
 
-  # Step 2: Run the Nuxt build command, also using the Node.js 18 builder
-  - name: "gcr.io/cloud-builders/npm:18"
+  - name: "node:18"
+    entrypoint: "npm"
     args: [ "run", "build" ]
     id: "Run Nuxt Build"
 
-  # Step 3: Deploy to Cloud Run. This step uses a special feature.
-  # It automatically takes your built application (including the .output directory)
-  # and deploys it using the correct Node.js 18 buildpack on the server.
+  # Step 2: Deploy to Cloud Run from the current source.
+  # The '--source .' flag tells gcloud to intelligently package and deploy
+  # the application, using the '.output' directory that was just created.
   - name: "gcr.io/google.com/cloudsdktool/cloud-sdk"
-    entrypoint: gcloud
+    entrypoint: "gcloud"
     args:
       - "run"
       - "deploy"
       - "frontend-service"
       - "--source"
-      - "." # Deploy from the current directory which now contains the built .output
+      - "."
       - "--platform"
       - "managed"
       - "--region"
       - "us-central1"
       - "--allow-unauthenticated"
     id: "Deploy Frontend Service"
+
 options:
   logging: CLOUD_LOGGING_ONLY
