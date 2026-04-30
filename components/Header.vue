@@ -68,8 +68,7 @@
               <div class="d-flex flex-wrap justify-content-center">
                 <ul class="nav justify-content-center">
                   <li class="nav-item d-flex">
-                    <a tabindex="-1" href="https://www.linkedin.com/company/al-rayyan-tourism-investment-company/" class="nav-link px-1 text-muted color-white pt-0">LinkedIn </a><span
-                      class="px-2">|</span>
+                    <a href="https://www.linkedin.com/company/al-rayyan-tourism-investment-company/" class="nav-link px-1 text-muted color-white pt-0">LinkedIn</a>
                   </li>
                   <li class="nav-item d-flex">
                     <a tabindex="-1" href="https://x.com/ARTIC_QA" class="nav-link px-1 text-muted color-white pt-0">X </a><span
@@ -198,372 +197,198 @@
 </template>
 
 <script setup lang="ts">
-  import { useRouter, useRoute } from "vue-router";
-  import { ref, onMounted, onUnmounted, nextTick } from 'vue';
-  import { createRouter, createWebHistory } from 'vue-router';
+import { useRouter, useRoute } from "vue-router";
+import { ref, computed, onMounted, onUnmounted, nextTick, watch } from "vue";
 
+const config = useRuntimeConfig();
+const imgBaseURL = config.public.IMG_BASE_URL;
+const apiBaseURL = config.public.API_BASE_URL;
+const apiAuthKey = config.public.API_AUTH_KEY;
+const route = useRoute();
+const router = useRouter();
 
+const searchQuery = ref("");
+const searchResults = ref([]);
+const topResults = ref([]);
+const recentResults = ref([]);
+const isLoading = ref(false);
 
+const defaultCategory = ref("all");
+const isSearchBarActive = ref(false);
+const isSearchFocues = ref(false);
+const isSearchTyping = ref(false);
+const isMobileMenuVisible = ref(false);
 
-  const config = useRuntimeConfig();
-  const imgBaseURL = config.public.IMG_BASE_URL;
-  const apiBaseURL = config.public.API_BASE_URL;
-  const apiAuthKey = config.public.API_AUTH_KEY;
-  const route = useRoute();
-  const router = useRouter();
+const logoRef = ref(null);
+const navbarSupportedContentRef = ref<HTMLDivElement | null>(null);
 
+// Computed property to determine the tabindex based on the current URL
+const tabIndex = computed(() => {
+  return route?.path?.includes("supply-chain") ? -1 : 0;
+});
 
+const toggleMobileMenu = () => {
+  isMobileMenuVisible.value = !isMobileMenuVisible.value;
 
-  const searchQuery = defineModel();
-  const searchResults = ref([]);
-  const topResults = ref([]);
-  const recentResults = ref([]);
-  const isLoading = ref(false);
-
-  const defaultCategory = ref("all");
-  const isSearchBarActive = ref(false);
-  const isSearchFocues = ref(false);
-  const isSearchTyping = ref(false);
-  const isMobileMenuVisible = ref(false);
-
-  const logoRef = ref(null);
-  const navbarSupportedContentRef = ref < HTMLDivElement | null > (null);
-
-
-    // Computed property to determine the tabindex based on the current URL
-    const tabIndex = computed(() => {
-      return route.path.includes('supply-chain') ? -1 : 0;
-    });
-
-
-
-  const toggleMobileMenu = () => {
-    isMobileMenuVisible.value = !isMobileMenuVisible.value;
-    
-    if(isMobileMenuVisible.value){
-      const mbLogoElement = document.querySelector('.mb-logo-focus');
-      if (mbLogoElement) {
-        mbLogoElement.focus();
-      }
+  if (isMobileMenuVisible.value) {
+    const mbLogoElement = document.querySelector(".mb-logo-focus");
+    if (mbLogoElement) {
+      mbLogoElement.focus();
     }
- 
-  };
-  const handleKeydown = (event) => {
-    if (event.key === 'Tab') {
-      const mbLogoElement = document.querySelector('.mb-logo-focus');
-      if (mbLogoElement) {
-        mbLogoElement.focus();
-      }
+  }
+};
 
-      // nextTick(() => {
-      //   if (logoRef.value) {
-      //     logoRef.value.focus();
-      //     navbarSupportedContentRef.value.scrollTo({ top: 0, behavior: 'smooth' });
-      //   }
-      // });
+const handleKeydown = (event: KeyboardEvent) => {
+  if (event.key === "Tab") {
+    const mbLogoElement = document.querySelector(".mb-logo-focus");
+    if (mbLogoElement) {
+      mbLogoElement.focus();
     }
-  };
-  const hideMobileMenu = () => {
-    isMobileMenuVisible.value = false;
-  };
+  }
+};
 
-
+const hideMobileMenu = () => {
+  isMobileMenuVisible.value = false;
+};
 
 // Set focus on the button when the component is mounted (on reload page)
 onMounted(async () => {
   await nextTick(); // Wait for the DOM to be updated
-  const logoRef = document.getElementById('header');
+  const logoRef = document.getElementById("header");
   if (logoRef) {
     logoRef.focus();
   }
 });
 
-watch(() => router.currentRoute.value.path, (newPath) => {
-  if (newPath === '/') {
-    const logoRef = document.getElementById('header');
-    if (logoRef) {
-      logoRef.focus();
+watch(
+  () => router.currentRoute.value.path,
+  (newPath) => {
+    if (newPath === "/") {
+      const logoRef = document.getElementById("header");
+      if (logoRef) {
+        logoRef.focus();
+      }
     }
   }
-});
+);
 
-  // Search
-  const toggleSearchBar = () => {
-   
-    isSearchBarActive.value = !isSearchBarActive.value;
-    handleFocus();
-    searchQuery.value = "";
-  };
-  const handleFocus = () => {
-    isSearchFocues.value = true;
-    addBackdrop();
-  };
-  const handleFocusOut = () => {
-    // isSearchFocues.value = false;
-    removeBackdrop();
-  }
-  const clearSearch = () => {
-    isSearchFocues.value = false;
-    isSearchTyping.value = false;
-    isSearchBarActive.value = false;
-    searchQuery.value = "";
-    removeBackdrop();
-  };
-  const searchItems = () => {
-    const cleanedQuery = searchQuery.value.replace(/\s+/g, ' ').trim();
-    if (cleanedQuery.length > 1 && !/\s{2,}/.test(searchQuery.value)) {
-      window.location.href = "/search/" + encodeURIComponent(searchQuery.value);
-      isSearchFocues.value = false;
-      isSearchTyping.value = false;
-    }
-  };
-  const navigateSearchResult = (label) => {
-    const cleanedQuery = label.replace(/\s+/g, ' ').trim();
+// Search
+const toggleSearchBar = () => {
+  isSearchBarActive.value = !isSearchBarActive.value;
+  handleFocus();
+  searchQuery.value = "";
+};
+
+const handleFocus = () => {
+  isSearchFocues.value = true;
+  addBackdrop();
+};
+
+const handleFocusOut = () => {
+  removeBackdrop();
+};
+
+const clearSearch = () => {
+  isSearchFocues.value = false;
+  isSearchTyping.value = false;
+  isSearchBarActive.value = false;
+  searchQuery.value = "";
+  removeBackdrop();
+};
+
+const searchItems = () => {
+  const cleanedQuery = searchQuery.value.replace(/\s+/g, " ").trim();
+  if (cleanedQuery.length > 1) {
     window.location.href = "/search/" + encodeURIComponent(cleanedQuery);
     isSearchFocues.value = false;
     isSearchTyping.value = false;
-    searchQuery.value = "";
-  };
-  const usefulLinkUrl = (item) => {
-    if(item.type=='node--press_release'){
-      return '/press-release/'+item.id;
-    }
-    else if(item.type=='node--news'){
-      return '/news';
-    }
-    else if(item.type=='node--about'){
-      return '/about-us';
-    }
-    else if(item.type=='node--media'){
-      return '/media';
-    }
-    else if(item.type=='node--sustainability'){
-      return '/sustainability';
-    }
-    else if(item.type=='node--portfolio'){
-      return '/portfolio/';
-    }
-    else if(item.type=='node--home' || item.type=='node--index'){
-      return '/';
-    }
-    else{
-      return '/';
-    }
-    // const cleanedQuery = label.replace(/\s+/g, ' ').trim();
-    // window.location.href = "/search/" + encodeURIComponent(cleanedQuery);
-    // isSearchFocues.value = false;
-    // isSearchTyping.value = false;
-    // searchQuery.value = "";
-  };
-  const onInputSearch = async () => {
-    const cleanedQuery = searchQuery.value.replace(/\s+/g, ' ').trim();
-    if (cleanedQuery.length > 1 && !/\s{2,}/.test(searchQuery.value)) {
-      isSearchTyping.value = true;
-      isLoading.value = true;
-      try {
-        const [topRes, recentRes] = await Promise.all([
-          fetch(
-            `${apiBaseURL}/jsonapi/top-searches/${encodeURIComponent(cleanedQuery)}`,
-            {
-              method: "GET",
-              headers: {
-                Authorization: `Basic ${apiAuthKey}`,
-              },
-            }
-          ),
-          fetch(
-            `${apiBaseURL}/jsonapi/index/artic_index_database?fields[node--portfolio]=title&fields[node--news]=title&fields[node--press_release]=title&fields[node--board_members]=title&fields[node--executive_management]=title&fields[node--policy_pages]=title&fields[node--landing_page]=title&fields[node--supply_chain]=title&page[limit]=10&filter[fulltext]=${encodeURIComponent(cleanedQuery)}`,
-            {
-              method: "GET",
-              headers: {
-                Authorization: `Basic ${apiAuthKey}`,
-              },
-            }
-          )
-        ]);
+  } else {
+    console.warn("Search query is too short or invalid.");
+  }
+};
 
-        if (!topRes.ok || !recentRes.ok) {
-          throw new Error('Network response was not ok');
-        }
+const usefulLinkUrl = (item: any) => {
+  switch (item.type) {
+    case "node--press_release":
+      return "/press-release/" + item.id;
+    case "node--news":
+      return "/news";
+    case "node--about":
+      return "/about-us";
+    case "node--media":
+      return "/media";
+    case "node--sustainability":
+      return "/sustainability";
+    case "node--portfolio":
+      return "/portfolio/";
+    case "node--home":
+    case "node--index":
+      return "/";
+    default:
+      return "/";
+  }
+};
 
-
-        const dataTop = await topRes.json();
-        topResults.value = dataTop;
-
-        const dataRecent = await recentRes.json();
-        recentResults.value = dataRecent;
-
-      } catch (error) {
-        console.error("Error fetching search results:", error);
-      } finally {
-        isLoading.value = false;
-      }
-    } else {
-      searchResults.value = [];
-      topResults.value = [];
-      recentResults.value = [];
-      isLoading.value = false;
-    }
-  };
-  const __onInputSearch = async () => {
-    const cleanedQuery = searchQuery.value.replace(/\s+/g, ' ').trim();
-    if (cleanedQuery.length > 2 && !/\s{2,}/.test(searchQuery.value)) {
-      isSearchTyping.value = true;
-      isLoading.value = true;
-      try {
-        // const res = await fetch(
-        //   `${apiBaseURL}/jsonapi/top-searches/${encodeURIComponent(searchQuery.value)}`,
-        //   {
-        //     method: "GET",
-        //     headers: {
-        //       Authorization: `Basic ${apiAuthKey}`,
-        //     },
-        //   }
-        // );
-        // const dataTop = await res.json();
-        // topResults.value = dataTop;
-
-        // Recent Result Search
-        const { data: dataRecent } = await useFetch(
-          `${apiBaseURL}/jsonapi/index/artic_index_database?fields[node--portfolio]=title&fields[node--news]=title&fields[node--press_release]=title&fields[node--board_members]=title&fields[node--executive_management]=title&fields[node--policy_pages]=title&fields[node--landing_page]=title&fields[node--supply_chain]=title&page[limit]=10&filter[fulltext]=${encodeURIComponent(searchQuery.value)}`,
+const onInputSearch = async () => {
+  const cleanedQuery = searchQuery.value.replace(/\s+/g, " ").trim();
+  if (cleanedQuery.length > 1) {
+    isSearchTyping.value = true;
+    isLoading.value = true;
+    try {
+      const [topRes, recentRes] = await Promise.all([
+        fetch(`${apiBaseURL}/jsonapi/top-searches/${encodeURIComponent(cleanedQuery)}`, {
+          method: "GET",
+          headers: {
+            Authorization: `Basic ${apiAuthKey}`,
+          },
+        }),
+        fetch(
+          `${apiBaseURL}/jsonapi/index/artic_index_database?fields[node--portfolio]=title&fields[node--news]=title&fields[node--press_release]=title&page[limit]=10&filter[fulltext]=${encodeURIComponent(cleanedQuery)}`,
           {
             method: "GET",
             headers: {
               Authorization: `Basic ${apiAuthKey}`,
             },
           }
-        );
-        recentResults.value = dataRecent;
-      } catch (error) {
-        console.error("Error fetching search results:", error);
-      } finally {
-        isLoading.value = false;
+        ),
+      ]);
+
+      if (!topRes.ok || !recentRes.ok) {
+        throw new Error("Network response was not ok");
       }
-    } else {
-      searchResults.value = [];
-      topResults.value = [];
-      recentResults.value = [];
+
+      const dataTop = await topRes.json();
+      topResults.value = dataTop;
+
+      const dataRecent = await recentRes.json();
+      recentResults.value = dataRecent;
+    } catch (error) {
+      console.error("Error fetching search results:", error);
+    } finally {
       isLoading.value = false;
     }
-  };
-  // Fetch search results as the user types
-  watch(searchQuery, (newQuery) => {
-    if (newQuery.trim() !== "") {
-      //onInputSearch();
-    } else {
-      searchResults.value = [];
-      topResults.value = [];
-      recentResults.value = [];
-    }
-  });
+  } else {
+    searchResults.value = [];
+    topResults.value = [];
+    recentResults.value = [];
+    isLoading.value = false;
+  }
+};
 
+// Menu API call
+const { data: menu, error: menuError } = await useFetch(
+  `${apiBaseURL}/system/menu/main/linkset`,
+  {
+    method: "GET",
+    headers: {
+      Authorization: `Basic ${apiAuthKey}`,
+    },
+  }
+);
 
-  const searchOnPageCat = async (label) => {
-    if (label == "all") {
-      const searchResults = await $fetch(
-        apiBaseURL + "/jsonapi/index/artic_index_database/",
-        {
-          method: "GET",
-          params: {
-            "filter[fulltext]": searchQuery.value,
-          },
-          headers: {
-            Authorization: `Basic ${apiAuthKey}`,
-          },
-        }
-      );
-      searchResults.value = searchResults;
-      defaultCategory.value = label;
-    } else {
-      const searchResults = await $fetch(
-        apiBaseURL + "/jsonapi/index/artic_index_database/",
-        {
-          method: "GET",
-          params: {
-            "filter[fulltext]": searchQuery.value,
-            "filter[search_filter]": label,
-          },
-          headers: {
-            Authorization: `Basic ${apiAuthKey}`,
-          },
-        }
-      );
-      searchResults.value = searchResults;
-      defaultCategory.value = label;
-    }
-  };
-
-  // Body Click (Outside)
-  const isMobile = () => {
-    return window.innerWidth <= 768; // Adjust this value based on your mobile breakpoint
-  };
-  const handleClickOutside = (event) => {
-    if (isMobile()) {
-      // Mobile
-      if (
-        !event.target.closest(".searchform-wrap") &&
-        !event.target.closest(".search-icon") &&
-        !event.target.closest(".search-icon-mg")
-      ) {
-        isSearchFocues.value = false;
-        isSearchTyping.value = false;
-        isSearchBarActive.value = false;
-        removeBackdrop();
-      }
-    } else {
-      // Desktop
-      if (
-        !event.target.closest(".searchform-wrap") &&
-        !event.target.closest(".search-icon")
-      ) {
-        isSearchFocues.value = false;
-        isSearchTyping.value = false;
-        isSearchBarActive.value = false;
-        removeBackdrop();
-      }
-    }
-  };
-  onMounted(() => {
-    document.addEventListener("click", handleClickOutside);
-  });
-  onBeforeUnmount(() => {
-    document.removeEventListener("click", handleClickOutside);
-  });
-  const isActiveLink = (href) => {
-    return route.path === href;
-  };
-  const addBackdrop = () => {
-    // Check if the backdrop already exists
-    if (!document.getElementById("backdrop")) {
-      const backdrop = document.createElement("div");
-      backdrop.className = "backdrop";
-      backdrop.id = "backdrop";
-      document.body.appendChild(backdrop);
-      document.body.classList.add("no-scroll");
-      let header=document.getElementById("header");
-      header.classList.add("header-bg");
-    }
-  };
-  const removeBackdrop = () => {
-    const backdrop = document.getElementById("backdrop");
-    if (backdrop) {
-      backdrop.remove();
-    }
-    document.body.classList.remove("no-scroll");
-    header.classList.remove("header-bg");
-  };
-
-
-  // Menu api call
-  const { data: menu } = await useFetch(
-    apiBaseURL + "/system/menu/main/linkset",
-    {
-      method: "GET",
-      headers: {
-        Authorization: `Basic ${apiAuthKey}`,
-      },
-    }
-  );
+if (menuError.value) {
+  console.error("Error fetching menu:", menuError.value);
+}
 </script>
 <style scoped>
   

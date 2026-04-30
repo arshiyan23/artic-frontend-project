@@ -138,7 +138,7 @@ const closePopup = () => {
   isPopupVisible.value = false;
 
   // Check the current page URL and add condition
-  if (route.path.includes('search')) {
+  if (route?.path?.includes('search')) {
     const headingElement = document.querySelector('p.totalSearchResultRef');
     if (headingElement) {
       headingElement.focus();

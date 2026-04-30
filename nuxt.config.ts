@@ -19,7 +19,11 @@ export default defineNuxtConfig({
     ]
   },
 
-  runtimeConfig: {
+  imports: {
+    autoImport: true
+   },
+
+   runtimeConfig: {
     public: {
       API_BASE_URL: process.env.API_BASE_URL || 'https://artic-apis.ddev.site',
       IMG_BASE_URL: process.env.IMG_BASE_URL || 'https://artic-apis.ddev.site',
@@ -35,6 +39,7 @@ export default defineNuxtConfig({
       brotli: true
     }
   },
+
 
   app: {
     head: {

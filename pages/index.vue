@@ -1010,7 +1010,7 @@ onMounted(async () => {
   await nextTick();
 
    // Check if the user is on macOS and using Chrome
-   if (navigator.userAgent.includes('Mac OS X') && navigator.userAgent.includes('Chrome')) {
+   if (navigator?.userAgent?.includes('Mac OS X') && navigator?.userAgent?.includes('Chrome')) {
       document.body.classList.add('mac-chrome');
     }
     
