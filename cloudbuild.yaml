@@ -1,20 +1,30 @@
 steps:
-  - name: "gcr.io/cloud-builders/gcloud"
-    args:
-      - "builds"
-      - "submit"
-      - "."
-      - "--pack=image=us-central1-docker.pkg.dev/$PROJECT_ID/cloud-run-source-d\
-        eploy/frontend-service:latest"
-  - name: "gcr.io/cloud-builders/gcloud"
+  # Step 1: Install dependencies using the specific Node.js 18 builder
+  - name: "gcr.io/cloud-builders/npm:18"
+    args: [ "install" ]
+    id: "Install Dependencies"
+
+  # Step 2: Run the Nuxt build command, also using the Node.js 18 builder
+  - name: "gcr.io/cloud-builders/npm:18"
+    args: [ "run", "build" ]
+    id: "Run Nuxt Build"
+
+  # Step 3: Deploy to Cloud Run. This step uses a special feature.
+  # It automatically takes your built application (including the .output directory)
+  # and deploys it using the correct Node.js 18 buildpack on the server.
+  - name: "gcr.io/google.com/cloudsdktool/cloud-sdk"
+    entrypoint: gcloud
     args:
       - "run"
       - "deploy"
       - "frontend-service"
-      - "--image=us-central1-docker.pkg.dev/$PROJECT_ID/cloud-run-source-deploy\
-        /frontend-service:latest"
-      - "--region=us-central1"
-      - "--platform=managed"
+      - "--source"
+      - "." # Deploy from the current directory which now contains the built .output
+      - "--platform"
+      - "managed"
+      - "--region"
+      - "us-central1"
       - "--allow-unauthenticated"
+    id: "Deploy Frontend Service"
 options:
   logging: CLOUD_LOGGING_ONLY
