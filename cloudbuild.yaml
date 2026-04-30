@@ -25,10 +25,6 @@ steps:
       - "--region"
       - "us-central1"
       - "--allow-unauthenticated"
-      # THIS IS THE FINAL FIX: Set HOST=0.0.0.0 to make the container accessible
-      # from the outside, and ensure the other variables are also present.
-      - "--set-env-vars=HOST=0.0.0.0,API_BASE_URL=https://backend-service-qylp2\
-        g3ica-uc.a.run.app,API_AUTH_KEY=not-a-real-key"
     id: "Deploy Frontend Service"
 options:
   logging: CLOUD_LOGGING_ONLY
