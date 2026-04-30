@@ -1,18 +1,18 @@
 steps:
-  # Step 1: Install dependencies using the exact Node.js version you use locally.
+  # Step 1: Install dependencies using 'npm install', which works without a package-lock.json.
+  # We are still using the correct Node.js v22 image.
   - name: "node:22"
     entrypoint: "npm"
-    args: [ "ci" ]
+    args: [ "install" ] # THIS IS THE FIX
     id: "Install Dependencies"
 
-  # Step 2: Build the Nuxt application, also using the correct Node.js version.
+  # Step 2: Build the Nuxt application.
   - name: "node:22"
     entrypoint: "npm"
     args: [ "run", "build" ]
     id: "Run Nuxt Build"
 
-  # Step 3: Deploy the built source to Cloud Run. The --source flag is smart
-  # and will correctly package your built Nuxt app from the .output directory.
+  # Step 3: Deploy the built source to Cloud Run.
   - name: "gcr.io/google.com/cloudsdktool/cloud-sdk"
     entrypoint: "gcloud"
     args:
