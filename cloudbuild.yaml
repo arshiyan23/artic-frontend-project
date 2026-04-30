@@ -1,17 +1,17 @@
 steps:
-  # Step 1: Install dependencies using 'npm install'.
+  # Step 1: Install dependencies
   - name: "node:22"
     entrypoint: "npm"
     args: [ "install" ]
     id: "Install Dependencies"
 
-  # Step 2: Build the Nuxt application.
+  # Step 2: Build the Nuxt application
   - name: "node:22"
     entrypoint: "npm"
     args: [ "run", "build" ]
     id: "Run Nuxt Build"
 
-  # Step 3: Deploy, but explicitly tell Cloud Run to check port 3000.
+  # Step 3: Deploy with all necessary flags, including the environment variables.
   - name: "gcr.io/google.com/cloudsdktool/cloud-sdk"
     entrypoint: "gcloud"
     args:
@@ -25,7 +25,8 @@ steps:
       - "--region"
       - "us-central1"
       - "--allow-unauthenticated"
-      - "--port=3000" # THIS IS THE FINAL FIX
+      - "--set-env-vars=API_BASE_URL=https://backend-service-qylp2g3ica-uc.a.ru\
+        n.app,API_AUTH_KEY=not-a-real-key" # THIS IS THE FINAL FIX
     id: "Deploy Frontend Service"
 options:
   logging: CLOUD_LOGGING_ONLY
