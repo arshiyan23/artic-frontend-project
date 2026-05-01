@@ -30,7 +30,12 @@ export default defineNuxtConfig({
   },
 
   nitro: {
-    preset: "node-server", // ✅ changed from azure (important for local dev)
+    preset: "node-server",
+    routeRules: {
+      '/api/**': {
+        proxy: 'https://backend-service-703709491101.us-central1.run.app/**'
+      }
+    },
     compressPublicAssets: {
       brotli: true
     }
