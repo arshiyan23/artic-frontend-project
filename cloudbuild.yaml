@@ -1,18 +1,26 @@
 steps:
-  # Step 1: Use 'npm ci' which respects the package-lock.json and is the correct
-  # command for CI/CD environments. It will correctly handle the postinstall script.
+  # Step 1: Install dependencies using 'npm install' but IGNORE the broken postinstall script.
+  # This works even without a package-lock.json file.
   - name: "node:22"
     entrypoint: "npm"
-    args: [ "ci" ]
+    args: [ "install", "--ignore-scripts" ]
     id: "Install Dependencies"
 
-  # Step 2: Build the Nuxt application.
+  # Step 2: Manually run the 'nuxt prepare' script now that all dependencies are safely installed.
+  # We run it by calling the binary directly from the node_modules folder.
+  - name: "node:22"
+    entrypoint: "./node_modules/.bin/nuxt"
+    args: [ "prepare" ]
+    id: "Prepare Nuxt App"
+
+  # Step 3: Run the final Nuxt build command.
   - name: "node:22"
     entrypoint: "npm"
     args: [ "run", "build" ]
     id: "Run Nuxt Build"
 
-  # Step 3: Deploy the built source. The environment variables are handled in the UI.
+  # Step 4: Deploy the built source. This does NOT touch your environment variables.
+  # It will preserve the configuration you have already set in the Cloud Run UI.
   - name: "gcr.io/google.com/cloudsdktool/cloud-sdk"
     entrypoint: "gcloud"
     args:
