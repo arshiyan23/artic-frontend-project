@@ -1,39 +1,42 @@
 steps:
-  # Step 1: Install dependencies using 'npm install' but IGNORE the broken postinstall script.
-  # This works even without a package-lock.json file.
-  - name: "node:22"
-    entrypoint: "npm"
-    args: [ "install", "--ignore-scripts" ]
-    id: "Install Dependencies"
+  # Step 1: Build the Docker image using the Dockerfile we just created.
+  - name: "gcr.io/cloud-builders/docker"
+    args:
+      [
+        "build",
+        "-t",
+        "us-central1-docker.pkg.dev/$PROJECT_ID/cloud-run-source-deploy/front\
+          end-service:$COMMIT_SHA",
+        ".",
+      ]
+    id: "Build"
 
-  # Step 2: Manually run the 'nuxt prepare' script now that all dependencies are safely installed.
-  # We run it by calling the binary directly from the node_modules folder.
-  - name: "node:22"
-    entrypoint: "./node_modules/.bin/nuxt"
-    args: [ "prepare" ]
-    id: "Prepare Nuxt App"
+  # Step 2: Push the successfully built image to Google's Artifact Registry.
+  - name: "gcr.io/cloud-builders/docker"
+    args:
+      [
+        "push",
+        "us-central1-docker.pkg.dev/$PROJECT_ID/cloud-run-source-deploy/front\
+          end-service:$COMMIT_SHA",
+      ]
+    id: "Push"
 
-  # Step 3: Run the final Nuxt build command.
-  - name: "node:22"
-    entrypoint: "npm"
-    args: [ "run", "build" ]
-    id: "Run Nuxt Build"
-
-  # Step 4: Deploy the built source. This does NOT touch your environment variables.
-  # It will preserve the configuration you have already set in the Cloud Run UI.
+  # Step 3: Deploy that specific, immutable image to Cloud Run.
+  # This does NOT set environment variables, so it will preserve your UI settings.
   - name: "gcr.io/google.com/cloudsdktool/cloud-sdk"
     entrypoint: "gcloud"
     args:
       - "run"
       - "deploy"
       - "frontend-service"
-      - "--source"
-      - "."
-      - "--platform"
-      - "managed"
+      - "--image"
+      - "us-central1-docker.pkg.dev/$PROJECT_ID/cloud-run-source-deploy/fronten\
+        d-service:$COMMIT_SHA"
       - "--region"
       - "us-central1"
+      - "--platform"
+      - "managed"
       - "--allow-unauthenticated"
-    id: "Deploy Frontend Service"
+    id: "Deploy"
 options:
   logging: CLOUD_LOGGING_ONLY
