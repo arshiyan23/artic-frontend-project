@@ -1,4 +1,5 @@
 steps:
+  # Step 1: Build the Docker image using the correct Dockerfile.
   - name: "gcr.io/cloud-builders/docker"
     args:
       [
@@ -8,6 +9,9 @@ steps:
           end-service:$COMMIT_SHA",
         ".",
       ]
+    id: "Build"
+
+  # Step 2: Push the image to the registry.
   - name: "gcr.io/cloud-builders/docker"
     args:
       [
@@ -15,6 +19,9 @@ steps:
         "us-central1-docker.pkg.dev/$PROJECT_ID/cloud-run-source-deploy/front\
           end-service:$COMMIT_SHA",
       ]
+    id: "Push"
+
+  # Step 3: Deploy that image. This does NOT touch your environment variables.
   - name: "gcr.io/google.com/cloudsdktool/cloud-sdk"
     entrypoint: "gcloud"
     args:
@@ -29,6 +36,6 @@ steps:
       - "--platform"
       - "managed"
       - "--allow-unauthenticated"
-    id: "Deploy Frontend Service"
+    id: "Deploy"
 options:
   logging: CLOUD_LOGGING_ONLY
