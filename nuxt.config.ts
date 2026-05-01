@@ -3,12 +3,6 @@ import viteCompression from 'vite-plugin-compression'
 export default defineNuxtConfig({
   ssr: false,
 
-  // ❌ REMOVE this (Nuxt 3 doesn’t use target)
-  // target: 'static',
-
-  // ❌ REMOVE this (Nuxt 3 uses nitro prerender instead)
-  // generate: { fallback: true },
-
   vite: {
     plugins: [
       viteCompression({
@@ -31,13 +25,6 @@ export default defineNuxtConfig({
 
   nitro: {
     preset: "node-server",
-    routeRules: {
-      '/api/**': {
-        proxy: {
-          to: 'https://backend-service-703709491101.us-central1.run.app/**'
-        }
-      }
-    },
     compressPublicAssets: {
       brotli: true
     }
@@ -46,15 +33,10 @@ export default defineNuxtConfig({
   app: {
     head: {
       title: 'ARTIC',
-      htmlAttrs: {
-        lang: 'en'
-      },
+      htmlAttrs: { lang: 'en' },
       meta: [
         { charset: 'utf-8' },
-        {
-          name: 'viewport',
-          content: 'width=device-width, initial-scale=1, maximum-scale=2.0, user-scalable=1'
-        }
+        { name: 'viewport', content: 'width=device-width, initial-scale=1, maximum-scale=2.0, user-scalable=1' }
       ],
       script: [
         { src: '/js/bootstrap.bundle.min.js', tagPosition: 'bodyClose' },
@@ -90,10 +72,7 @@ export default defineNuxtConfig({
     cookieExpiryOffsetMs: 1000 * 60 * 60 * 24 * 365,
     cookieNameIsConsentGiven: 'ncc_c',
     cookieNameCookiesEnabledIds: 'ncc_e',
-    cookieOptions: {
-      path: '/',
-      sameSite: 'strict'
-    },
+    cookieOptions: { path: '/', sameSite: 'strict' },
     isAcceptNecessaryButtonEnabled: true,
     isControlButtonEnabled: true,
     locales: ['en']
