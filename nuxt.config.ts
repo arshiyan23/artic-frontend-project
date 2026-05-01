@@ -33,7 +33,9 @@ export default defineNuxtConfig({
     preset: "node-server",
     routeRules: {
       '/api/**': {
-        proxy: 'https://backend-service-703709491101.us-central1.run.app/**'
+        proxy: {
+          to: 'https://backend-service-703709491101.us-central1.run.app/**'
+        }
       }
     },
     compressPublicAssets: {
