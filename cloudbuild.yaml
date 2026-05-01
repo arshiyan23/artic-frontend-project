@@ -1,41 +1,40 @@
 steps:
-  # Step 1: Build the Docker image using the correct Dockerfile.
-  - name: "gcr.io/cloud-builders/docker"
-    args:
-      [
-        "build",
-        "-t",
-        "us-central1-docker.pkg.dev/$PROJECT_ID/cloud-run-source-deploy/front\
-          end-service:$COMMIT_SHA",
-        ".",
-      ]
-    id: "Build"
+  # Step 1: Install dependencies using 'npm install' but IGNORE the broken postinstall script.
+  - name: "node:22"
+    entrypoint: "npm"
+    args: [ "install", "--ignore-scripts" ]
+    id: "Install Dependencies"
 
-  # Step 2: Push the image to the registry.
-  - name: "gcr.io/cloud-builders/docker"
-    args:
-      [
-        "push",
-        "us-central1-docker.pkg.dev/$PROJECT_ID/cloud-run-source-deploy/front\
-          end-service:$COMMIT_SHA",
-      ]
-    id: "Push"
+  # Step 2: Manually run the 'nuxt prepare' script now that dependencies are installed.
+  - name: "node:22"
+    entrypoint: "./node_modules/.bin/nuxt"
+    args: [ "prepare" ]
+    id: "Prepare Nuxt App"
 
-  # Step 3: Deploy that image. This does NOT touch your environment variables.
+  # Step 3: Run the final Nuxt build command.
+  - name: "node:22"
+    entrypoint: "npm"
+    args: [ "run", "build" ]
+    id: "Run Nuxt Build"
+
+  # Step 4: Deploy the built source. This does NOT touch your environment variables.
+  # This is the command that was almost working before. It uses Google's builders.
+  # We add a longer startup timeout just in case, which is best practice for SSR apps.
   - name: "gcr.io/google.com/cloudsdktool/cloud-sdk"
     entrypoint: "gcloud"
     args:
       - "run"
       - "deploy"
       - "frontend-service"
-      - "--image"
-      - "us-central1-docker.pkg.dev/$PROJECT_ID/cloud-run-source-deploy/fronten\
-        d-service:$COMMIT_SHA"
-      - "--region"
-      - "us-central1"
+      - "--source"
+      - "."
       - "--platform"
       - "managed"
+      - "--region"
+      - "us-central1"
       - "--allow-unauthenticated"
-    id: "Deploy"
+      - "--cpu=1"
+      - "--timeout=600"
+id: "Deploy Frontend Service"
 options:
   logging: CLOUD_LOGGING_ONLY

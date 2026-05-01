@@ -31,7 +31,8 @@ COPY --from=build /app/package.json .
 ENV HOST=0.0.0.0
 
 # Expose the port
+ENV PORT=3000
 EXPOSE 3000
 
 # The command to start the server
-CMD [ "npm", "start" ]
+CMD [ "node".output/server/index.mjs]
