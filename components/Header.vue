@@ -232,7 +232,7 @@
 
     // Computed property to determine the tabindex based on the current URL
     const tabIndex = computed(() => {
-      return route.path.includes('supply-chain') ? -1 : 0;
+      return route.path?.includes('supply-chain') ? -1 : 0;
     });
 
 
@@ -550,7 +550,8 @@ watch(() => router.currentRoute.value.path, (newPath) => {
       backdrop.remove();
     }
     document.body.classList.remove("no-scroll");
-    header.classList.remove("header-bg");
+    const header = document.getElementById("header");
+    if (header) header.classList.remove("header-bg");
   };
 
 
