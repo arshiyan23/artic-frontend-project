@@ -14,11 +14,8 @@ COPY --from=build /app/.output .
 COPY --from=build /app/node_modules ./node_modules
 COPY --from=build /app/package.json .
 
-# CRITICAL FIXES
 ENV HOST=0.0.0.0
 ENV PORT=3000
-ENV NITRO_HOST=0.0.0.0
-ENV NITRO_PORT=3000
 
 EXPOSE 3000
 
