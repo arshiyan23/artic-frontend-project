@@ -1,50 +1,31 @@
 steps:
-  # Step 1: Install dependencies
+  # Step 1: Use 'npm ci' which respects the package-lock.json and is the correct
+  # command for CI/CD environments. It will correctly handle the postinstall script.
   - name: "node:22"
     entrypoint: "npm"
-    args: ["install", "--ignore-scripts"]
+    args: [ "ci" ]
     id: "Install Dependencies"
 
-  # Step 2: Nuxt prepare
-  - name: "node:22"
-    entrypoint: "./node_modules/.bin/nuxt"
-    args: ["prepare"]
-    id: "Prepare Nuxt App"
-
-  # Step 3: Nuxt build
+  # Step 2: Build the Nuxt application.
   - name: "node:22"
     entrypoint: "npm"
-    args: ["run", "build"]
+    args: [ "run", "build" ]
     id: "Run Nuxt Build"
 
-  # Step 4: Build Docker image
-  - name: "gcr.io/cloud-builders/docker"
-    args:
-      - "build"
-      - "-t"
-      - "gcr.io/$PROJECT_ID/frontend-service:$COMMIT_SHA"
-      - "."
-    id: "Build Docker Image"
-
-  # Step 5: Push Docker image to Container Registry
-  - name: "gcr.io/cloud-builders/docker"
-    args:
-      - "push"
-      - "gcr.io/$PROJECT_ID/frontend-service:$COMMIT_SHA"
-    id: "Push Docker Image"
-
-  # Step 6: Deploy to Cloud Run using the image
+  # Step 3: Deploy the built source. The environment variables are handled in the UI.
   - name: "gcr.io/google.com/cloudsdktool/cloud-sdk"
     entrypoint: "gcloud"
     args:
       - "run"
       - "deploy"
       - "frontend-service"
-      - "--image=gcr.io/$PROJECT_ID/frontend-service:$COMMIT_SHA"
-      - "--platform=managed"
-      - "--region=us-central1"
+      - "--source"
+      - "."
+      - "--platform"
+      - "managed"
+      - "--region"
+      - "us-central1"
       - "--allow-unauthenticated"
     id: "Deploy Frontend Service"
-
 options:
   logging: CLOUD_LOGGING_ONLY
