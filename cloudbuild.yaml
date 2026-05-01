@@ -34,7 +34,6 @@ steps:
       - "us-central1"
       - "--allow-unauthenticated"
       - "--cpu=1"
-      - "--timeout=600"
 id: "Deploy Frontend Service"
 options:
   logging: CLOUD_LOGGING_ONLY
