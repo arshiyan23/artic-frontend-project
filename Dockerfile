@@ -22,4 +22,4 @@ ENV NITRO_PORT=3000
 
 EXPOSE 3000
 
-CMD ["sh", "-c", "node .output/server/index.mjs || npx serve -s .output/public -l 3000"]
+CMD ["node", ".output/server/index.mjs"]
