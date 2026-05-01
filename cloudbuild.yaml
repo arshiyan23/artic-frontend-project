@@ -1,36 +1,33 @@
 steps:
-  # Step 1: Install dependencies using Node.js v22, but IGNORE the broken postinstall script.
-  # This works without a package-lock.json file.
-  - name: "node:22"
-    entrypoint: "npm"
-    args: [ "install", "--ignore-scripts" ]
-    id: "Install Dependencies"
-
-  # Step 2: Manually run the 'nuxt prepare' script now that all dependencies are safely installed.
-  - name: "node:22"
-    entrypoint: "./node_modules/.bin/nuxt"
-    args: [ "prepare" ]
-    id: "Prepare Nuxt App"
-
-  # Step 3: Run the final Nuxt build command.
-  - name: "node:22"
-    entrypoint: "npm"
-    args: [ "run", "build" ]
-    id: "Run Nuxt Build"
-
-  # Step 4: Deploy the built source. This does NOT touch your environment variables.
+  - name: "gcr.io/cloud-builders/docker"
+    args:
+      [
+        "build",
+        "-t",
+        "us-central1-docker.pkg.dev/$PROJECT_ID/cloud-run-source-deploy/front\
+          end-service:$COMMIT_SHA",
+        ".",
+      ]
+  - name: "gcr.io/cloud-builders/docker"
+    args:
+      [
+        "push",
+        "us-central1-docker.pkg.dev/$PROJECT_ID/cloud-run-source-deploy/front\
+          end-service:$COMMIT_SHA",
+      ]
   - name: "gcr.io/google.com/cloudsdktool/cloud-sdk"
     entrypoint: "gcloud"
     args:
       - "run"
       - "deploy"
       - "frontend-service"
-      - "--source"
-      - "."
-      - "--platform"
-      - "managed"
+      - "--image"
+      - "us-central1-docker.pkg.dev/$PROJECT_ID/cloud-run-source-deploy/fronten\
+        d-service:$COMMIT_SHA"
       - "--region"
       - "us-central1"
+      - "--platform"
+      - "managed"
       - "--allow-unauthenticated"
     id: "Deploy Frontend Service"
 options:
