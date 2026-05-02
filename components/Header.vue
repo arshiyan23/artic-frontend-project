@@ -428,6 +428,7 @@ watch(() => router.currentRoute.value.path, (newPath) => {
           `${apiBaseURL}/jsonapi/index/artic_index_database?fields[node--portfolio]=title&fields[node--news]=title&fields[node--press_release]=title&fields[node--board_members]=title&fields[node--executive_management]=title&fields[node--policy_pages]=title&fields[node--landing_page]=title&fields[node--supply_chain]=title&page[limit]=10&filter[fulltext]=${encodeURIComponent(searchQuery.value)}`,
           {
             method: "GET",
+            server: false,
             headers: {
               Authorization: `Basic ${apiAuthKey}`,
             },
@@ -560,6 +561,7 @@ watch(() => router.currentRoute.value.path, (newPath) => {
     apiBaseURL + "/system/menu/main/linkset",
     {
       method: "GET",
+      server: false,
       headers: {
         Authorization: `Basic ${apiAuthKey}`,
       },
