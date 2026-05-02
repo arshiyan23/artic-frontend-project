@@ -1,0 +1,39 @@
+steps:
+  - name: "node:22"
+    entrypoint: "npm"
+    args: [ "install", "--ignore-scripts" ]
+    id: "Install Dependencies"
+
+  - name: "node:22"
+    entrypoint: "./node_modules/.bin/nuxt"
+    args: [ "prepare" ]
+    id: "Prepare Nuxt App"
+
+  - name: "node:22"
+    entrypoint: "npm"
+    args: [ "run", "build" ]
+    id: "Run Nuxt Build"
+
+  - name: "gcr.io/cloud-builders/docker"
+    args: [ "build", "-t", "gcr.io/$PROJECT_ID/frontend-service:$COMMIT_SHA", "." ]
+    id: "Build Docker Image"
+
+  - name: "gcr.io/cloud-builders/docker"
+    args: [ "push", "gcr.io/$PROJECT_ID/frontend-service:$COMMIT_SHA" ]
+    id: "Push Docker Image"
+
+  - name: "gcr.io/google.com/cloudsdktool/cloud-sdk"
+    entrypoint: "gcloud"
+    args:
+      - "run"
+      - "deploy"
+      - "frontend-service"
+      - "--image=gcr.io/$PROJECT_ID/frontend-service:$COMMIT_SHA"
+      - "--platform=managed"
+      - "--region=us-central1"
+      - "--allow-unauthenticated"
+      - "--port=3000"
+    id: "Deploy Frontend Service"
+
+options:
+  logging: CLOUD_LOGGING_ONLY

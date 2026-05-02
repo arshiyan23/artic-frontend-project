@@ -197,35 +197,43 @@
 </template>
 
 <script setup lang="ts">
-import { useRouter, useRoute } from "vue-router";
-import { ref, computed, onMounted, onUnmounted, nextTick, watch } from "vue";
+  import { useRouter, useRoute } from "vue-router";
+  import { ref, onMounted, onUnmounted, nextTick } from 'vue';
+  import { createRouter, createWebHistory } from 'vue-router';
 
-const config = useRuntimeConfig();
-const imgBaseURL = config.public.IMG_BASE_URL;
-const apiBaseURL = config.public.API_BASE_URL;
-const apiAuthKey = config.public.API_AUTH_KEY;
-const route = useRoute();
-const router = useRouter();
 
-const searchQuery = ref("");
-const searchResults = ref([]);
-const topResults = ref([]);
-const recentResults = ref([]);
-const isLoading = ref(false);
 
-const defaultCategory = ref("all");
-const isSearchBarActive = ref(false);
-const isSearchFocues = ref(false);
-const isSearchTyping = ref(false);
-const isMobileMenuVisible = ref(false);
 
-const logoRef = ref(null);
-const navbarSupportedContentRef = ref<HTMLDivElement | null>(null);
+  const config = useRuntimeConfig();
+  const imgBaseURL = config.public.IMG_BASE_URL;
+  const apiBaseURL = config.public.API_BASE_URL;
+  const apiAuthKey = config.public.API_AUTH_KEY;
+  const route = useRoute();
+  const router = useRouter();
 
-// Computed property to determine the tabindex based on the current URL
-const tabIndex = computed(() => {
-  return route?.path?.includes("supply-chain") ? -1 : 0;
-});
+
+
+  const searchQuery = defineModel();
+  const searchResults = ref([]);
+  const topResults = ref([]);
+  const recentResults = ref([]);
+  const isLoading = ref(false);
+
+  const defaultCategory = ref("all");
+  const isSearchBarActive = ref(false);
+  const isSearchFocues = ref(false);
+  const isSearchTyping = ref(false);
+  const isMobileMenuVisible = ref(false);
+
+  const logoRef = ref(null);
+  const navbarSupportedContentRef = ref < HTMLDivElement | null > (null);
+
+
+    // Computed property to determine the tabindex based on the current URL
+    const tabIndex = computed(() => {
+      return route.path?.includes('supply-chain') ? -1 : 0;
+    });
+
 
 const toggleMobileMenu = () => {
   isMobileMenuVisible.value = !isMobileMenuVisible.value;
@@ -366,6 +374,112 @@ const onInputSearch = async () => {
       console.error("Error fetching search results:", error);
     } finally {
       isLoading.value = false;
+
+  const searchOnPageCat = async (label) => {
+    if (label == "all") {
+      const searchResults = await $fetch(
+        apiBaseURL + "/jsonapi/index/artic_index_database/",
+        {
+          method: "GET",
+          params: {
+            "filter[fulltext]": searchQuery.value,
+          },
+          headers: {
+            Authorization: `Basic ${apiAuthKey}`,
+          },
+        }
+      );
+      searchResults.value = searchResults;
+      defaultCategory.value = label;
+    } else {
+      const searchResults = await $fetch(
+        apiBaseURL + "/jsonapi/index/artic_index_database/",
+        {
+          method: "GET",
+          params: {
+            "filter[fulltext]": searchQuery.value,
+            "filter[search_filter]": label,
+          },
+          headers: {
+            Authorization: `Basic ${apiAuthKey}`,
+          },
+        }
+      );
+      searchResults.value = searchResults;
+      defaultCategory.value = label;
+    }
+  };
+
+  // Body Click (Outside)
+  const isMobile = () => {
+    return window.innerWidth <= 768; // Adjust this value based on your mobile breakpoint
+  };
+  const handleClickOutside = (event) => {
+    if (isMobile()) {
+      // Mobile
+      if (
+        !event.target.closest(".searchform-wrap") &&
+        !event.target.closest(".search-icon") &&
+        !event.target.closest(".search-icon-mg")
+      ) {
+        isSearchFocues.value = false;
+        isSearchTyping.value = false;
+        isSearchBarActive.value = false;
+        removeBackdrop();
+      }
+    } else {
+      // Desktop
+      if (
+        !event.target.closest(".searchform-wrap") &&
+        !event.target.closest(".search-icon")
+      ) {
+        isSearchFocues.value = false;
+        isSearchTyping.value = false;
+        isSearchBarActive.value = false;
+        removeBackdrop();
+      }
+    }
+  };
+  onMounted(() => {
+    document.addEventListener("click", handleClickOutside);
+  });
+  onBeforeUnmount(() => {
+    document.removeEventListener("click", handleClickOutside);
+  });
+  const isActiveLink = (href) => {
+    return route.path === href;
+  };
+  const addBackdrop = () => {
+    // Check if the backdrop already exists
+    if (!document.getElementById("backdrop")) {
+      const backdrop = document.createElement("div");
+      backdrop.className = "backdrop";
+      backdrop.id = "backdrop";
+      document.body.appendChild(backdrop);
+      document.body.classList.add("no-scroll");
+      let header=document.getElementById("header");
+      header.classList.add("header-bg");
+    }
+  };
+  const removeBackdrop = () => {
+    const backdrop = document.getElementById("backdrop");
+    if (backdrop) {
+      backdrop.remove();
+    }
+    document.body.classList.remove("no-scroll");
+    const header = document.getElementById("header");
+    if (header) header.classList.remove("header-bg");
+  };
+
+
+  // Menu api call
+  const { data: menu } = await useFetch(
+    apiBaseURL + "/system/menu/main/linkset",
+    {
+      method: "GET",
+      headers: {
+        Authorization: `Basic ${apiAuthKey}`,
+      },
     }
   } else {
     searchResults.value = [];

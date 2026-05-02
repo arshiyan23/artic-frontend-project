@@ -6,9 +6,12 @@
     "build": "nuxt build",
     "dev": "nuxt dev",
     "generate": "nuxt generate",
-    "start": "nuxt start",
+    "start": "node .output/server/index.mjs",
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare"
+  },
+  "engines": {
+    "node": "18"
   },
   "dependencies": {
     "@nuxt/image": "^1.7.0",

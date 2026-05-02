@@ -3,12 +3,6 @@ import viteCompression from 'vite-plugin-compression'
 export default defineNuxtConfig({
   ssr: false,
 
-  // ❌ REMOVE this (Nuxt 3 doesn’t use target)
-  // target: 'static',
-
-  // ❌ REMOVE this (Nuxt 3 uses nitro prerender instead)
-  // generate: { fallback: true },
-
   vite: {
     plugins: [
       viteCompression({
@@ -25,16 +19,16 @@ export default defineNuxtConfig({
 
    runtimeConfig: {
     public: {
-      API_BASE_URL: process.env.API_BASE_URL || 'https://artic-apis.ddev.site',
-      IMG_BASE_URL: process.env.IMG_BASE_URL || 'https://artic-apis.ddev.site',
-      FRONTEND_BASE_URL: process.env.FRONTEND_BASE_URL || 'http://localhost:3001',
-      API_AUTH_KEY: process.env.API_AUTH_KEY || '',
+      API_BASE_URL: 'https://artic-apis.ddev.site',
+      IMG_BASE_URL: 'https://artic-apis.ddev.site',
+      FRONTEND_BASE_URL: 'http://localhost:3001',
+      API_AUTH_KEY: '',
       gtagId: 'G-TTNXS1ZH7X'
     }
   },
 
   nitro: {
-    preset: "node-server", // ✅ changed from azure (important for local dev)
+    preset: "node-server",
     compressPublicAssets: {
       brotli: true
     }
@@ -44,15 +38,10 @@ export default defineNuxtConfig({
   app: {
     head: {
       title: 'ARTIC',
-      htmlAttrs: {
-        lang: 'en'
-      },
+      htmlAttrs: { lang: 'en' },
       meta: [
         { charset: 'utf-8' },
-        {
-          name: 'viewport',
-          content: 'width=device-width, initial-scale=1, maximum-scale=2.0, user-scalable=1'
-        }
+        { name: 'viewport', content: 'width=device-width, initial-scale=1, maximum-scale=2.0, user-scalable=1' }
       ],
       script: [
         { src: '/js/bootstrap.bundle.min.js', tagPosition: 'bodyClose' },
@@ -88,10 +77,7 @@ export default defineNuxtConfig({
     cookieExpiryOffsetMs: 1000 * 60 * 60 * 24 * 365,
     cookieNameIsConsentGiven: 'ncc_c',
     cookieNameCookiesEnabledIds: 'ncc_e',
-    cookieOptions: {
-      path: '/',
-      sameSite: 'strict'
-    },
+    cookieOptions: { path: '/', sameSite: 'strict' },
     isAcceptNecessaryButtonEnabled: true,
     isControlButtonEnabled: true,
     locales: ['en']

@@ -15,8 +15,8 @@
             <div class="container mw-100 px-0">
               <div class="video-text">
                 <h1 class="pt-0 ardf-1 page-main-heading" tabindex="0">
-                  <span ref="title" class="color-primary">{{ homepage.data.field_banner_title }}</span>
-                  <span ref="subtitle" class="text-white textwhiteset">{{ homepage.data.field_banner_sub_title }}</span>
+                  <span ref="title" class="color-primary">{{ homepage?.data?.field_banner_title }}</span>
+                  <span ref="subtitle" class="text-white textwhiteset">{{ homepage?.data?.field_banner_sub_title }}</span>
                 </h1>
               </div>
 
@@ -275,9 +275,9 @@
                             <div tabindex="0" class="card-body text-center p-4 p-xxl-5 d-flex counter-show"
                               ref="counterShow">
                               <div class="mb-2 pe-2 pe-2 count-number data h1">
-                                {{homepage.data.field_sections[1].field_data_details[0].field_number}}</div>
+                                {{homepage?.data?.field_sections?.[1]?.field_data_details?.[0]?.field_number}}</div>
                               <p class="mb-0" role="heading" aria-level="2">
-                                {{homepage.data.field_sections[1].field_data_details[0].field_number_text}}</p>
+                                {{homepage?.data?.field_sections?.[1]?.field_data_details?.[0]?.field_number_text}}</p>
                             </div>
                           </div>
                         </div>
@@ -285,9 +285,9 @@
                           <div class="card border-0 bg-transparent">
                             <div tabindex="0" class="card-body text-center p-4 p-xxl-5 d-flex">
                               <div class="mb-2 pe-2 pe-2 data h1">
-                                {{homepage.data.field_sections[1].field_data_details[1].field_number}}</div>
+                                {{homepage?.data?.field_sections?.[1]?.field_data_details?.[1]?.field_number}}</div>
                               <p class="mb-0" role="heading" aria-level="2">
-                                {{homepage.data.field_sections[1].field_data_details[1].field_number_text}} <br>
+                                {{homepage?.data?.field_sections?.[1]?.field_data_details?.[1]?.field_number_text}} <br>
                                 &nbsp;</p>
                             </div>
                           </div>
@@ -296,10 +296,10 @@
                           <div class="card border-0 bg-transparent">
                             <div tabindex="0" class="card-body text-center p-4 p-xxl-5 d-flex">
                               <div class="mb-2 pe-2  data h1">
-                                {{homepage.data.field_sections[1].field_data_details[2].field_number}}
+                                {{homepage?.data?.field_sections?.[1]?.field_data_details?.[2]?.field_number}}
                               </div>
                               <p class="mb-0" role="heading" aria-level="2">
-                                {{homepage.data.field_sections[1].field_data_details[2].field_number_text}} <br>
+                                {{homepage?.data?.field_sections?.[1]?.field_data_details?.[2]?.field_number_text}} <br>
                                 &nbsp;</p>
                             </div>
                           </div>
@@ -309,10 +309,10 @@
                             <div tabindex="0" class="card-body text-center p-4 p-xxl-5 d-flex last-counter">
                               <div class="mb-2 pe-2 data h1">
                                 <span>$</span>
-                                <div>{{homepage.data.field_sections[1].field_data_details[3].field_number}}</div>
+                                <div>{{homepage?.data?.field_sections?.[1]?.field_data_details?.[3]?.field_number}}</div>
                                 <div class="d-flex flex-column justify-between">
                                   <strong role="heading" aria-level="2"
-                                    class="">{{homepage.data.field_sections[1].field_data_details[3].field_number_text}}</strong>
+                                    class="">{{homepage?.data?.field_sections?.[1]?.field_data_details?.[3]?.field_number_text}}</strong>
                                   <p class="bn">bn</p>
                                 </div>
                               </div>
@@ -333,7 +333,7 @@
                 <div class="section-header">
                   <h2 tabindex="0" class="arfs-2 text-uppercase pb-4">Our Global Presence</h2>
                 </div>
-                <Globe :markersData="homepage.data.field_sections[2].field_map_markers_data" @selectedMapData1="selectedMapData=$event;isOpen=true;" />
+                <Globe :markersData="homepage?.data?.field_sections?.[2]?.field_map_markers_data" @selectedMapData1="selectedMapData=$event;isOpen=true;" />
               </div>
             </section>
             <!-- ============== -->
@@ -433,7 +433,7 @@
                       <div class="col-lg-7">
                         <div class="d-flex h-100 align-items-end w-100">
                           <div class="post-box mt-5 mb-sm-0 mb-4 h-auto w-100 strategic_approach_content">
-                            <div v-for="(strategic,index) in homepage?.data?.field_sections?.[4].field_startegic_approach"
+                            <div v-for="(strategic,index) in homepage?.data?.field_sections?.[4]?.field_startegic_approach"
                               :key="index">
                               <p tabindex="0" class="mt-5 pt-1 ">
                                 {{ strategic }}
@@ -561,8 +561,8 @@
                   <div class="col-lg-3" data-aos="fade-right" data-aos-delay="400">
                     <div class="post-box dn-s">
                       <div class="text-start d-flex" tabindex="0">
-                        <h3 class="mb-2 pe-1 h1">{{homepage.data.field_sections[3].field_no_of_regions}}</h3>
-                        <p class="fs-5 mb-0 text-secondary">{{homepage.data.field_sections[3].field_regions_title}}</p>
+                        <h3 class="mb-2 pe-1 h1">{{homepage?.data?.field_sections?.[3]?.field_no_of_regions}}</h3>
+                        <p class="fs-5 mb-0 text-secondary">{{homepage?.data?.field_sections?.[3]?.field_regions_title}}</p>
                       </div>
                     </div>
                   </div>
@@ -571,19 +571,19 @@
                     <div class="post-box d-flex flex-column align-items-stretch justify-between">
                       <div class="post-img pb-5 mb-md-5 closerLookImg1 gsapPaperAnimationwrap ">
                         <NuxtImg role="img" tabindex="0" width="100%" height="100%" loading="lazy"
-                          :src="homepage?.data.field_sections[3]?.field_small_image?.field_media_image?.image_style_uri?.a_closer_look_1"
+                          :src="homepage?.data?.field_sections?.[3]?.field_small_image?.field_media_image?.image_style_uri?.a_closer_look_1"
                           class="img-fluid "
-                          :alt="homepage?.data.field_sections[3]?.field_small_image?.field_media_image?.meta?.alt" />
+                          :alt="homepage?.data?.field_sections?.[3]?.field_small_image?.field_media_image?.meta?.alt" />
                       </div>
                       <div class="post-box dn-s dn-d dn-m">
                         <div class="text-start d-flex" tabindex="0">
-                          <h1 class="mb-2 pe-2 pe-2">{{homepage.data.field_sections[3].field_no_of_regions}}</h1>
-                          <p class="fs-5 mb-0 text-secondary">{{homepage.data.field_sections[3].field_regions_title}}
+                          <h1 class="mb-2 pe-2 pe-2">{{homepage?.data?.field_sections?.[3]?.field_no_of_regions}}</h1>
+                          <p class="fs-5 mb-0 text-secondary">{{homepage?.data?.field_sections?.[3]?.field_regions_title}}
                           </p>
                         </div>
                       </div>
                       <div class="closerlook-list  mb-4 mb-sm-0 strategic_approach_content">
-                        <div v-for="(closeData,index) in homepage.data.field_sections[3].field_a_closer_look_lists"
+                        <div v-for="(closeData,index) in homepage?.data?.field_sections?.[3]?.field_a_closer_look_lists"
                           :key="index">
                           <p tabindex="0" class="m-0">
                             {{closeData}}
@@ -598,8 +598,8 @@
                     <div class="post-box">
                       <div class="post-img   closerLookImg2 gsapPaperAnimationwrap">
                         <NuxtImg role="img" tabindex="0" width="100%" height="100%" loading="lazy"
-                          :src="homepage?.data?.field_sections[3]?.field_big_image.field_media_image?.image_style_uri?.a_closer_look_2"
-                          :alt="homepage?.data?.field_sections[3]?.field_big_image?.field_media_image?.meta?.alt"
+                          :src="homepage?.data?.field_sections?.[3]?.field_big_image?.field_media_image?.image_style_uri?.a_closer_look_2"
+                          :alt="homepage?.data?.field_sections?.[3]?.field_big_image?.field_media_image?.meta?.alt"
                           class="img-fluid tile-img" />
                       </div>
                     </div>
@@ -785,13 +785,13 @@
     }
   ];
   // Combined api call
-//   const { data: combined } = await useFetch(apiBaseURL + '/subrequests?_format=json', {
-//     method: "POST",
-//     headers: {
-//       "Authorization": `Basic ${apiAuthKey}`
-//     },
-//     body: combinedReqData
-//   })
+   const { data: combined } = await useFetch(apiBaseURL + '/subrequests?_format=json', {
+     method: "POST",
+     headers: {
+       "Authorization": `Basic ${apiAuthKey}`
+     },
+     body: combinedReqData
+   })
 // homepage.value = combined.value?.herobanner?.body
 //   ? JSON.parse(combined.value.herobanner.body)
 //   : { data: {} };
@@ -997,8 +997,6 @@ const movePrev = () => {
   }
 };
 
-
-const { data: legacyData } = await useFetch('/api/legacy')
 console.log('legacyy:', legacyy.value)
 // console.log('error:', error.value)
 const secondLeader = computed(() => {
