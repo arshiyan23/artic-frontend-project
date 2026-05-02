@@ -646,7 +646,6 @@
   
   // About API call
   const { data: about } = await useFetch(apiBaseURL + '/jsonapi/node/landing_page/72537377-4833-4d5d-b1fe-beaa7b92a1ec', {
-    server: false,
     method: 'GET',
     headers: {
       Authorization: `Basic ${apiAuthKey}`,
@@ -654,7 +653,6 @@
   });
   // Board Members API call
   const { data: members } = await useFetch(apiBaseURL + '/jsonapi/node/board_members', {
-    server: false,
     method: 'GET',
     headers: {
       Authorization: `Basic ${apiAuthKey}`,
@@ -662,7 +660,6 @@
   });
   // Executive API call
   const { data: executives } = await useFetch(apiBaseURL + '/jsonapi/node/executive_management', {
-    server: false,
     method: 'GET',
     headers: {
       Authorization: `Basic ${apiAuthKey}`,

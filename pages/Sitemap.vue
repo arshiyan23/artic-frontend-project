@@ -262,7 +262,6 @@
 
     // Fetch data from API
   const { data, error } = await useFetch(apiBaseURL + '/system/menu/sitemap/linkset', {
-    server: false,
     method: "GET",
     headers: {
       "Authorization": `Basic ${apiAuthKey}`

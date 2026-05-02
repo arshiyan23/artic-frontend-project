@@ -438,14 +438,12 @@
 
   // Press Release api call
   const { data: pressRelease } = await useFetch(apiBaseURL + `/jsonapi/node/press_release/${paramID}`, {
-    server: false,
     method: "GET",
     headers: {
       "Authorization": `Basic ${apiAuthKey}`
     }
   });
   const { data: BodyContent2 } = await useFetch(apiBaseURL + `/jsonapi/block_content/press_release_body_2`, {
-    server: false,
     method: "GET",
     headers: {
       "Authorization": `Basic ${apiAuthKey}`

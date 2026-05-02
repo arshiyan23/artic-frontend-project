@@ -33,7 +33,6 @@
 
   // Title description api call
   const { data: page_data } = await useFetch(apiBaseURL + '/jsonapi/node/policy_pages', {
-    server: false,
     method: "GET",
     headers: {
       "Authorization": `Basic ${apiAuthKey}`

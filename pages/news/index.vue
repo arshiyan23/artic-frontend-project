@@ -308,7 +308,6 @@
     const fetchNews = async () => {
         isLoading.value = true;
         const { data: news } = await useFetch(apiBaseURL + `/jsonapi/node/news?fields[node--news]=field_published_date,title,body,field_news_gallery&page[offset]=${offSet.value}&page[limit]=${itemParPage.value}`, {
-    server: false,
             method: "GET",
             headers: {
                 "Authorization": `Basic ${apiAuthKey}`

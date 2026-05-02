@@ -382,7 +382,6 @@
   }
 
   const { data: contact } = await useFetch('/jsonapi/node/landing_page/d2341547-1e41-4dac-be26-2c731dacc502', {
-    server: false,
     // immediate: false,
     baseURL: apiBaseURL,
     method: "GET",

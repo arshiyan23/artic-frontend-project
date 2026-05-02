@@ -283,7 +283,6 @@
 
   // 01
   const { data: getData } = await useFetch(apiBaseURL + `/jsonapi/node/supply_chain`, {
-    server: false,
     method: "GET",
     headers: {
       "Authorization": `Basic ${apiAuthKey}`
@@ -294,7 +293,6 @@
 
   // 02
   const { data: getBlock } = await useFetch(apiBaseURL + `/jsonapi/block_content/supply_chain`, {
-    server: false,
     method: "GET",
     headers: {
       "Authorization": `Basic ${apiAuthKey}`
@@ -305,7 +303,6 @@
 
   // 03
   const { data: contact } = await useFetch(apiBaseURL + '/jsonapi/node/landing_page/d2341547-1e41-4dac-be26-2c731dacc502', {
-    server: false,
     method: "GET",
     headers: {
       "Authorization": `Basic ${apiAuthKey}`

@@ -368,7 +368,6 @@ let combinedReqData = [
   ];
   // Portfolio api call
   const { data: portfolio } = await useFetch(apiBaseURL + '/subrequests?_format=json', {
-    server: false,
     method: "POST",
     headers: {
       "Authorization": `Basic ${apiAuthKey}`
