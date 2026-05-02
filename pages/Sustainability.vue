@@ -241,6 +241,7 @@
 
   // Title description api call
   const { data: title_desc } = await useFetch(apiBaseURL + '/jsonapi/node/landing_page/fd90d888-712e-411a-947d-d4a6cfb42d43', {
+    server: false,
     method: "GET",
     headers: {
       "Authorization": `Basic ${apiAuthKey}`

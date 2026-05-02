@@ -209,6 +209,7 @@
         // }
 
         const { data: searchResults } = await useFetch(apiBaseURL + '/jsonapi/index/artic_index_database/', {
+    server: false,
           method: "GET",
           params: params,
           headers: {
@@ -240,6 +241,7 @@
     }
     // Default Search api call
     // const { data: searchResults } = await useFetch(() => `${apiBaseURL}/jsonapi/index/artic_index_database/?filter[fulltext]=${query}`, {
+    server: false,
     //   method: "GET",
     //   params: {
     //     'page[limit]': page

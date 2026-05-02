@@ -214,6 +214,7 @@
 
     // Video Gallery api call
     const { data: videoGallery } = await useFetch(apiBaseURL + '/jsonapi/node/landing_page/d7c412c3-cce4-4b3f-aafd-a00dd815f39a', {
+    server: false,
         method: "GET",
         headers: {
         "Authorization": `Basic ${apiAuthKey}`

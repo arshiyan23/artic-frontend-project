@@ -766,6 +766,7 @@
 
     // News api call
     const { data: news } = await useFetch(apiBaseURL + '/jsonapi/node/news?fields[node--news]=field_published_date,title,body,field_news_gallery&page[limit]=5', {
+    server: false,
         method: "GET",
         headers: {
             "Authorization": `Basic ${apiAuthKey}`
@@ -775,6 +776,7 @@
 
     // Press Release api call
     const { data: pressRelease } = await useFetch(apiBaseURL + '/jsonapi/node/press_release?fields[node--press_release]=field_published_date,title,field_download,field_download_english&page[limit]=5', {
+    server: false,
         method: "GET",
         headers: {
             "Authorization": `Basic ${apiAuthKey}`
@@ -784,6 +786,7 @@
 
     // Video Gallery api call
     const { data: videoGallery } = await useFetch(apiBaseURL + '/jsonapi/node/landing_page/d7c412c3-cce4-4b3f-aafd-a00dd815f39a', {
+    server: false,
         method: "GET",
         headers: {
             "Authorization": `Basic ${apiAuthKey}`

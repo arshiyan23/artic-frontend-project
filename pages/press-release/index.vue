@@ -320,6 +320,7 @@
   const fetchRecord = async () => {
     isLoading.value = true;
     const { data: pressRelease } = await useFetch(apiBaseURL + `/jsonapi/node/press_release?fields[node--press_release]=field_published_date,title,field_download,field_download_english&page[offset]=${offSet.value}&page[limit]=${itemParPage.value}`, {
+    server: false,
       method: "GET",
       headers: {
         "Authorization": `Basic ${apiAuthKey}`
@@ -356,6 +357,7 @@
     //const URL = `/jsonapi/node/press_release?fields[node--press_release]=field_published_date,title,field_download,field_download_english&filter[datefilter][condition][path]=field_published_date&filter[datefilter][condition][operator]=STARTS_WITH&filter[datefilter][condition][value]=${e}&page[offset]=${offSet.value}&page[limit]=${itemParPage.value}`;
     const URLS = `/jsonapi/node/press_release?fields[node--press_release]=field_published_date,title,field_download,field_download_english&sort[sort-field_published_date][path]=field_published_date&filter[datefilter][condition][path]=field_published_date&filter[datefilter][condition][operator]=STARTS_WITH&filter[datefilter][condition][value]=${e}&sort[sort-field_published_date][direction]=${sortBy.value}&page[offset]=${offSet.value}&page[limit]=${itemParPage.value}`;
     const pressReleaseByCountry = await useFetch(apiBaseURL + URLS, {
+    server: false,
       method: "GET",
       headers: {
         "Authorization": `Basic ${apiAuthKey}`
@@ -372,6 +374,7 @@
     const URLS = `/jsonapi/node/press_release?fields[node--press_release]=field_published_date,title,field_download,field_download_english&sort[sort-field_published_date][path]=field_published_date&filter[datefilter][condition][path]=field_published_date&filter[datefilter][condition][operator]=STARTS_WITH&filter[datefilter][condition][value]=${selectedYear.value}&sort[sort-field_published_date][direction]=${e}&page[offset]=${offSet.value}&page[limit]=${itemParPage.value}`;
 
     const pressReleaseByCountry = await useFetch(apiBaseURL + URLS, {
+    server: false,
       method: "GET",
       headers: {
         "Authorization": `Basic ${apiAuthKey}`

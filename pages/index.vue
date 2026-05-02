@@ -786,6 +786,7 @@
   ];
   // Combined api call
    const { data: combined } = await useFetch(apiBaseURL + '/subrequests?_format=json', {
+    server: false,
      method: "POST",
      headers: {
        "Authorization": `Basic ${apiAuthKey}`

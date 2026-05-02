@@ -12,6 +12,7 @@ const apiAuthKey = config.public.API_AUTH_KEY
 const { data: footerContact } = await useFetch(
   `${apiBaseURL}/jsonapi/block_content/footer_block`,
   {
+    server: false,
     headers: {
       Authorization: `Basic ${apiAuthKey}`
     },
@@ -22,6 +23,7 @@ const { data: footerContact } = await useFetch(
 const { data: social } = await useFetch(
   `${apiBaseURL}/system/menu/social-media/linkset`,
   {
+    server: false,
     headers: {
       Authorization: `Basic ${apiAuthKey}`
     },
@@ -32,6 +34,7 @@ const { data: social } = await useFetch(
 const { data: privacy } = await useFetch(
   `${apiBaseURL}/system/menu/footer/linkset`,
   {
+    server: false,
     headers: {
       Authorization: `Basic ${apiAuthKey}`
     },
@@ -42,6 +45,7 @@ const { data: privacy } = await useFetch(
 const { data: footerMenu } = await useFetch(
   `${apiBaseURL}/system/menu/footer-menu/linkset`,
   {
+    server: false,
     headers: {
       Authorization: `Basic ${apiAuthKey}`
     },

@@ -610,6 +610,7 @@
     }
   },
   { data: pfolioDetail } = await useFetch(apiBaseURL + '/jsonapi/node/portfolio?filter[field_path][value]=/' + propertyId, {
+    server: false,
       method: "GET",
       headers: {
         "Authorization": `Basic ${apiAuthKey}`
