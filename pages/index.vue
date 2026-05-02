@@ -997,7 +997,7 @@ const movePrev = () => {
   }
 };
 
-console.log('legacyy:', legacyyvalue)
+console.log('legacyy:', legacyy.value)
 // console.log('error:', error.value)
 const secondLeader = computed(() => {
  return legacyy?.value?.data?.[1] || null
