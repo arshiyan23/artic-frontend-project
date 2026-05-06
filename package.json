@@ -11,12 +11,12 @@
     "postinstall": "nuxt prepare"
   },
   "engines": {
-    "node": "18"
+    "node": ">=18.0.0"
   },
   "dependencies": {
-    "@nuxt/image": "^1.7.0",
     "@averjs/nuxt-compression": "^1.2.2",
-    "@dargmuesli/nuxt-cookie-control": "^8.4.2",
+    "@dargmuesli/nuxt-cookie-control": "^8.6.1",
+    "@nuxt/image": "^1.7.0",
     "@nuxt/ui": "^2.15.2",
     "@stefanobartoletti/nuxt-social-share": "^0.7.0",
     "aos": "^2.3.4",
@@ -46,8 +46,5 @@
     "sass": "^1.72.0",
     "sass-loader": "^14.1.1",
     "vite-plugin-compression": "^0.5.1"
-  },
-  "engines": {
-    "node": ">=18.0.0"
   }
 }

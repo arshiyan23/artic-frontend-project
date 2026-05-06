@@ -1,23 +1,34 @@
-// Example: Initialization based on enabled cookies
-export default defineNuxtPlugin((nuxtApp) => {
-  const cookieControl = useCookieControl();
+export default defineNuxtPlugin(() => {
+  // @ts-ignore (Nuxt auto-import)
+  const cookieControl = useCookieControl?.()
 
-  // Define the initGoogleAnalytics function
-  const initGoogleAnalytics = () => {
-    console.log('Initializing Google Analytics...');
-    // Add your Google Analytics initialization logic here
-    // Example: gtag('config', 'GA_MEASUREMENT_ID');
-  };
+  const enabledCookies = cookieControl?.cookiesEnabledIds?.value || []
 
-  // Check if `cookieControl` and `cookiesEnabledIds` are properly initialized
-  if (cookieControl?.cookiesEnabledIds?.value?.includes('google-analytics')) {
-    try {
-      initGoogleAnalytics(); // Call the initialization function
-      console.log('Google Analytics initialized successfully.');
-    } catch (error) {
-      console.error('Failed to initialize Google Analytics:', error);
-    }
-  } else {
-    console.warn('Google Analytics is not enabled due to missing or disabled cookies.');
+  if (enabledCookies.includes('google-analytics')) {
+    initGoogleAnalytics()
   }
-});
+})
+
+function initGoogleAnalytics() {
+  if (typeof window === 'undefined') return
+
+  // prevent duplicate init
+  if ((window as any).gtag) return
+
+  const script = document.createElement('script')
+  script.async = true
+  script.src = 'https://www.googletagmanager.com/gtag/js?id=GA_MEASUREMENT_ID'
+
+  document.head.appendChild(script)
+
+  window.dataLayer = window.dataLayer || []
+
+  window.gtag = function (...args: any[]) {
+    window.dataLayer.push(args)
+  }
+
+  window.gtag('js', new Date())
+  window.gtag('config', 'GA_MEASUREMENT_ID')
+
+  console.log('Google Analytics initialized')
+}
