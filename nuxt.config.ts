@@ -1,9 +1,27 @@
 import viteCompression from 'vite-plugin-compression'
 
+const drupalBaseUrl = process.env.NUXT_DRUPAL_BASE_URL
+  || process.env.DRUPAL_BASE_URL
+  || 'https://8cf3-2401-4900-1f38-65d-45a4-63a7-363a-147a.ngrok-free.app'
+
+import { defineNuxtConfig } from 'nuxt/config'
+
 export default defineNuxtConfig({
   ssr: false,
 
+  devServer: {
+    port: 3001
+  },
+
   vite: {
+    server: {
+      strictPort: true,
+      hmr: {
+        host: 'localhost',
+        protocol: 'ws',
+        clientPort: 3001
+      }
+    },
     plugins: [
       viteCompression({
         algorithm: 'brotliCompress',
@@ -18,16 +36,24 @@ export default defineNuxtConfig({
    },
 
    runtimeConfig: {
+    drupalBaseUrl,
     public: {
-      API_BASE_URL: 'https://artic-apis.ddev.site',
-      IMG_BASE_URL: 'https://artic-apis.ddev.site',
-      FRONTEND_BASE_URL: 'http://localhost:3001',
-      API_AUTH_KEY: '',
-      gtagId: 'G-TTNXS1ZH7X'
+      API_BASE_URL: process.env.NUXT_PUBLIC_API_BASE_URL || '/drupal',
+      IMG_BASE_URL: process.env.NUXT_PUBLIC_IMG_BASE_URL || drupalBaseUrl,
+      FRONTEND_BASE_URL: process.env.NUXT_PUBLIC_FRONTEND_BASE_URL || 'http://localhost:3001/',
+      API_AUTH_KEY: process.env.NUXT_PUBLIC_API_AUTH_KEY || 'YXBpYWRtaW5HM2g3UjpQIzJzNkxqQDlFIXE=',
+      gtagId: process.env.NUXT_PUBLIC_GTAG_ID || 'G-TTNXS1ZH7X'
+    }
+  },
+
+  routeRules: {
+    '/drupal/**': {
+      proxy: `${drupalBaseUrl}/**`
     }
   },
 
   nitro: {
+    compatibilityDate: '2026-05-07',
     preset: "node-server",
     compressPublicAssets: {
       brotli: true
@@ -65,23 +91,25 @@ export default defineNuxtConfig({
     { src: '~/plugins/detectSafari.js' }
   ],
 
-  cookieControl: {
-    barPosition: 'bottom-right',
-    closeModalOnClickOutside: true,
-    colors: {
-      barBackground: '#000',
-      barButtonBackground: '#fff',
-      barButtonColor: '#000',
-      barTextColor: '#fff'
-    },
-    cookieExpiryOffsetMs: 1000 * 60 * 60 * 24 * 365,
-    cookieNameIsConsentGiven: 'ncc_c',
-    cookieNameCookiesEnabledIds: 'ncc_e',
-    cookieOptions: { path: '/', sameSite: 'strict' },
-    isAcceptNecessaryButtonEnabled: true,
-    isControlButtonEnabled: true,
-    locales: ['en']
-  },
+  ...({
+    cookieControl: {
+      barPosition: 'bottom-right',
+      closeModalOnClickOutside: true,
+      colors: {
+        barBackground: '#000',
+        barButtonBackground: '#fff',
+        barButtonColor: '#000',
+        barTextColor: '#fff'
+      },
+      cookieExpiryOffsetMs: 1000 * 60 * 60 * 24 * 365,
+      cookieNameIsConsentGiven: 'ncc_c',
+      cookieNameCookiesEnabledIds: 'ncc_e',
+      cookieOptions: { path: '/', sameSite: 'strict' },
+      isAcceptNecessaryButtonEnabled: true,
+      isControlButtonEnabled: true,
+      locales: ['en']
+    }
+  } as any),
 
   css: [
     '@/assets/css/bootstrap.min.css',
@@ -96,7 +124,7 @@ export default defineNuxtConfig({
   ],
 
   purgecss: {
-    enabled: true,
+    enabled: process.env.NODE_ENV === 'production',
     safelist: ['canvas', 'mainGlobeWrapper', 'globeWrapper', '#globeViz']
   },
 

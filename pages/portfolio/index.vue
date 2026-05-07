@@ -116,7 +116,7 @@
                   <div class="propertyNotFound" v-if="portfolioList?.data?.length==0">
                     Sorry property not available !!!
                   </div>
-                  <div v-for="(portfolioLists,index) in portfolioList.data" :key="index" :class="`col pb-4 mb-1 plp-d gsapYPartners200 gsapYPartners200-${index + 1}`">
+                  <div v-for="(portfolioLists,index) in portfolioList.data" :key="index" :class="`col pb-4 mb-1 plp-d gsapYPartners200 gsapYPartners200-${Number(index) + 1}`">
                     <div class="portfolio-list-member overflow-hidden">
                       <div class="member-img position-relative ">
                         <div tabindex="0" :aria-label="portfolioLists.field_property_image?.field_media_image?.meta.alt">
@@ -131,7 +131,7 @@
                       <path fill-rule="evenodd" d="M4 8a.5.5 0 0 1 .5-.5h5.793L8.146 5.354a.5.5 0 1 1 .708-.708l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708-.708L10.293 8.5H4.5A.5.5 0 0 1 4 8"/>
                     </svg>
                     </NuxLink> -->
-                          <button type="button" @click="navigateTo('/portfolio/'+portfolioLists.field_tags.name.toLowerCase()+portfolioLists.path.alias)"
+                          <button type="button" @click="navigateTo(getPortfolioPath(portfolioLists))"
                             class="btn btn-success">
                             View more <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                               class="bi bi-arrow-right-short" viewBox="0 0 16 16">
@@ -142,9 +142,9 @@
                         </div>
                       </div>
                       <div class="member-info px-0">
-                        <span class="list-type">{{ portfolioLists.field_tags.name }}</span>
+                        <span class="list-type">{{ portfolioLists.field_tags?.name || 'Portfolio' }}</span>
                         <h5 class="arfs-5">
-                          <a :href="`/portfolio/${portfolioLists.field_tags.name.toLowerCase()+portfolioLists.path.alias}`" :title="portfolioLists.title">
+                          <a :href="getPortfolioPath(portfolioLists)" :title="portfolioLists.title">
                             {{portfolioLists.title }}
                           </a>
                         </h5>
@@ -192,7 +192,7 @@
             ref="InvestmentPortfoiloHeading">ARTIC Investment</h1>
           <div class="pb-3 datatable">
             <div class="full-img" style="max-height:60vh;">
-              <img src="/assets/img/datatable.jpg" class="img-fluid w-100" alt="ARTIC Investment Portfoilo Image" />
+              <img src="~/assets/img/datatable.jpg" class="img-fluid w-100" alt="ARTIC Investment Portfoilo Image" />
             </div>
           </div>
 
@@ -211,10 +211,10 @@
   </div>
 </template>
 <script setup lang="ts">
-  import { ref, onMounted, defineComponent, computed, nextTick } from 'vue';
+  import { ref, onMounted, onUnmounted, computed, nextTick } from 'vue';
+  import { navigateTo, useFetch, useRuntimeConfig, useState } from '#imports';
   import { useRoute } from 'vue-router';
   import PopupComponent from '../../components/Popup.vue';
-  import { boolean } from 'zod';
 
   import gsap from 'gsap';
   import { InitSmoothness, pauseSmoother, refreshSmoother } from '~/helpers/gsap/InitGSAP';
@@ -227,25 +227,25 @@
   const apiAuthKey = config.public.API_AUTH_KEY;
 
   const page = ref(1);
-  const investment = ref();
+  const investment = ref<any>();
   page.value = 15;
   const defaultCategory = ref('all');
   const defaultCategory1 = ref('all');
   const defaultCountry = ref('all');
-  const portfolioList = useState('portfolioList');
+  const portfolioList = useState<any>('portfolioList');
   const customKey = ref(0);
 
   const isPopupVisible = ref(false);
   const downloadInvestmentPortfolio = ref < HTMLDivElement | null > (null);
   const pageTopPosition = ref < HTMLDivElement | null > (null);
-  const InvestmentPortfoiloHeading = ref(null);
-  const closeButtonRef = ref(null);
-  const popupContent = ref(null);
+  const InvestmentPortfoiloHeading = ref<HTMLElement | null>(null);
+  const closeButtonRef = ref<HTMLElement | null>(null);
+  const popupContent = ref<HTMLElement | null>(null);
   const isLoading = ref(false);
-  const pageHeading = ref(null);
+  const pageHeading = ref<HTMLElement | null>(null);
 
-const main = ref(null);
-let ctx = null;
+const main = ref<HTMLElement | null>(null);
+let ctx: gsap.Context | null = null;
 // Animation on mount
 
 const runAnimationSmother = (event = true) => {
@@ -282,8 +282,8 @@ const runAnimationSmother = (event = true) => {
     .catch(e => {
       console.log(e);
     });
-  }, main.value);
-}
+  }, main.value ?? undefined);
+};
 
 onMounted(async () => {
   await nextTick();
@@ -294,6 +294,12 @@ onUnmounted(() => {
   if (ctx) ctx.revert();
   pauseSmoother();
 });
+
+const getPortfolioPath = (portfolioItem: any) => {
+  const category = portfolioItem?.field_tags?.name?.toLowerCase?.() || 'portfolio';
+  const alias = portfolioItem?.path?.alias || '';
+  return `/portfolio/${category}${alias}`;
+};
 
 async function loadMore() {
   // if (ctx) ctx.revert();
@@ -337,17 +343,17 @@ const showPopup = () => {
 const closePopup = () => {
   isPopupVisible.value = false;
   document.body.classList.remove('noscroll');
-  const headingElement = document.querySelector('.page-main-heading');
+  const headingElement = document.querySelector('.page-main-heading') as HTMLElement | null;
   if (headingElement) {
     headingElement.focus();
   }
-}
-const handleKeydownDownloadInvestment = () => {
+};
+const handleKeydownDownloadInvestment = (event: KeyboardEvent) => {
   if (event.key === 'Tab' && !event.shiftKey) {
     event.preventDefault();
     closeButtonRef.value?.focus();
   }
-}
+};
 let combinedReqData = [
     {
       "requestId": "plp_download",
@@ -366,23 +372,27 @@ let combinedReqData = [
       }
     }
   ];
+  type PortfolioSubrequestResponse = {
+    plp_list: { body: string };
+    plp_download: { body: string };
+  };
   // Portfolio api call
-  const { data: portfolio } = await useFetch(apiBaseURL + '/subrequests?_format=json', {
+  const { data: portfolio } = await useFetch<PortfolioSubrequestResponse>(apiBaseURL + '/subrequests?_format=json', {
     method: "POST",
     headers: {
       "Authorization": `Basic ${apiAuthKey}`
     },
     body: combinedReqData
   })
-  portfolioList.value = JSON.parse(portfolio.value.plp_list.body);
-  investment.value = JSON.parse(portfolio.value.plp_download.body);
+  portfolioList.value = portfolio.value?.plp_list?.body ? JSON.parse(portfolio.value.plp_list.body) : { data: [] };
+  investment.value = portfolio.value?.plp_download?.body ? JSON.parse(portfolio.value.plp_download.body) : { data: [] };
   const catType = ['Hotel', 'Retail', 'Residential', 'Service']
   const allSortBy = ['MENA', 'Algeria', 'Egypt', 'Saudi Arabia', 'Qatar', 'Europe', 'USA']
   const sortBy = ref(allSortBy[0])
   const countryN = ref('REGION');
   const pType = ref('CATEGORY');
 
-  async function sortByCountry(countryName) {
+  async function sortByCountry(countryName: any) {
     if (ctx) ctx.revert();
     pauseSmoother();
     // Check if countryName is a string and either 'Europe' or 'USA'
@@ -446,7 +456,7 @@ let combinedReqData = [
     isLoading.value = false;
     runAnimationSmother();
   }
-  async function getFilter(propertyType) {
+  async function getFilter(propertyType: any) {
     if (ctx) ctx.revert();
     pauseSmoother();
     if (!propertyType || (typeof propertyType === 'string' && propertyType.trim() === '')) {
@@ -570,7 +580,7 @@ let combinedReqData = [
     isLoading.value = false;
     runAnimationSmother();
   }
-  async function getFilter2(propertyType) {
+  async function getFilter2(propertyType: any) {
 
     if (!propertyType || (typeof propertyType === 'string' && propertyType.trim() === '')) {
       return; // Exit if propertyType is empty
@@ -614,7 +624,7 @@ let combinedReqData = [
     customKey.value = customKey.value + 1;
     getFilter2(defaultCategory1.value);
   }
-  function checkCategory(cat) {
+  function checkCategory(cat: string) {
 
     if (cat == 'HOTEL' && pType.value == 'Hotels') {
       return false;

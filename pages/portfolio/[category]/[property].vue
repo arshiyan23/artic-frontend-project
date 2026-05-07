@@ -14,7 +14,7 @@
                   <div class="heading-l">
                     <div class="head-bet">
                       <a @click="handleBack()" class="arfs-8 d-flex" aria-label="back button">
-                        <img src="/assets/img/lucide_arrow-up.svg" class="img-fluid" alt="">
+                        <img src="~/assets/img/lucide_arrow-up.svg" class="img-fluid" alt="">
                         Back
                       </a>
 
@@ -22,7 +22,7 @@
                         role="button">
                         <span>Contact ARTIC Team</span>
                         <i class="d-flex align-items-center p-0 justify-content-center">
-                          <img src="/assets/img/arrow-right-short.svg" alt="arrow">
+                          <img src="~/assets/img/arrow-right-short.svg" alt="arrow">
                         </i>
                       </button>
                     </div>
@@ -35,7 +35,7 @@
                     <button @click="showPopup" class="btn-orange align-self-start">
                       <span>Contact ARTIC Team</span>
                       <i class="d-flex align-items-center p-0 justify-content-center">
-                        <img src="/assets/img/arrow-right-short.svg" alt="Contact ARTIC Team">
+                          <img src="~/assets/img/arrow-right-short.svg" alt="Contact ARTIC Team">
                       </i>
                     </button>
                     <h4 class="mt-4 mb-0 pt-2 arfs-7 color-default text-uppercase" tabindex="0">
@@ -157,7 +157,7 @@
                               <a href="https://www.marriott.com" class="website-link btn d-flex align-items-center justify-content-between p-0">
                                 www.project.com
                               </a> -->
-                                    <img src="/assets/img/arrow_r.svg" class="img-fluid" alt="Arrow">
+                                    <img src="~/assets/img/arrow_r.svg" class="img-fluid" alt="Arrow">
                                   </a>
                                   <hr class="gsapX-line3">
 
@@ -311,7 +311,7 @@
                                 v-for="(fetures, index) in pfolioDetail?.data[0]?.field_features[0]?.field_startegic_approach"
                                 :key="index">
                                 <p class="mt-0" tabindex="0">{{ fetures }}</p>
-                                <hr :class="`gsapX-line5-${index + 1}`">
+                                <hr :class="`gsapX-line5-${Number(index) + 1}`">
                               </div>
 
 
@@ -499,11 +499,12 @@
   </div>
 </template>
 <script setup lang="ts">
-  import { onMounted, onUnmounted, nextTick, ref } from 'vue';
+  import { onMounted, onUnmounted, nextTick, reactive, ref } from 'vue';
+  import { useFetch, useRuntimeConfig } from '#imports';
   import { useRoute, useRouter } from 'vue-router';
   import PopupComponent from '../../../components/Popup.vue';
   import { z } from 'zod'
-  import type { FormSubmitEvent } from '#ui/types';
+  import type { FormError, FormSubmitEvent } from '#ui/types';
 
   import gsap from 'gsap';
   import { InitSmoothness, pauseSmoother,resumeSmoother } from '~/helpers/gsap/InitGSAP';
@@ -514,18 +515,18 @@
   const route = useRoute();
   const router = useRouter();
   const config = useRuntimeConfig();
-  const apiBaseURL = config.public.API_BASE_URL;
-  const apiAuthKey = config.public.API_AUTH_KEY;
+  const apiBaseURL = String(config.public.API_BASE_URL || '');
+  const apiAuthKey = String(config.public.API_AUTH_KEY || '');
   const propertyId = route.params.property;
   console.log("propertyId",propertyId)
   // Define a ref to track the visibility of the popup
   const isPopupVisible = ref(false);
-  const closeButtonRef = ref(null);
-  const pageHeadingRef = ref(null);
+  const closeButtonRef = ref<HTMLElement | null>(null);
+  const pageHeadingRef = ref<HTMLElement | null>(null);
   const isLoading = ref(false);
 
-  const main = ref(null);
-  let ctx = null;
+  const main = ref<HTMLElement | null>(null);
+  let ctx: any = null;
   // Animation on mount
   const runAnimationSmother = (event = true) => {
       ctx = gsap.context(async () => {
@@ -569,8 +570,8 @@
           .catch(e => {
             console.log(e);
           });
-      }, main.value);
-  }
+        }, main.value ?? undefined);
+      };
   onMounted(async () => {
     await nextTick();
     runAnimationSmother();
@@ -586,13 +587,13 @@
     nextTick(() => {
       closeButtonRef.value?.focus();
     });
-  }
+  };
   const closePopup = () => {
     isPopupVisible.value = false;
     nextTick(() => {
       pageHeadingRef.value?.focus();
     });
-  }
+  };
   const handleBack = () => {
       if (router) {
           window.scrollTo(0, 0);
@@ -603,18 +604,18 @@
           console.warn('Router instance is not available');
       }
   };
-  const handleKeydown = () => {
+  const handleKeydown = (event: KeyboardEvent) => {
     if (event.key === 'Tab' && !event.shiftKey) {
       event.preventDefault();
       closeButtonRef.value?.focus();
     }
-  },
-  { data: pfolioDetail } = await useFetch(apiBaseURL + '/jsonapi/node/portfolio?filter[field_path][value]=/' + propertyId, {
+  };
+  const { data: pfolioDetail } = await useFetch<any>(apiBaseURL + '/jsonapi/node/portfolio?filter[field_path][value]=/' + propertyId, {
       method: "GET",
       headers: {
         "Authorization": `Basic ${apiAuthKey}`
       }
-    })
+    });
   const isOpen = ref(false)
   const schema = z.object({
     name: z.string().min(4, 'Name is very short').max(25, 'Name must be no longer than 25 characters'),
@@ -624,13 +625,18 @@
     message: z.string().max(250, 'You have exceeded the maximum number of 250 characters in this field')
   })
   type Schema = z.output<typeof schema>
-  const state = reactive({
-    name: undefined,
-    email: undefined,
-    phone: undefined,
-    message: undefined,
+  const state = reactive<{
+    name: string;
+    email: string;
+    phone: string | number;
+    message: string;
+  }>({
+    name: '',
+    email: '',
+    phone: '',
+    message: '',
   })
-  const validate = (state): FormError[] => {
+  const validate = (state: any): FormError[] => {
     const errors = []
     if (!state.name) errors.push({ path: 'name', message: 'Enter your name' })
     if (!state.email) errors.push({ path: 'email', message: 'Enter your email' })
@@ -647,7 +653,7 @@
     const message = event.data.message;
     isLoading.value = true;
 
-    const frmSubmit = await $fetch('/webform_rest/submit', {
+    const frmSubmit: any = await $fetch('/webform_rest/submit', {
       // immediate: false,
       baseURL: apiBaseURL,
       method: "POST",
@@ -675,7 +681,7 @@
 
     }
   }
-  function isNumber(evt) {
+  function isNumber(evt: any) {
     evt = (evt) ? evt : window.event;
     var charCode = (evt.which) ? evt.which : evt.keyCode;
     if ((charCode > 31 && (charCode < 48 || charCode > 57)) && charCode !== 46) {

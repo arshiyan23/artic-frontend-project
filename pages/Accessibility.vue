@@ -26,20 +26,22 @@
 </template>
 
 <script lang="ts" setup>
+  import { ref, toRaw } from 'vue';
+  import { useFetch, useRuntimeConfig } from '#imports';
   const config = useRuntimeConfig();
   const apiBaseURL = config.public.API_BASE_URL;
   const apiAuthKey = config.public.API_AUTH_KEY;
-  const accessPage = ref(null);
+  const accessPage = ref<any>(null);
 
   // Title description api call
-  const { data: page_data } = await useFetch(apiBaseURL + '/jsonapi/node/policy_pages', {
+  const { data: page_data } = await useFetch<any>(apiBaseURL + '/jsonapi/node/policy_pages', {
     method: "GET",
     headers: {
       "Authorization": `Basic ${apiAuthKey}`
     }
   });
-    const rawData = toRaw(page_data.value.data);
-    const privacyPageData = rawData.find(page => page.title === 'Accessibility');
+    const rawData = toRaw(page_data.value?.data || []);
+    const privacyPageData = rawData.find((page: any) => page.title === 'Accessibility');
     accessPage.value = privacyPageData;
 </script>
 <style >

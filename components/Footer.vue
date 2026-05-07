@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref, onMounted, onBeforeUnmount } from 'vue'
+import { useFetch, useRuntimeConfig } from '#imports'
 import { useRoute } from 'vue-router'
 
 const config = useRuntimeConfig()
@@ -9,7 +10,7 @@ const apiBaseURL = config.public.API_BASE_URL
 const apiAuthKey = config.public.API_AUTH_KEY
 
 // ✅ CORRECT (WITH BACKTICKS)
-const { data: footerContact } = await useFetch(
+const { data: footerContact } = await useFetch<any>(
   `${apiBaseURL}/jsonapi/block_content/footer_block`,
   {
     headers: {
@@ -19,7 +20,7 @@ const { data: footerContact } = await useFetch(
   }
 )
 
-const { data: social } = await useFetch(
+const { data: social } = await useFetch<any>(
   `${apiBaseURL}/system/menu/social-media/linkset`,
   {
     headers: {
@@ -29,7 +30,7 @@ const { data: social } = await useFetch(
   }
 )
 
-const { data: privacy } = await useFetch(
+const { data: privacy } = await useFetch<any>(
   `${apiBaseURL}/system/menu/footer/linkset`,
   {
     headers: {
@@ -39,7 +40,7 @@ const { data: privacy } = await useFetch(
   }
 )
 
-const { data: footerMenu } = await useFetch(
+const { data: footerMenu } = await useFetch<any>(
   `${apiBaseURL}/system/menu/footer-menu/linkset`,
   {
     headers: {

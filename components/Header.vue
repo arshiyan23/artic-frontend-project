@@ -16,7 +16,7 @@
           <div class="search-bar">
             <button class="search-icon cursor-pointer" @click="toggleSearchBar" tabindex="0">
               <span class="sr-only">Button</span>
-              <img class="img-fluid search-icon-mg" src="/assets/img/search-icon.svg" alt="search-icon" width="24"
+              <img class="img-fluid search-icon-mg" src="~/assets/img/search-icon.svg" alt="search-icon" width="24"
                 height="24" v-if="!isSearchBarActive" rel="preload"   />
             </button>
           </div>
@@ -24,7 +24,7 @@
             @click="toggleMobileMenu" aria-controls="navbarSupportedContent" aria-expanded="false"
             aria-label="Toggle navigation">
             <i>
-              <img class="img-fluid" src="/assets/img/menu.svg" width="24" height="24" alt="menu icon" />
+              <img class="img-fluid" src="~/assets/img/menu.svg" width="24" height="24" alt="menu icon" />
           </i>
           </button>
         </div>
@@ -39,7 +39,7 @@
                     class="img-fluid mb-logo-focus" 
                     :tabindex="tabIndex" 
                     aria-label="Mobile Logo" 
-                    src="/assets/img/logom.svg" 
+                    src="~/assets/img/logom.svg" 
                     width="320" 
                     height="36" 
                     alt="Logo" 
@@ -49,7 +49,7 @@
             </div>
 
             <ul class="mobile-menu" role="none">
-              <li   v-for="(menus, index) in menu?.linkset[0]?.item.filter( (p) => p.hierarchy.length == 1 )" :key="index"
+              <li   v-for="(menus, index) in menuItems" :key="index"
                 :class="{ active: isActiveLink(menus.href) }" class="dropdown">
                 <NuxtLink :tabindex="tabIndex" :to="menus.href" class="nav-link scrollto" @click="hideMobileMenu">
                   {{ menus.title }}
@@ -106,18 +106,18 @@
                   @keyup.enter="searchItems" type="text" placeholder="Search ARTIC" aria-label="Write keyword"
                   name="search" v-model="searchQuery" id="search-artic" autocomplete="off">
 
-                <button :tabindex="tabIndex" aria-label="Search close" v-if="searchQuery?.length > 0" @click="clearSearch()" name="Clear"
+                <button :tabindex="tabIndex" aria-label="Search close" v-if="searchQueryValue.length > 0" @click="clearSearch()" name="Clear"
                   class="w-[40px] h-[40px] p-0 m-0 flex align-items-center justify-center close-search" type="button">
                   <span class="sr-only">Button</span>
-                  <img class="img-fluid" src="/assets/img/close.svg" width="12" height="12" alt="button"
+                  <img class="img-fluid" src="~/assets/img/close.svg" width="12" height="12" alt="button"
                     loading="lazy" rel="preload"  />
                 </button>
 
                 <button :tabindex="tabIndex" aria-label="click here to Search"
                   class="btn btn-outline-secondary border-0 rounded-circle bg-orange"
-                  :class="{disabled: searchQuery?.length < 2}" type="button" @click="searchItems()" name="Search">
+                  :class="{disabled: searchQueryValue.length < 2}" type="button" @click="searchItems()" name="Search">
                   <span class="sr-only">Search</span>
-                  <img class="img-fluid" src="/assets/img/search.svg" width="18" height="18" alt="button"
+                  <img class="img-fluid" src="~/assets/img/search.svg" width="18" height="18" alt="button"
                     loading="lazy" rel="preload"  />
                 </button>
               </div>
@@ -161,7 +161,7 @@
                         <p class="ms-2 mb-1">
                           Search Results
                         </p>
-                          <a class="" v-for="(item, index) in recentResults?.data?.splice(5)" :href="usefulLinkUrl(item)" target="_blank">
+                          <a class="" v-for="(item, index) in usefulResults" :href="usefulLinkUrl(item)" target="_blank">
                             <!-- <span class="font-[500]">Hotels</span> -->
                             {{ item.title }}
                           </a>
@@ -172,7 +172,7 @@
                           Recent Search
                         </p>-->
                        
-                          <a class="" v-for="(item, index) in recentResults?.meta?.facets[0]?.terms" v-show="item?.values?.count>0" :href="`/search/${item?.values?.label}/${searchQuery}`">
+                          <a class="" v-for="(item, index) in recentSearchTerms" v-show="item?.values?.count>0" :href="`/search/${item?.values?.label}/${searchQueryValue}`">
                           
                             <div class="Searchitem d-flex align-items-center gx-1">
                               <span class="mr-1">{{ searchQuery }} </span> in <a class="ml-2"> {{ item?.values?.label }} <span>({{ item?.values?.count }})</span></a>
@@ -198,8 +198,8 @@
 
 <script setup lang="ts">
   import { useRouter, useRoute } from "vue-router";
-  import { ref, onMounted, onUnmounted, nextTick } from 'vue';
-  import { createRouter, createWebHistory } from 'vue-router';
+  import { computed, ref, onMounted, onBeforeUnmount, nextTick, watch } from 'vue';
+  import { useFetch, useRuntimeConfig } from '#imports';
 
 
 
@@ -213,10 +213,10 @@
 
 
 
-  const searchQuery = defineModel();
-  const searchResults = ref([]);
-  const topResults = ref([]);
-  const recentResults = ref([]);
+  const searchQuery = defineModel<string>({ default: "" });
+  const searchResults = ref<any>(null);
+  const topResults = ref<any>(null);
+  const recentResults = ref<any>(null);
   const isLoading = ref(false);
 
   const defaultCategory = ref("all");
@@ -227,6 +227,12 @@
 
   const logoRef = ref(null);
   const navbarSupportedContentRef = ref < HTMLDivElement | null > (null);
+  const searchQueryValue = computed(() => searchQuery.value || "");
+  const menuItems = computed(() => {
+    return (menu.value?.linkset?.[0]?.item ?? []).filter((item: any) => item?.hierarchy?.length === 1);
+  });
+  const usefulResults = computed(() => recentResults.value?.data?.slice(5) ?? []);
+  const recentSearchTerms = computed(() => recentResults.value?.meta?.facets?.[0]?.terms ?? []);
 
 
     // Computed property to determine the tabindex based on the current URL
@@ -239,7 +245,7 @@ const toggleMobileMenu = () => {
   isMobileMenuVisible.value = !isMobileMenuVisible.value;
 
   if (isMobileMenuVisible.value) {
-    const mbLogoElement = document.querySelector(".mb-logo-focus");
+    const mbLogoElement = document.querySelector(".mb-logo-focus") as HTMLElement | null;
     if (mbLogoElement) {
       mbLogoElement.focus();
     }
@@ -248,7 +254,7 @@ const toggleMobileMenu = () => {
 
 const handleKeydown = (event: KeyboardEvent) => {
   if (event.key === "Tab") {
-    const mbLogoElement = document.querySelector(".mb-logo-focus");
+    const mbLogoElement = document.querySelector(".mb-logo-focus") as HTMLElement | null;
     if (mbLogoElement) {
       mbLogoElement.focus();
     }
@@ -270,7 +276,7 @@ onMounted(async () => {
 
 watch(
   () => router.currentRoute.value.path,
-  (newPath) => {
+  (newPath: string) => {
     if (newPath === "/") {
       const logoRef = document.getElementById("header");
       if (logoRef) {
@@ -305,7 +311,7 @@ const clearSearch = () => {
 };
 
 const searchItems = () => {
-  const cleanedQuery = searchQuery.value.replace(/\s+/g, " ").trim();
+  const cleanedQuery = searchQueryValue.value.replace(/\s+/g, " ").trim();
   if (cleanedQuery.length > 1) {
     window.location.href = "/search/" + encodeURIComponent(cleanedQuery);
     isSearchFocues.value = false;
@@ -338,7 +344,7 @@ const usefulLinkUrl = (item: any) => {
 };
 
 const onInputSearch = async () => {
-  const cleanedQuery = searchQuery.value.replace(/\s+/g, " ").trim();
+  const cleanedQuery = searchQueryValue.value.replace(/\s+/g, " ").trim();
   if (cleanedQuery.length > 1) {
     isSearchTyping.value = true;
     isLoading.value = true;
@@ -374,53 +380,63 @@ const onInputSearch = async () => {
       console.error("Error fetching search results:", error);
     } finally {
       isLoading.value = false;
-
-  const searchOnPageCat = async (label) => {
-    if (label == "all") {
-      const searchResults = await $fetch(
-        apiBaseURL + "/jsonapi/index/artic_index_database/",
-        {
-          method: "GET",
-          params: {
-            "filter[fulltext]": searchQuery.value,
-          },
-          headers: {
-            Authorization: `Basic ${apiAuthKey}`,
-          },
-        }
-      );
-      searchResults.value = searchResults;
-      defaultCategory.value = label;
-    } else {
-      const searchResults = await $fetch(
-        apiBaseURL + "/jsonapi/index/artic_index_database/",
-        {
-          method: "GET",
-          params: {
-            "filter[fulltext]": searchQuery.value,
-            "filter[search_filter]": label,
-          },
-          headers: {
-            Authorization: `Basic ${apiAuthKey}`,
-          },
-        }
-      );
-      searchResults.value = searchResults;
-      defaultCategory.value = label;
     }
-  };
+  } else {
+    searchResults.value = [];
+    topResults.value = [];
+    recentResults.value = [];
+    isLoading.value = false;
+    isSearchTyping.value = false;
+  }
+};
+
+const searchOnPageCat = async (label: string) => {
+  if (label == "all") {
+    const results = await $fetch(
+      apiBaseURL + "/jsonapi/index/artic_index_database/",
+      {
+        method: "GET",
+        params: {
+          "filter[fulltext]": searchQuery.value,
+        },
+        headers: {
+          Authorization: `Basic ${apiAuthKey}`,
+        },
+      }
+    );
+    searchResults.value = results;
+    defaultCategory.value = label;
+  } else {
+    const results = await $fetch(
+      apiBaseURL + "/jsonapi/index/artic_index_database/",
+      {
+        method: "GET",
+        params: {
+          "filter[fulltext]": searchQuery.value,
+          "filter[search_filter]": label,
+        },
+        headers: {
+          Authorization: `Basic ${apiAuthKey}`,
+        },
+      }
+    );
+    searchResults.value = results;
+    defaultCategory.value = label;
+  }
+};
 
   // Body Click (Outside)
   const isMobile = () => {
     return window.innerWidth <= 768; // Adjust this value based on your mobile breakpoint
   };
-  const handleClickOutside = (event) => {
+  const handleClickOutside = (event: MouseEvent) => {
+    const target = event.target as HTMLElement | null;
     if (isMobile()) {
       // Mobile
       if (
-        !event.target.closest(".searchform-wrap") &&
-        !event.target.closest(".search-icon") &&
-        !event.target.closest(".search-icon-mg")
+        !target?.closest(".searchform-wrap") &&
+        !target?.closest(".search-icon") &&
+        !target?.closest(".search-icon-mg")
       ) {
         isSearchFocues.value = false;
         isSearchTyping.value = false;
@@ -430,8 +446,8 @@ const onInputSearch = async () => {
     } else {
       // Desktop
       if (
-        !event.target.closest(".searchform-wrap") &&
-        !event.target.closest(".search-icon")
+        !target?.closest(".searchform-wrap") &&
+        !target?.closest(".search-icon")
       ) {
         isSearchFocues.value = false;
         isSearchTyping.value = false;
@@ -446,7 +462,7 @@ const onInputSearch = async () => {
   onBeforeUnmount(() => {
     document.removeEventListener("click", handleClickOutside);
   });
-  const isActiveLink = (href) => {
+  const isActiveLink = (href: string) => {
     return route.path === href;
   };
   const addBackdrop = () => {
@@ -457,8 +473,8 @@ const onInputSearch = async () => {
       backdrop.id = "backdrop";
       document.body.appendChild(backdrop);
       document.body.classList.add("no-scroll");
-      let header=document.getElementById("header");
-      header.classList.add("header-bg");
+      const header = document.getElementById("header");
+      if (header) header.classList.add("header-bg");
     }
   };
   const removeBackdrop = () => {
@@ -473,7 +489,7 @@ const onInputSearch = async () => {
 
 
   // Menu api call
-  const { data: menu } = await useFetch(
+  const { data: menu } = await useFetch<any>(
     apiBaseURL + "/system/menu/main/linkset",
     {
       method: "GET",
@@ -481,28 +497,7 @@ const onInputSearch = async () => {
         Authorization: `Basic ${apiAuthKey}`,
       },
     }
-  } else {
-    searchResults.value = [];
-    topResults.value = [];
-    recentResults.value = [];
-    isLoading.value = false;
-  }
-};
-
-// Menu API call
-const { data: menu, error: menuError } = await useFetch(
-  `${apiBaseURL}/system/menu/main/linkset`,
-  {
-    method: "GET",
-    headers: {
-      Authorization: `Basic ${apiAuthKey}`,
-    },
-  }
-);
-
-if (menuError.value) {
-  console.error("Error fetching menu:", menuError.value);
-}
+  );
 </script>
 <style scoped>
   

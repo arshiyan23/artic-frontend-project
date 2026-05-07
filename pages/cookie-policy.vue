@@ -24,21 +24,23 @@
 </template>
 
 <script lang="ts" setup>
+  import { ref, toRaw } from 'vue';
+  import { useFetch, useRuntimeConfig } from '#imports';
   const config = useRuntimeConfig();
   const apiBaseURL = config.public.API_BASE_URL;
   const apiAuthKey = config.public.API_AUTH_KEY;
-  const cookiePage = ref(null);
+  const cookiePage = ref<any>(null);
 
 
   // Title description api call
-  const { data: page_data } = await useFetch(apiBaseURL + '/jsonapi/node/policy_pages', {
+  const { data: page_data } = await useFetch<any>(apiBaseURL + '/jsonapi/node/policy_pages', {
     method: "GET",
     headers: {
       "Authorization": `Basic ${apiAuthKey}`
     }
   });
-    const rawData = toRaw(page_data.value.data);
-    const privacyPageData = rawData.find(page => page.title === 'Cookie Policy');
+    const rawData = toRaw(page_data.value?.data || []);
+    const privacyPageData = rawData.find((page: any) => page.title === 'Cookie Policy');
     cookiePage.value = privacyPageData;
 
 </script>

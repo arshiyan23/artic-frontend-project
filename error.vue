@@ -1,9 +1,9 @@
 <template>
     <Header />
   <div class="mt-7 max-w-sm mx-auto text-center card content-page " style="min-height: 400px;">
-    <h2 class="mt-7 text-7x1 font-bold" style="margin-top: 150px;">{{ error.statusCode }}</h2>
+    <h2 class="mt-7 text-7x1 font-bold" style="margin-top: 150px;">{{ error?.statusCode }}</h2>
     <p class="mt-7 text-6x1">Oops something wrong...</p>
-    <p class="mt-7">{{ error.message }}</p>
+    <p class="mt-7">{{ error?.message }}</p>
     <p class="mt-7">
     
     <a href="/" class="view-all " ><span>Go home &nbsp;</span><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-right" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8"></path></svg></a>
@@ -13,11 +13,10 @@
   <Footer />
 </template>
 <script setup lang="ts">
+import { clearError } from '#app'
 import type { NuxtError } from '#app'
 
-const props = defineProps({
-  error: Object as () => NuxtError
-})
+const { error } = defineProps<{ error?: NuxtError }>()
 
 const handleError = () => clearError({ redirect: '/' })
 </script>

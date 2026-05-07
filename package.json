@@ -8,7 +8,7 @@
     "generate": "nuxt generate",
     "start": "node .output/server/index.mjs",
     "preview": "nuxt preview",
-    "postinstall": "nuxt prepare"
+    "postinstall": "node scripts/patch-nuxt-ui-css.mjs && nuxt prepare"
   },
   "engines": {
     "node": ">=18.0.0"
@@ -16,8 +16,8 @@
   "dependencies": {
     "@averjs/nuxt-compression": "^1.2.2",
     "@dargmuesli/nuxt-cookie-control": "^8.6.1",
-    "@nuxt/image": "^1.7.0",
-    "@nuxt/ui": "^2.15.2",
+    "@nuxt/image": "1.7.0",
+    "@nuxt/ui": "2.14.1",
     "@stefanobartoletti/nuxt-social-share": "^0.7.0",
     "aos": "^2.3.4",
     "bootstrap": "^5.3.2",
@@ -25,7 +25,7 @@
     "gsap": "^3.15.0",
     "ipx": "^3.1.1",
     "js-cookie": "^3.0.5",
-    "nuxt": "^3.10.3",
+    "nuxt": "3.10.3",
     "nuxt-cookie-control": "^1.9.93",
     "sass": "^1.72.0",
     "serve": "^14.2.6",
@@ -39,7 +39,7 @@
     "@types/bootstrap": "^5.2.10",
     "@types/node": "^20.11.30",
     "eslint": "^8.49.0",
-    "nuxt-aos": "^1.2.4",
+    "nuxt-aos": "1.2.4",
     "nuxt-bootstrap-icons": "^1.1.7",
     "nuxt-purgecss": "^2.0.0",
     "prettier": "^3.0.3",

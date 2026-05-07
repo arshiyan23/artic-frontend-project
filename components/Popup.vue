@@ -14,16 +14,16 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch, onMounted } from 'vue';
+import { nextTick, onMounted, ref, watch } from 'vue';
 const props = defineProps<Props>();
 interface Props {
-  isVisible: Boolean
+  isVisible: boolean
 }
 
 const emit = defineEmits(['close', 'focus-close-button']);
 
-const popupContent = ref(null);
-const closeButton = ref(null);
+const popupContent = ref<HTMLElement | null>(null);
+const closeButton = ref<HTMLElement | null>(null);
 
 const closePopup = () => {
   emit('close');

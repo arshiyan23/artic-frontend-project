@@ -135,12 +135,7 @@
                         </div>
                         <div >
                           <div class="post-box mapdown" >
-                            <p tabindex="-1" class="mt-4 pt-1 mt-m-20 pt-m papdescontact">
-                            <!-- <p tabindex="0" v-html="supplyChainContact?.data?.field_sections[0]?.field_address?.value"> -->
-                              <p tabindex="-1" class="mt-4 pt-1 mt-m-20 pt-m papdescontact">
-                                <div v-html="supplyChainContact?.data?.field_sections[0]?.field_address?.value"></div>
-                              </p>
-                            </p>
+                            <div tabindex="-1" class="mt-4 pt-1 mt-m-20 pt-m papdescontact" v-html="supplyChainContact?.data?.field_sections[0]?.field_address?.value"></div>
                             
                             <hr>
                             <p tabindex="0">
@@ -207,49 +202,46 @@
 </template>
 
 <script lang="ts" setup>
-  import { ref, defineComponent, nextTick } from 'vue';
-  import { useRoute } from 'vue-router';
+  import { ref, nextTick, watch } from 'vue';
+  import { useFetch, useRuntimeConfig, useState } from '#imports';
   import PopupComponent from '../components/Popup.vue';
-  import placeholderImage from '/image_not_available.png';
+  const placeholderImage = '/image_not_available.png';
   const config = useRuntimeConfig();
   const imgBaseURL = config.public.IMG_BASE_URL;
   const apiBaseURL = config.public.API_BASE_URL;
   const apiAuthKey = config.public.API_AUTH_KEY;
 
-  const supplyChainTenderList = useState('supplyChainTenderList');
-  const supplyChainBlock = useState('supplyChainBlock');
-  const supplyChainContact = useState('supplyChainContact');
+  const supplyChainTenderList = useState<any>('supplyChainTenderList', () => ({ data: [] }));
+  const supplyChainBlock = useState<any>('supplyChainBlock', () => ({ data: [] }));
+  const supplyChainContact = useState<any>('supplyChainContact', () => ({ data: { field_sections: [] } }));
 
   const isLoading = ref(false);
   const isPopupVisible = ref(false);
-  const selecteditem = ref(null);
+  const selecteditem = ref<any | null>(null);
 
-  const pageHeadingRef = ref(null);
-  const currentButtonPopup = ref(null);
-  const currentButtonIndex = ref(null);
+  const pageHeadingRef = ref<HTMLElement | null>(null);
+  const currentButtonPopup = ref<HTMLElement | null>(null);
+  const currentButtonIndex = ref<number | null>(null);
 
 
 
 
   // Define a ref to track the visibility of the popup
-  const showPopup = (item, event, index) => {
+  const showPopup = (item: any, _event: MouseEvent, index: string | number) => {
     selecteditem.value = item;
     isPopupVisible.value = true;
-    currentButtonIndex.value = index;
-  }
+    currentButtonIndex.value = Number(index);
+  };
   const closePopup = () => {
     isPopupVisible.value = false;
     selecteditem.value = null;
 
-    event.preventDefault();
-    // const button = document.querySelector('.showPopupBtnVD');
-    // button.focus();
-
     nextTick(() => {
       if (currentButtonIndex.value !== null) {
         const buttons = document.querySelectorAll('.showPopupBtnVD');
-        if (buttons[currentButtonIndex.value]) {
-          buttons[currentButtonIndex.value].focus();
+        const button = buttons[currentButtonIndex.value] as HTMLElement | undefined;
+        if (button) {
+          button.focus();
         }
       }
     });
@@ -259,12 +251,12 @@
     //     currentButtonPopup.value.focus();
     //   }
     // });
-  }
-  const handleKeydown = (event) => {
+  };
+  const handleKeydown = (event: KeyboardEvent) => {
     if (event.key === 'Tab' && !event.shiftKey) {
       event.preventDefault();
-      const button = document.querySelector('.close-btn');
-      button.focus();
+      const button = document.querySelector('.close-btn') as HTMLElement | null;
+      button?.focus();
     }
   };
 
@@ -288,7 +280,7 @@
       "Authorization": `Basic ${apiAuthKey}`
     }
   });
-  supplyChainTenderList.value = getData || [];
+  supplyChainTenderList.value = getData.value || { data: [] };
 
 
   // 02
@@ -298,7 +290,7 @@
       "Authorization": `Basic ${apiAuthKey}`
     }
   });
-  supplyChainBlock.value = getBlock || [];
+  supplyChainBlock.value = getBlock.value || { data: [] };
 
 
   // 03
@@ -308,22 +300,22 @@
       "Authorization": `Basic ${apiAuthKey}`
     },
   });
-  supplyChainContact.value = contact || [];
+  supplyChainContact.value = contact.value || { data: { field_sections: [] } };
 
 
-  const getImageUrl = (uri) => {
+  const getImageUrl = (uri?: string) => {
     return uri ? (uri) : placeholderImage;
-  }
-  const formatDate = (dateString) => {
-    const options = { day: '2-digit', month: 'short', year: 'numeric' };
+  };
+  const formatDate = (dateString?: string) => {
+    const options: Intl.DateTimeFormatOptions = { day: '2-digit', month: 'short', year: 'numeric' };
     return dateString ? new Date(dateString).toLocaleDateString('en-US', options) : '';
   };
-  const getPDFDownloadLink = (downloadItem) => {
-    return imgBaseURL + downloadItem?.field_media_document?.uri?.url || '';
-  }
+  const getPDFDownloadLink = (downloadItem: any) => {
+    return downloadItem?.field_media_document?.uri?.url ? imgBaseURL + downloadItem.field_media_document.uri.url : '';
+  };
 
   // Watch for popup visibility changes
-  watch(isPopupVisible, (newValue) => {
+  watch(isPopupVisible, (newValue: boolean) => {
     if (newValue) {
       document.body.style.overflow = 'hidden';
     } else {

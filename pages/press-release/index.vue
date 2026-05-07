@@ -3,8 +3,8 @@
     <Loader :loading="isLoading"></Loader>
 
     <Head>
-      <Title>{{ pressReleaseList?.list_page_meta_tags?.meta_title }}</Title>
-      <Meta name="description" :content="pressReleaseList?.list_page_meta_tags?.meta_description" />
+      <Title>{{ pressReleaseList?.list_page_meta_tags?.meta_title || 'Press Release' }}</Title>
+      <Meta name="description" :content="pressReleaseList?.list_page_meta_tags?.meta_description || 'Latest press releases from Artic.'" />
     </Head>
     <div id="smooth-wrapper">
       <div id="smooth-content">
@@ -120,7 +120,7 @@
                     <!-- Pagination -->
                     <div class="text-center mb-md-5 mb-4 pb-lg-4">
                       <div class="site-pagination gsapSection3Heading">
-                        <button :class="{ 'disabled': offSet === 0 }" v-show="pressReleaseList.data.length>20"
+                        <button :class="{ 'disabled': offSet === 0 }" v-show="pressReleaseList?.data?.length > 20"
                           class="backbtn" @click="fetchPrevPage" aria-label="Previous Page" title="Previous Page">
                           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                             class="bi bi-chevron-left" viewBox="0 0 16 16">
@@ -135,7 +135,7 @@
                               }}</a>
                           </li>
                         </ul>
-                        <button class="nextbtn" v-show="pressReleaseList.data.length>20" href="javascript:void(0);"
+                        <button class="nextbtn" v-show="pressReleaseList?.data?.length > 20" href="javascript:void(0);"
                           :class="{ 'disabled': isLastPage }" @click="fetchNextPage" aria-label="Next Page"
                           title="Next Page">
                           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
@@ -293,7 +293,7 @@
   const endYear = currentYear;
   const yearsList = Array.from({ length: endYear - startYear + 1 }, (v, i) => endYear - i);
   const selectedYear = ref(currentYear);
-  const pressReleaseList = useState('pressReleaseList');
+  const pressReleaseList = useState('pressReleaseList', () => ({ data: [], meta: { count: 0 } }));
   const isLoading = ref(false);
   // Pagination
   const totalItems = ref(0);
@@ -325,7 +325,7 @@
         "Authorization": `Basic ${apiAuthKey}`
       }
     });
-    pressReleaseList.value = pressRelease || [];
+    pressReleaseList.value = pressRelease?.value || { data: [], meta: { count: 0 } };
     totalItems.value = pressRelease?.value?.meta?.count || 0;
     isLoading.value = false;
   };

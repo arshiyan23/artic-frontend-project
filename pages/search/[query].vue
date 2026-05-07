@@ -41,7 +41,7 @@
 
                         <button class="searchPage-submit-btn" aria-label="search">
                           <!--<span class="sr-only">Button</span>-->
-                          <img v-if="!isLoading" @click="searchOnPage()" class="img-fluid" src="/assets/img/search.svg"
+                          <img v-if="!isLoading" @click="searchOnPage()" class="img-fluid" src="~/assets/img/search.svg"
                             width="18" height="18" alt="&nbsp;" loading="lazy" />
                           <!-- loader -->
                           <svg v-if="isLoading" xmlns="http://www.w3.org/2000/svg" width="1.3em" height="1.3em"

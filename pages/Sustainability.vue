@@ -146,7 +146,8 @@
 
 </template>
 <script lang="ts" setup>
-  import { ref, onMounted, defineComponent, computed, nextTick } from 'vue';
+  import { ref, onMounted, onUnmounted, computed, nextTick } from 'vue';
+  import { useFetch, useRuntimeConfig } from '#imports';
   import gsap from 'gsap';
   import { InitSmoothness, pauseSmoother } from '~/helpers/gsap/InitGSAP';
   import { animateTitleLines, animateTitleLetters,animateTitleWords } from '~/helpers/gsap/title-animation';
@@ -158,8 +159,8 @@
   const apiBaseURL = config.public.API_BASE_URL;
   const apiAuthKey = config.public.API_AUTH_KEY;
 
-  const main = ref(null);
-  let ctx = null;
+  const main = ref<HTMLElement | null>(null);
+  let ctx: any = null;
   // Animation on mount
   const runAnimationSmother = (event = true) => {
     ctx = gsap.context(async () => {
@@ -190,7 +191,7 @@
       .catch(e => {
         console.log(e);
       });
-    }, main.value);
+    }, main.value ?? undefined);
   };
   onMounted(async () => {
     await nextTick();
@@ -201,7 +202,7 @@
     if (ctx) ctx.revert();
     pauseSmoother();
   });
-  const downloadPDF = async (lnk) => {
+  const downloadPDF = async (lnk: string) => {
   // const pdfUrl = 'https://artic-devsetup.azurewebsites.net/sites/default/files/2024-06/ARTIC-sustainability.pdf';
   const pdfUrl = lnk;
   
@@ -240,7 +241,7 @@
 // };
 
   // Title description api call
-  const { data: title_desc } = await useFetch(apiBaseURL + '/jsonapi/node/landing_page/fd90d888-712e-411a-947d-d4a6cfb42d43', {
+  const { data: title_desc } = await useFetch<any>(apiBaseURL + '/jsonapi/node/landing_page/fd90d888-712e-411a-947d-d4a6cfb42d43', {
     method: "GET",
     headers: {
       "Authorization": `Basic ${apiAuthKey}`

@@ -252,6 +252,8 @@
 </template>
 
 <script lang="ts" setup>
+  import { computed, ref } from 'vue';
+  import { useFetch, useRuntimeConfig } from '#imports';
 
   const config = useRuntimeConfig();
   const apiBaseURL = config.public.API_BASE_URL;
@@ -261,7 +263,7 @@
   const pageData = ref<any>(null);
 
     // Fetch data from API
-  const { data, error } = await useFetch(apiBaseURL + '/system/menu/sitemap/linkset', {
+  const { data, error } = await useFetch<any>(apiBaseURL + '/system/menu/sitemap/linkset', {
     method: "GET",
     headers: {
       "Authorization": `Basic ${apiAuthKey}`
@@ -276,8 +278,8 @@
   const groupedData = computed(() => {
     if (!pageData.value) return {};
 
-    const grouped = {};
-    pageData.value.forEach((item) => {
+    const grouped: Record<string, any[]> = {};
+    pageData.value.forEach((item: any) => {
       const topLevel = item.hierarchy[0];
       if (!grouped[topLevel]) {
         grouped[topLevel] = [];
@@ -288,7 +290,7 @@
     });
 
     // Convert hierarchical groupings to meaningful section titles
-    const sections = {
+    const sections: Record<string, string> = {
       '0': 'HomePage',
       '1': 'About Us',
       '2': 'Portfolio',
@@ -298,7 +300,7 @@
       '6': 'Supply Chain',
       '7': 'Site Services'
     };
-    return Object.keys(grouped).reduce((acc, key) => {
+    return Object.keys(grouped).reduce((acc: Record<string, any[]>, key) => {
       const sectionTitle = sections[key] || `Section ${key}`;
       acc[sectionTitle] = grouped[key];
       return acc;
@@ -306,7 +308,7 @@
   });
 
   // Navigation function
-  const navigateTo = (href) => {
+  const navigateTo = (href: string) => {
     window.location.href = href;
   };
   

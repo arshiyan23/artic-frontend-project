@@ -2,7 +2,7 @@
 
   <div id="Siteloader" >
     <div class="flex flex-column gap-5 text-center align-items-center justify-content-center">
-      <img class="img-fluid" src="/assets/img/logow.svg" alt="Footer Logo" />
+      <img class="img-fluid" src="~/assets/img/logow.svg" alt="Footer Logo" />
        <!-- Spinner Element -->
        <div class="spinner-container">
         <div class="spinner"></div>
@@ -139,12 +139,12 @@ const closePopup = () => {
 
   // Check the current page URL and add condition
   if (route?.path?.includes('search')) {
-    const headingElement = document.querySelector('p.totalSearchResultRef');
+    const headingElement = document.querySelector('p.totalSearchResultRef') as HTMLElement | null;
     if (headingElement) {
       headingElement.focus();
     }
   } else {
-    const headingElement = document.querySelector('.page-main-heading');
+    const headingElement = document.querySelector('.page-main-heading') as HTMLElement | null;
     if (headingElement) {
       headingElement.focus();
     }

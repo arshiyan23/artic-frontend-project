@@ -258,7 +258,7 @@
                           <div class="post-box mapdown" >
                             <h4 tabindex="0">{{ contact?.data?.field_sections[1]?.field_title_sustanability }}</h4>
                             <p tabindex="0" class="mb-4 pb-2 mb-m">{{
-                              contact.data.field_sections[1].field_description_sustanability }}</p>
+                              contact?.data?.field_sections[1]?.field_description_sustanability }}</p>
                             <p tabindex="0" class="py-3">To join our team, please send your updated resume</p>
 
                             <p tabindex="0"><span class="email" aria-label="Our recruitment Email address"><a
@@ -309,11 +309,13 @@
 
 <script setup lang="ts">
   import { z } from 'zod'
-  import type { FormSubmitEvent } from '#ui/types'
+  import { reactive, ref } from 'vue'
+  import { useFetch, useRuntimeConfig } from '#imports'
+  import type { FormError, FormSubmitEvent } from '#ui/types'
   const config = useRuntimeConfig();
-  const imgBaseURL = config.public.IMG_BASE_URL;
-  const apiBaseURL = config.public.API_BASE_URL;
-  const apiAuthKey = config.public.API_AUTH_KEY;
+  const imgBaseURL = String(config.public.IMG_BASE_URL || '');
+  const apiBaseURL = String(config.public.API_BASE_URL || '');
+  const apiAuthKey = String(config.public.API_AUTH_KEY || '');
 
   const isOpen = ref(false)
   const isLoading = ref(false);
@@ -328,11 +330,16 @@
 
   type Schema = z.output<typeof schema>
 
-  const state = reactive({
-    name: undefined,
-    email: undefined,
-    phone: undefined,
-    message: undefined,
+  const state = reactive<{
+    name: string;
+    email: string;
+    phone: string | number;
+    message: string;
+  }>({
+    name: '',
+    email: '',
+    phone: '',
+    message: '',
   })
 
   const validate = (state: any): FormError[] => {
@@ -355,7 +362,7 @@
 
     isLoading.value = true;
 
-    const frmSubmit = await $fetch('/webform_rest/submit', {
+    const frmSubmit: any = await $fetch('/webform_rest/submit', {
       // immediate: false,
       baseURL: apiBaseURL,
       method: "POST",
@@ -381,7 +388,8 @@
     }
   }
 
-  const { data: contact } = await useFetch('/jsonapi/node/landing_page/d2341547-1e41-4dac-be26-2c731dacc502', {
+  const contact = ref<any>(null)
+  const { data: contactResponse } = await useFetch<any>('/jsonapi/node/landing_page/d2341547-1e41-4dac-be26-2c731dacc502', {
     // immediate: false,
     baseURL: apiBaseURL,
     method: "GET",
@@ -389,7 +397,8 @@
       "Authorization": `Basic ${apiAuthKey}`
     },
   })
-  function isNumber(evt) {
+  contact.value = contactResponse.value
+  function isNumber(evt: any) {
     evt = (evt) ? evt : window.event;
     var charCode = (evt.which) ? evt.which : evt.keyCode;
     if ((charCode > 31 && (charCode < 48 || charCode > 57)) && charCode !== 46) {

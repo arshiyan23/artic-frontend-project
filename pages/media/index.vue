@@ -2,8 +2,8 @@
     <div class="media-page-template" ref="main" tabindex="0">
 
         <Head>
-            <Title>{{ videoGallery?.data?.metatag[0]?.attributes?.content }}</Title>
-            <Meta name="description" :content="videoGallery?.data?.metatag[1]?.attributes?.content" />
+            <Title>{{ videoGallery?.data?.metatag?.[0]?.attributes?.content }}</Title>
+            <Meta name="description" :content="videoGallery?.data?.metatag?.[1]?.attributes?.content" />
         </Head>
         <!-- Nav Bar -->
         <div class="mediaPage-menu d-none d-sm-block pt-3">
@@ -46,7 +46,7 @@
                                                     data-ride="carousel">
                                                     <div class="carousel-inner gsapPaperSlideEffectMedia">
                                                         <div @click="navigateTo('/news')" tabindex="0"
-                                                            v-for="(image, index) in news.data[0]?.field_news_gallery"
+                                                            v-for="(image, index) in news?.data?.[0]?.field_news_gallery"
                                                             :key="index"
                                                             :class="{ 'carousel-item': true, 'active': index === 0 }">
 
@@ -62,7 +62,7 @@
                                                         </div>
                                                         <div class="carousel-item-content right-1">
                                                             <div class="media-lg-slider-arrow d-none d-sm-block"
-                                                                v-if="news.data[0]?.field_news_gallery?.length > 1">
+                                                                v-if="news?.data?.[0]?.field_news_gallery?.length > 1">
                                                                 <!-- Arrows -->
                                                                 <button aria-label="Previous slide" tabindex="0"
                                                                     class="carousel-control-prev" type="button"
@@ -92,10 +92,10 @@
                                                             <div class="ci-content-meta">
                                                                 <span tabindex="0" class="date" aria-label="Date"
                                                                     @click="navigateTo('/news')">{{
-                                                                    formatDate(news?.data[0]?.field_published_date) }}
+                                                                    formatDate(news?.data?.[0]?.field_published_date) }}
                                                                 </span>
                                                                 <button tabindex="0" class="share-icon"
-                                                                    @click="openSharePopup(news.data[0], $event, 'news')"
+                                                                    @click="openSharePopup(news?.data?.[0], $event, 'news')"
                                                                     role="button" aria-label="social media share">
                                                                     <svg width="13" height="14" viewBox="0 0 13 14"
                                                                         fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -106,18 +106,18 @@
                                                                 </button>
                                                             </div>
                                                             <h3 tabindex="0" @click="navigateTo('/news')">
-                                                                {{news?.data[0]?.title}}
+                                                                {{news?.data?.[0]?.title}}
                                                             </h3>
                                                             <!-- [v-html]="news?.data[0]?.body?.value" -->
                                                             <p tabindex="0" class="mt-4 mb-0"
                                                                 @click="navigateTo('/news')">
-                                                                {{news.data[0].body.summary}}
+                                                                {{news?.data?.[0]?.body?.summary}}
                                                             </p>
                                                         </div>
 
                                                         <!-- Arrows -->
                                                         <div class="d-block d-sm-none"
-                                                            v-if="news.data[0]?.field_news_gallery?.length > 1">
+                                                            v-if="news?.data?.[0]?.field_news_gallery?.length > 1">
                                                             <button aria-label="Previous slide" tabindex="0"
                                                                 class="carousel-control-prev " type="button"
                                                                 data-bs-target="#SliderNewsLG_1" data-bs-slide="prev">
@@ -154,7 +154,7 @@
                                                 data-bs-ride="carousel">
                                                 <div class="carousel-inner">
                                                     <div tabindex="0"
-                                                        v-for="(image, index) in news.data[1]?.field_news_gallery"
+                                                        v-for="(image, index) in news?.data?.[1]?.field_news_gallery"
                                                         :key="index"
                                                         :class="{ 'carousel-item gsap_video_paperAnimation gsapPaperSlideEffect': true, 'active': index === 0 }">
                                                         <img @click="navigateTo('/news')"
@@ -175,9 +175,9 @@
                                                 <div class="carousel-item-content right-1 gsapSection2paragraph">
                                                     <div class="ci-content-meta">
                                                         <span tabindex="0" class="date" @click="navigateTo('/news')">{{
-                                                            formatDate(news.data[1].field_published_date) }} </span>
+                                                            formatDate(news?.data?.[1]?.field_published_date) }} </span>
                                                         <button tabindex="0" class="share-icon"
-                                                            @click="openSharePopup(news.data[0], $event, 'news')"
+                                                            @click="openSharePopup(news?.data?.[0], $event, 'news')"
                                                             role="button" aria-label="social media share">
                                                             <svg width="13" height="14" viewBox="0 0 13 14" fill="none"
                                                                 xmlns="http://www.w3.org/2000/svg">
@@ -188,14 +188,14 @@
                                                         </button>
                                                     </div>
                                                     <h3 tabindex="0" @click="navigateTo('/news')">
-                                                        {{news.data[1].title}}
+                                                        {{news?.data?.[1]?.title}}
                                                     </h3>
                                                     <p tabindex="0" class="m-0" @click="navigateTo('/news')">
-                                                        {{news.data[1].body.summary}}
+                                                        {{news?.data?.[1]?.body?.summary}}
                                                     </p>
                                                 </div>
                                                 <!-- Arrows -->
-                                                <div v-if="news.data[1]?.field_news_gallery?.length > 1">
+                                                <div v-if="news?.data?.[1]?.field_news_gallery?.length > 1">
                                                     <button aria-label="previous slide" tabindex="0"
                                                         class="carousel-control-prev" type="button"
                                                         data-bs-target="#SliderNewsMD_2" data-bs-slide="prev">
@@ -225,8 +225,8 @@
                                     <!-- SM Listin Grid (3) -->
                                     <div class="row">
                                         <div class="col-lg-4  mb-md-4 pb-3 mb-4"
-                                            v-for="(item, index) in news.data.slice(2)" :key="index"
-                                            :class="{ 'pe-lg-5': index < news.data.slice(2).length - 1 }">
+                                            v-for="(item, index) in (news?.data || []).slice(2)" :key="index"
+                                            :class="{ 'pe-lg-5': index < ((news?.data || []).slice(2).length - 1) }">
                                             <div :id="'SliderNewsSM_' + index"
                                                 class="carousel mediaListing-slider sm-mediaListing-slider slide"
                                                 data-bs-ride="carousel">
@@ -250,7 +250,7 @@
                                                         <span tabindex="0" class="date" @click="navigateTo('/news')">{{
                                                             formatDate(item.field_published_date) }} </span>
                                                         <button tabindex="0" class="share-icon"
-                                                            @click="openSharePopup(news.data[0], $event, 'news')"
+                                                            @click="openSharePopup(news?.data?.[0], $event, 'news')"
                                                             role="button" aria-label="social media share">
                                                             <svg width="13" height="14" viewBox="0 0 13 14" fill="none"
                                                                 xmlns="http://www.w3.org/2000/svg">
@@ -394,10 +394,10 @@
                                             <div class="mediaVideo-listing mediaVideo-listing-lg ">
                                                 <div
                                                     class="mediaVideo-container gsap_video_paperAnimation gsapPaperSlideEffect">
-                                                    <img :src="videoGallery.data?.field_sections[0]?.field_video_section[0]?.field_video_thumbnail?.field_media_image?.image_style_uri?.media_video_1"
+                                                    <img :src="videoGallery?.data?.field_sections?.[0]?.field_video_section?.[0]?.field_video_thumbnail?.field_media_image?.image_style_uri?.media_video_1"
                                                         alt="Video Poster" class="mediaVideo-poster">
                                                     <button tabindex="0" class="mediaVideo-playbutton"
-                                                        @click="openVideo(getVideoUrl(videoGallery.data?.field_sections[0]?.field_video_section[0]?.field_video), 0)"
+                                                        @click="openVideo(getVideoUrl(videoGallery?.data?.field_sections?.[0]?.field_video_section?.[0]?.field_video), 0)"
                                                         v-if="!isPlaying" aria-label="Play video"
                                                         aria-labelledby="playButtonLabel" title="Play video">
                                                         <svg xmlns="http://www.w3.org/2000/svg" width="55" height="55"
@@ -410,9 +410,9 @@
                                                     </button>
                                                 </div>
                                                 <div class="mediaVideo-content gsapYPortfolio120" tabindex="0"
-                                                    @click="openVideo(getVideoUrl(videoGallery.data?.field_sections[0]?.field_video_section[2]?.field_video), 2)"
+                                                    @click="openVideo(getVideoUrl(videoGallery?.data?.field_sections?.[0]?.field_video_section?.[2]?.field_video), 2)"
                                                     role="link" aria-label="play Video">
-                                                    {{videoGallery.data?.field_sections[0].field_video_section[0]?.field_video_title}}
+                                                    {{videoGallery?.data?.field_sections?.[0]?.field_video_section?.[0]?.field_video_title}}
                                                 </div>
                                             </div>
                                         </div>
@@ -421,11 +421,11 @@
                                             <div class="mediaVideo-listing mediaVideo-listing-sm mb-md-5 mb-3 w-100 ">
                                                 <div
                                                     class="mediaVideo-container-full gsap_video_paperAnimation gsapPaperSlideEffect">
-                                                    <img :src="videoGallery.data?.field_sections[0]?.field_video_section[1]?.field_video_thumbnail?.field_media_image?.image_style_uri?.media_news_2"
+                                                    <img :src="videoGallery?.data?.field_sections?.[0]?.field_video_section?.[1]?.field_video_thumbnail?.field_media_image?.image_style_uri?.media_news_2"
                                                         alt="Video Poster 2" class="mediaVideo-poster">
                                                     <button tabindex="0"
                                                         class="mediaVideo-playbutton mediaVideo-playbutton-sm"
-                                                        @click="openVideo(getVideoUrl(videoGallery.data?.field_sections[0]?.field_video_section[1]?.field_video), 1)"
+                                                        @click="openVideo(getVideoUrl(videoGallery?.data?.field_sections?.[0]?.field_video_section?.[1]?.field_video), 1)"
                                                         v-if="!isPlaying" aria-label="Play video"
                                                         aria-labelledby="playButtonLabel2" title="Play video">
                                                         <svg xmlns="http://www.w3.org/2000/svg" width="35" height="35"
@@ -438,20 +438,20 @@
                                                     </button>
                                                 </div>
                                                 <div class="mediaVideo-content gsapYPortfolio120" tabindex="0"
-                                                    @click="openVideo(getVideoUrl(videoGallery.data?.field_sections[0]?.field_video_section[2]?.field_video), 2)"
+                                                    @click="openVideo(getVideoUrl(videoGallery?.data?.field_sections?.[0]?.field_video_section?.[2]?.field_video), 2)"
                                                     role="link" aria-label="play Video">
-                                                    {{videoGallery.data?.field_sections[0].field_video_section[1]?.field_video_title}}
+                                                    {{videoGallery?.data?.field_sections?.[0]?.field_video_section?.[1]?.field_video_title}}
                                                 </div>
                                             </div>
                                             <!-- 02 - loop -->
                                             <div class="mediaVideo-listing mediaVideo-listing-sm mb-md-5 mb-3 w-100">
                                                 <div
                                                     class="mediaVideo-container-full gsap_video_paperAnimation gsapPaperSlideEffect">
-                                                    <img :src="videoGallery.data?.field_sections[0]?.field_video_section[2]?.field_video_thumbnail?.field_media_image?.image_style_uri?.media_news_1"
+                                                    <img :src="videoGallery?.data?.field_sections?.[0]?.field_video_section?.[2]?.field_video_thumbnail?.field_media_image?.image_style_uri?.media_news_1"
                                                         alt="Video Poster 3" class="mediaVideo-poster">
                                                     <button aria-label="Play video" tabindex="0"
                                                         class="mediaVideo-playbutton mediaVideo-playbutton-sm"
-                                                        @click="openVideo(getVideoUrl(videoGallery.data?.field_sections[0]?.field_video_section[2]?.field_video), 2)"
+                                                        @click="openVideo(getVideoUrl(videoGallery?.data?.field_sections?.[0]?.field_video_section?.[2]?.field_video), 2)"
                                                         v-if="!isPlaying" aria-labelledby="playButtonLabel3"
                                                         title="Play video">
                                                         <svg xmlns="http://www.w3.org/2000/svg" width="35" height="35"
@@ -464,9 +464,9 @@
                                                     </button>
                                                 </div>
                                                 <div class="mediaVideo-content gsapYPortfolio120" tabindex="0"
-                                                    @click="openVideo(getVideoUrl(videoGallery.data?.field_sections[0]?.field_video_section[2]?.field_video), 2)"
+                                                    @click="openVideo(getVideoUrl(videoGallery?.data?.field_sections?.[0]?.field_video_section?.[2]?.field_video), 2)"
                                                     role="link" aria-label="play Video">
-                                                    {{videoGallery.data?.field_sections[0].field_video_section[2]?.field_video_title}}
+                                                    {{videoGallery?.data?.field_sections?.[0]?.field_video_section?.[2]?.field_video_title}}
                                                 </div>
                                             </div>
                                         </div>
@@ -565,7 +565,7 @@
     export default {
         data() {
             return {
-                videos: [{ url: '/_nuxt/assets/img/video.mp4', thumbnail: '/_nuxt/assets/img/media/demo.jpg' }],
+                videos: [{ url: '/_nuxt/assets/img/video.mp4', thumbnail: new URL('../../assets/img/media/demo.jpg', import.meta.url).href }],
                 showPopup: false,
                 isPlaying: false,
                 currentVideo: null,
@@ -765,30 +765,50 @@
 
 
     // News api call
-    const { data: news } = await useFetch(apiBaseURL + '/jsonapi/node/news?fields[node--news]=field_published_date,title,body,field_news_gallery&page[limit]=5', {
+    const news = ref({
+        data: [
+            { field_news_gallery: [], body: {} },
+            { field_news_gallery: [], body: {} }
+        ]
+    });
+    const { data: newsResponse } = await useFetch(apiBaseURL + '/jsonapi/node/news?fields[node--news]=field_published_date,title,body,field_news_gallery&page[limit]=5', {
         method: "GET",
         headers: {
             "Authorization": `Basic ${apiAuthKey}`
         }
     });
+    news.value = newsResponse.value || news.value;
 
 
     // Press Release api call
-    const { data: pressRelease } = await useFetch(apiBaseURL + '/jsonapi/node/press_release?fields[node--press_release]=field_published_date,title,field_download,field_download_english&page[limit]=5', {
+    const pressRelease = ref({ data: [] });
+    const { data: pressReleaseResponse } = await useFetch(apiBaseURL + '/jsonapi/node/press_release?fields[node--press_release]=field_published_date,title,field_download,field_download_english&page[limit]=5', {
         method: "GET",
         headers: {
             "Authorization": `Basic ${apiAuthKey}`
         }
     });
+    pressRelease.value = pressReleaseResponse.value || pressRelease.value;
 
 
     // Video Gallery api call
-    const { data: videoGallery } = await useFetch(apiBaseURL + '/jsonapi/node/landing_page/d7c412c3-cce4-4b3f-aafd-a00dd815f39a', {
+    const videoGallery = ref({
+        data: {
+            metatag: [],
+            field_sections: [
+                {
+                    field_video_section: [{}, {}, {}]
+                }
+            ]
+        }
+    });
+    const { data: videoGalleryResponse } = await useFetch(apiBaseURL + '/jsonapi/node/landing_page/d7c412c3-cce4-4b3f-aafd-a00dd815f39a', {
         method: "GET",
         headers: {
             "Authorization": `Basic ${apiAuthKey}`
         }
     });
+    videoGallery.value = videoGalleryResponse.value || videoGallery.value;
 
 
     // Helping Functions

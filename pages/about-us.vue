@@ -13,10 +13,10 @@
             <div class="section-header">
 
               <h1 tabindex="0" class="ardf-1 page-main-heading mb-4 gsap_page_heading">
-                {{ about?.data?.field_sections[0].field_hwd_main_title }}
+                {{ about?.data?.field_sections?.[0]?.field_hwd_main_title }}
               </h1>
 
-              <div class="banner text-right" :aria-label="about.data.field_video_image_banner?.field_media_image?.meta?.alt">
+              <div class="banner text-right" :aria-label="about?.data?.field_video_image_banner?.field_media_image?.meta?.alt">
                 <div class="d-flex ml-auto play-video-btn " :style="imageStyle"
                   v-if="about?.data?.field_video_image_banner?.field_media_video_file?.uri?.url">
                    <!--  :style="imageStyle"  -->
@@ -69,7 +69,7 @@
                     <div class="col-lg-12">
                       <div class="post-box mb-0 mb-m">
                         <div tabindex="0" class="intro-about gsapSection2paragraph">
-                          <div class="mt-0 mb-3" v-html="about.data.field_sections[0].field_hwd_body.value"></div>
+                          <div class="mt-0 mb-3" v-html="about?.data?.field_sections?.[0]?.field_hwd_body?.value"></div>
                         </div>
                       </div>
                     </div>
@@ -79,7 +79,7 @@
 
                         <div  tabindex="-1"
                           class="col-xl-4 col-md-6 px-md-3 px-2 my-md-3 my-2 overflow-hidden"
-                          v-for="(aboutVision, index) in about.data.field_sections[0].field_icon_text_main">
+                          v-for="(aboutVision, index) in about?.data?.field_sections?.[0]?.field_icon_text_main">
                           <div class="services-box">
                             <div class="servicesbox_inner">
                               <div class="sb-icon" :aria-label="aboutVision?.field_icon?.field_media_svg?.meta?.alt">
@@ -110,22 +110,22 @@
                             <button role="button"  class="accordion-button d-flex w-100" type="button"
                               data-bs-toggle="collapse" data-bs-target="#collapsevision" aria-expanded="true"
                               aria-controls="collapseOne">
-                              <span  class="name">{{about.data.field_sections[0].field_icon_text_main[0].field_hwd_title }}</span>
+                              <span  class="name">{{about?.data?.field_sections?.[0]?.field_icon_text_main?.[0]?.field_hwd_title }}</span>
                             </button>
 
                           </h2>
                           <div id="collapsevision" class="accordion-collapse collapse show"
                             data-bs-parent="#accordionExample">
                             <div class="sb-icon" tabindex="0"
-                              :aria-label="about.data.field_sections[0].field_icon_text_main[0].field_icon?.field_media_svg?.meta?.alt">
+                              :aria-label="about?.data?.field_sections?.[0]?.field_icon_text_main?.[0]?.field_icon?.field_media_svg?.meta?.alt">
                               <NuxtImg tabindex="0" sizes="(max-width: 64px) 100vw, 61px" :quality="75"
-                                :src="imgBaseURL + about.data.field_sections[0].field_icon_text_main[0].field_icon?.field_media_image?.uri?.url"
+                                :src="imgBaseURL + (about?.data?.field_sections?.[0]?.field_icon_text_main?.[0]?.field_icon?.field_media_image?.uri?.url || '')"
                                 width="61" height="64"
-                                :alt="about.data.field_sections[0].field_icon_text_main[0].field_icon?.field_media_svg?.meta?.alt || 'about us- Mission Vision Values'" />
+                                :alt="about?.data?.field_sections?.[0]?.field_icon_text_main?.[0]?.field_icon?.field_media_svg?.meta?.alt || 'about us- Mission Vision Values'" />
                             </div>
                             <div class="accordion-body">
                               <p tabindex="0">
-                                {{about.data.field_sections[0].field_icon_text_main[0].field_hwd_description}}
+                                {{about?.data?.field_sections?.[0]?.field_icon_text_main?.[0]?.field_hwd_description}}
                               </p>
                             </div>
                           </div>
@@ -136,21 +136,21 @@
                               data-bs-toggle="collapse" data-bs-target="#collapsmission" aria-expanded="false"
                               aria-controls="collapseTwo">
                               <span tabindex="0">
-                                {{ about.data.field_sections[0].field_icon_text_main[1].field_hwd_title }}</span>
+                                {{ about?.data?.field_sections?.[0]?.field_icon_text_main?.[1]?.field_hwd_title }}</span>
                             </button>
 
                           </h2>
                           <div id="collapsmission" class="accordion-collapse collapse"
                             data-bs-parent="#accordionExample">
                             <div class="sb-icon" tabindex="0"
-                              :aria-label="about.data.field_sections[0].field_icon_text_main[1].field_icon?.field_media_svg?.meta?.alt">
+                              :aria-label="about?.data?.field_sections?.[0]?.field_icon_text_main?.[1]?.field_icon?.field_media_svg?.meta?.alt">
                               <NuxtImg sizes="(max-width: 64px) 100vw, 61px" :quality="75"
-                                :src="imgBaseURL + about.data.field_sections[0].field_icon_text_main[1].field_icon?.field_media_image?.uri?.url"
+                                :src="imgBaseURL + (about?.data?.field_sections?.[0]?.field_icon_text_main?.[1]?.field_icon?.field_media_image?.uri?.url || '')"
                                 width="61" height="64"
-                                :alt="about.data.field_sections[0].field_icon_text_main[1].field_icon?.field_media_svg?.meta?.alt || 'about us- Mission Vision Values'" />
+                                :alt="about?.data?.field_sections?.[0]?.field_icon_text_main?.[1]?.field_icon?.field_media_svg?.meta?.alt || 'about us- Mission Vision Values'" />
                             </div>
                             <div class="accordion-body" tabindex="0">
-                              <p>{{ about.data.field_sections[0].field_icon_text_main[1].field_hwd_description }}</p>
+                              <p>{{ about?.data?.field_sections?.[0]?.field_icon_text_main?.[1]?.field_hwd_description }}</p>
                             </div>
                           </div>
                         </div>
@@ -160,17 +160,17 @@
                               data-bs-toggle="collapse" data-bs-target="#collapsevalues" aria-expanded="false"
                               aria-controls="collapseThree">
                               <span class="name">
-                                {{ about.data.field_sections[0].field_icon_text_main[2].field_hwd_title }}</span>
+                                {{ about?.data?.field_sections?.[0]?.field_icon_text_main?.[2]?.field_hwd_title }}</span>
                             </button>
 
                           </h2>
                           <div id="collapsevalues" class="accordion-collapse collapse"
                             data-bs-parent="#accordionExample">
                             <div class="sb-icon" tabindex="0"><img tabindex="0"
-                                :src="imgBaseURL + about.data.field_sections[0].field_icon_text_main[2].field_icon?.field_media_image?.uri?.url"
+                                :src="imgBaseURL + (about?.data?.field_sections?.[0]?.field_icon_text_main?.[2]?.field_icon?.field_media_image?.uri?.url || '')"
                                 width="61" height="64" alt="Arrow"></div>
                             <div class="accordion-body">
-                              <p>{{ about.data.field_sections[0].field_icon_text_main[2].field_hwd_description }}</p>
+                              <p>{{ about?.data?.field_sections?.[0]?.field_icon_text_main?.[2]?.field_hwd_description }}</p>
                             </div>
                           </div>
                         </div>
@@ -226,20 +226,20 @@
                       our Strategy
                     </h2>
                     <div class="accordion" id="accordionExample">
-                      <div v-for="(strategy, index) in about.data.field_sections[1].field_startegic_approach_about"
+                      <div v-for="(strategy, index) in about?.data?.field_sections?.[1]?.field_startegic_approach_about"
                         :key="index" class="accordion-item gsapSectionOTBoxes22">
                         <h2 class="accordion-header" >
                           <button class="accordion-button collapsed d-flex w-100" type="button"   
-                            :class="{ 'active': openIndex === index }"  @click="toggle(index)">
-                            <span class="no">{{ index + 1 }}</span>
+                            :class="{ 'active': openIndex === Number(index) }"  @click="toggle(Number(index))">
+                            <span class="no">{{ Number(index) + 1 }}</span>
                             <span class="name" >{{ strategy.field_about }}</span>
                           </button>
                         </h2>
                         <div :id="'collapse' + index" class="accordion-collapse collapse"
-                          :class="{ show: openIndex === index }">
+                          :class="{ show: openIndex === Number(index) }">
                           <div class="accordion-body pt-m">
                             <div v-html="strategy.field_description_aboutus.value"></div>
-                            <div class="progress-bar" :class="{ active: progressBars[index] }"></div>
+                            <div class="progress-bar" :class="{ active: progressBars[Number(index)] }"></div>
                           </div>
                         </div>
                       </div>
@@ -290,8 +290,8 @@
                               <h5 tabindex="0" class="md:min-h-[48px]" >{{ member.field_board_member_name }}</h5>
                               <div class="member-des d-flex justify-content-between align-items-center md:min-h-[48px]">
                                 <span tabindex="0">{{ member.field_designation }}</span>
-                                <button @click="showPopup(member, index, $event)" tabindex="0" ref="popup"
-                                  aria-label="open popup"> <img src="/assets/img/arrow-r-blue.svg"
+                                <button @click="showPopup(member, Number(index), $event)" tabindex="0" ref="popup"
+                                  aria-label="open popup"> <img src="~/assets/img/arrow-r-blue.svg"
                                     class="cursor-pointer" width="18" height="15" alt="Show member details" /></button>
                               </div>
                             </div>
@@ -450,7 +450,8 @@
   </div>
 </template>
 <script setup lang="ts">
-  import { ref, onMounted, computed, onUnmounted, nextTick } from 'vue';
+  import { ref, onMounted, computed, onUnmounted, nextTick, watch } from 'vue';
+  import { useFetch, useRuntimeConfig } from '#imports';
   import { useRoute } from 'vue-router';
   import PopupComponent from '../components/Popup.vue';
 
@@ -470,7 +471,7 @@
   let videoBtnTxt = ref('');
   // videoBtnTxt.value = '<span class="px-1"></span>PAUSE<span class="px-1"></span>';
   videoBtnTxt.value = '~/assets/img/pause.svg';
-  const myVideo = ref();
+  const myVideo = ref<HTMLVideoElement | null>(null);
 
   const imageWidth = ref(41);
   const maxScroll  = ref(500);
@@ -479,16 +480,16 @@
   const isPopupVisible = ref(false);
   const isExecPopupVisible = ref(false);
 
-  const memberPopupData = ref();
-  const executivePopupData = ref();
+  const memberPopupData = ref<any>(null);
+  const executivePopupData = ref<any>(null);
   const currentPopupDataKey = ref(1);
 
-  const boardMemberHeadingRef = ref(null);
+  const boardMemberHeadingRef = ref<HTMLElement | null>(null);
   const boardMemberRef = ref < HTMLDivElement | null > (null);
-  const shareClickedItem = ref(null);
+  const shareClickedItem = ref<HTMLElement | null>(null);
 
-  const main = ref(null);
-  let ctx = null;
+  const main = ref<HTMLElement | null>(null);
+  let ctx: any = null;
   // Animation on mount
   const runAnimationSmother = (event = true) => {
       ctx = gsap.context(async () => {
@@ -515,8 +516,8 @@
           .catch(e => {
             console.log(e);
           });
-      }, main.value);
-    }
+      }, main.value ?? undefined);
+    };
     onMounted(async () => {
       await nextTick();
       runAnimationSmother();
@@ -555,12 +556,12 @@
   }));
 
   // Define the methods to show and close the popup
-  const showPopup = (member, currentKey, event) => {
+  const showPopup = (member: any, currentKey: number, event: MouseEvent) => {
     isPopupVisible.value = true;
     memberPopupData.value = member;
     currentPopupDataKey.value = currentKey;
     document.body.classList.add('noscroll');
-    shareClickedItem.value = event.target.closest('button');
+    shareClickedItem.value = (event.currentTarget as HTMLElement | null) ?? null;
   };
   const closePopup = () => {
     isPopupVisible.value = false;
@@ -573,11 +574,11 @@
       }
     });
   };
-  const handleKeydown = (event) => {
+  const handleKeydown = (event: KeyboardEvent) => {
     if (event.key === 'Tab' || event.key === ' ') {
       nextTick(() => {
         closePopup();
-        boardMemberHeadingRef.value.focus();
+        boardMemberHeadingRef.value?.focus();
         if (boardMemberRef.value) {
           boardMemberRef.value.scrollTo({ top: 0, behavior: 'smooth' });
         }
@@ -586,18 +587,18 @@
   };
   function videoPlay() {
     if (isPlaying.value) {
-      myVideo.value.pause()
+      myVideo.value?.pause()
       isPlaying.value = false;
       // videoBtnTxt.value = '<span class="px-1">.</span>PLAY<span class="px-1">.</span>';
       videoBtnTxt.value = '~/assets/img/play.svg';
     } else {
-      myVideo.value.play()
+      myVideo.value?.play()
       isPlaying.value = true;
       // videoBtnTxt.value = '<span class="px-1">.</span>PAUSE<span class="px-1">.</span>';
       videoBtnTxt.value = '~/assets/img/pause.svg';
     }
   }
-  const nextMember = (type, currentKey, mdata) => {
+  const nextMember = (type: string, currentKey: number, mdata: any) => {
     const nextKey = currentKey + 1;
     // Check if nextKey is beyond the array length
     if (nextKey >= mdata.data.length) {
@@ -614,7 +615,7 @@
       currentPopupDataKey.value = nextKey;
     }
   };
-  const previousMember = (type, currentKey, mdata) => {
+  const previousMember = (type: string, currentKey: number, mdata: any) => {
     const prevKey = currentKey - 1;
 
     // Check if prevKey is before the start of the array
@@ -632,7 +633,7 @@
       currentPopupDataKey.value = prevKey;
     }
   };
-  const showExecPopup = (executive, currentKey) => {
+  const showExecPopup = (executive: any, currentKey: number) => {
     isExecPopupVisible.value = true;
     executivePopupData.value = executive;
     currentPopupDataKey.value = currentKey;
@@ -645,37 +646,62 @@
   
   
   // About API call
-  const { data: about } = await useFetch(apiBaseURL + '/jsonapi/node/landing_page/72537377-4833-4d5d-b1fe-beaa7b92a1ec', {
+  const about = ref<any>({
+    data: {
+      metatag: [],
+      field_video_image_banner: {},
+      field_sections: [
+        {
+          field_hwd_main_title: '',
+          field_hwd_body: { value: '' },
+          field_icon_text_main: [
+            { field_hwd_title: '', field_hwd_description: '', field_icon: {} },
+            { field_hwd_title: '', field_hwd_description: '', field_icon: {} },
+            { field_hwd_title: '', field_hwd_description: '', field_icon: {} }
+          ]
+        },
+        {
+          field_startegic_approach_about: []
+        }
+      ]
+    }
+  })
+  const { data: aboutResponse } = await useFetch<any>(apiBaseURL + '/jsonapi/node/landing_page/72537377-4833-4d5d-b1fe-beaa7b92a1ec', {
     method: 'GET',
     headers: {
       Authorization: `Basic ${apiAuthKey}`,
     },
   });
+  about.value = aboutResponse.value || about.value
   // Board Members API call
-  const { data: members } = await useFetch(apiBaseURL + '/jsonapi/node/board_members', {
+  const members = ref<any>({ data: [] })
+  const { data: membersResponse } = await useFetch<any>(apiBaseURL + '/jsonapi/node/board_members', {
     method: 'GET',
     headers: {
       Authorization: `Basic ${apiAuthKey}`,
     },
   });
+  members.value = membersResponse.value || members.value
   // Executive API call
-  const { data: executives } = await useFetch(apiBaseURL + '/jsonapi/node/executive_management', {
+  const executives = ref<any>({ data: [] })
+  const { data: executivesResponse } = await useFetch<any>(apiBaseURL + '/jsonapi/node/executive_management', {
     method: 'GET',
     headers: {
       Authorization: `Basic ${apiAuthKey}`,
     },
   });
+  executives.value = executivesResponse.value || executives.value
 
 
 
   // Accordion state
-  const openIndex = ref(null); // Use `null` to represent the closed state
-  const progressBars = ref([]);
-  const toggle = (index) => {
+  const openIndex = ref<number | null>(null); // Use `null` to represent the closed state
+  const progressBars = ref<boolean[]>([]);
+  const toggle = (index: number) => {
     openIndex.value = openIndex.value === index ? null : index;
-  }
+  };
   // Auto show/hide logic
-  watch(openIndex, (newIndex) => {
+  watch(openIndex, (newIndex: number | null) => {
     if (newIndex !== -1) {
       progressBars.value = progressBars.value.map((_, index) => index === newIndex);
       // setTimeout(() => {

@@ -1,3 +1,5 @@
+import { defineNuxtPlugin } from '#app'
+
 export default defineNuxtPlugin(() => {
   // @ts-ignore (Nuxt auto-import)
   const cookieControl = useCookieControl?.()

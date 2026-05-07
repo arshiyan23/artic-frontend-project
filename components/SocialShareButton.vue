@@ -17,18 +17,27 @@
     </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
+import { computed } from 'vue';
 
-const props = defineProps<Props>();
-  interface Props {
-    isVisible: Boolean,
-    url: String
+interface Props {
+    isVisible: boolean;
+    url?: string;
 }
 
-// const props = defineProps({
-//   isVisible: Boolean,
-//   url: String,
-// });
+const props = defineProps<Props>();
+const emit = defineEmits<{
+    (event: 'close'): void;
+}>();
+
+const isOpen = computed({
+    get: () => props.isVisible,
+    set: (value: boolean) => {
+        if (!value) {
+            emit('close');
+        }
+    }
+});
 
 </script>
 

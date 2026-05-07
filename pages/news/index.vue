@@ -1,7 +1,7 @@
 <template>
         <Head>
-            <Title>{{ news?.list_page_meta_tags?.meta_title || 'News'}}</Title>
-            <Meta name="description" :content="news?.list_page_meta_tags?.meta_description" />
+            <Title>News</Title>
+            <Meta name="description" content="Latest news from Artic." />
         </Head>
         <div class="news-page-template" tabindex="0" ref="main">
         <!-- <Loader :loading="isLoading"></Loader> -->

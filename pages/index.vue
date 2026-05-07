@@ -34,7 +34,7 @@
                 width="100%" autoplay muted loop playsInline id="myVideo" ref="myVideo"
                 preload="none">
                 <source muted
-                  :src="imgBaseURL + homepage?.data.field_video_image_banner?.field_media_video_file?.uri?.url"
+                  :src="homepage?.data.field_video_image_banner?.field_media_video_file?.uri?.url ? imgBaseURL + homepage.data.field_video_image_banner.field_media_video_file.uri.url : ''"
                   :type="homepage?.data?.field_video_image_banner?.field_media_video_file?.filemime" />
                 Your browser does not support HTML5 video.
               </video>
@@ -104,14 +104,14 @@
 
                   <div class="col-lg-9 pb-5">
                     <div class="row gx-5">
-                      <div v-for="(newss,index) in news.data.slice(0,3)" :key="index" class="pt-5 col-lg-4 pb-5">
+                      <div v-for="(newss,index) in news?.data?.slice(0,3) || []" :key="index" class="pt-5 col-lg-4 pb-5">
                         <div class="post-box bm-4">
                           <div class="post-img pb-1 gsapLatestNewsThumb" tabindex="0" role="img"
-                            :aria-label="newss.field_news_thumbnail.field_media_image.meta.alt+index || ''">
+                            :aria-label="(newss.field_news_thumbnail?.field_media_image?.meta?.alt || '') + index">
                             <NuxtImg width="100%" height="100%" loading="lazy"
                               :src="newss.field_news_thumbnail.field_media_image?.image_style_uri.home_news"
                               class="img-fluid  "
-                              :alt="newss.field_news_thumbnail.field_media_image.meta.alt + index || ''" />
+                              :alt="(newss.field_news_thumbnail?.field_media_image?.meta?.alt || '') + index" />
                           </div>
                           <!-- Content -->
                           <div class="gsapTopBottom">
@@ -235,7 +235,7 @@
                             :alt="portfolio?.field_property_image?.field_media_image?.meta?.alt" />
                         </div>
                         <div class="social">
-                          <button type="button" @click="navigateTo('portfolio/'+portfolio.field_tags.name.toLowerCase()+portfolio.path.alias)" class="btn btn-success"
+                          <button type="button" @click="navigateToPage('portfolio/'+portfolio.field_tags.name.toLowerCase()+portfolio.path.alias)" class="btn btn-success"
                             tabindex="0">
                             View more <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                               class="bi bi-arrow-right-short" viewBox="0 0 16 16" role="presentation">
@@ -247,7 +247,7 @@
                       </div>
 
                       <div class="member-info px-0 gsapYPortfolio120">
-                        <h5 class="arfs-5"><button @click="navigateTo('portfolio/'+portfolio.field_tags.name.toLowerCase()+portfolio.path.alias)" tabindex="0"
+                        <h5 class="arfs-5"><button @click="navigateToPage('portfolio/'+portfolio.field_tags.name.toLowerCase()+portfolio.path.alias)" tabindex="0"
                             type="button">{{ portfolio.title }}</button></h5>
                         <span tabindex="0" class="line-clamp arfs-8">{{portfolio.body?.summary }}</span>
                       </div>
@@ -274,7 +274,7 @@
                           <div class="card border-0 bg-transparent">
                             <div tabindex="0" class="card-body text-center p-4 p-xxl-5 d-flex counter-show"
                               ref="counterShow">
-                              <div class="mb-2 pe-2 pe-2 count-number data h1">
+                              <div class="mb-2 pe-2 count-number data h1">
                                 {{homepage?.data?.field_sections?.[1]?.field_data_details?.[0]?.field_number}}</div>
                               <p class="mb-0" role="heading" aria-level="2">
                                 {{homepage?.data?.field_sections?.[1]?.field_data_details?.[0]?.field_number_text}}</p>
@@ -284,7 +284,7 @@
                         <div class="col-12 col-md-3 p-0 border-start gsapYCounter200">
                           <div class="card border-0 bg-transparent">
                             <div tabindex="0" class="card-body text-center p-4 p-xxl-5 d-flex">
-                              <div class="mb-2 pe-2 pe-2 data h1">
+                              <div class="mb-2 pe-2 data h1">
                                 {{homepage?.data?.field_sections?.[1]?.field_data_details?.[1]?.field_number}}</div>
                               <p class="mb-0" role="heading" aria-level="2">
                                 {{homepage?.data?.field_sections?.[1]?.field_data_details?.[1]?.field_number_text}} <br>
@@ -333,7 +333,7 @@
                 <div class="section-header">
                   <h2 tabindex="0" class="arfs-2 text-uppercase pb-4">Our Global Presence</h2>
                 </div>
-                <Globe :markersData="homepage?.data?.field_sections?.[2]?.field_map_markers_data" @selectedMapData1="selectedMapData=$event;isOpen=true;" />
+                <Globe :markersData="homepage?.data?.field_sections?.[2]?.field_map_markers_data || []" @selectedMapData1="selectedMapData=$event;isOpen=true;" />
               </div>
             </section>
             <!-- ============== -->
@@ -343,15 +343,15 @@
               <div class="container">
                 <h2 tabindex="0" class="arfs-2 text-sm-center gsapYPartners200"
                   style="background-color: #E09235; color: #ffffff;">Our Partners</h2>
-                <div class="our-partners-boxes" v-if="partners?.data?.length">
+                <div class="our-partners-boxes" v-if="partnerCards.length">
                   <div
-                    v-for="(partner,index) in partners.data"
+                    v-for="(partner,index) in partnerCards"
                     :key="index"
                     class="up-single-box"
                   >
                     <NuxtImg
-                      :src="imgBaseURL + partner?.field_partners_logo?.field_media_image?.uri?.url"
-                      :alt="partner?.field_partners_logo?.field_media_image?.meta?.alt"
+                      :src="partner.image"
+                      :alt="partner.alt"
                     />
                   </div>
                 </div>
@@ -404,7 +404,7 @@
                               aria-label="Click here to Continue reading Chairman message"
                               class="d-flex align-items-center">
                               Continue reading
-                              <img width="12" height="11" src="/assets/img/continue-reading-arrow.svg"
+                              <img width="12" height="11" src="~/assets/img/continue-reading-arrow.svg"
                                 alt="continue reading" class="ml-2" />
                             </button>
                           </div>
@@ -497,7 +497,7 @@
                             <button @click="showPopup(legacyy?.data?.[1], $event)"
                               aria-label="Click here to Continue reading" class="d-flex align-items-center">
                               Continue reading
-                              <img width="12" height="11" src="/assets/img/continue-reading-arrow.svg"
+                              <img width="12" height="11" src="~/assets/img/continue-reading-arrow.svg"
                                 alt="continue reading" class="ml-2" rel="preload"  />
                             </button>
                           </div>
@@ -507,26 +507,26 @@
                           </div>
                         </div>
                       </div>
-                      <div class="col-lg-6 aos-init mt-lg-5 mt-3 ps-lg-4 v-if="legacyy?.data?.length > 1">
+                      <div class="col-lg-6 aos-init mt-lg-5 mt-3 ps-lg-4" v-if="legacyy?.data?.length > 1">
                         <div class="post-box">
                           <div class="post-img pb-4 pb-lg-5  gsapPaperSlideEffect ceo-IMG">
                             <NuxtImg role="img" tabindex="0" loading="lazy" class="img-fluid"
-                              :src="legacyy?.data?.[2].field_our_legacy_member_image.field_media_image?.image_style_uri?.home_our_leadership || ''"
+                              :src="legacyy?.data?.[2]?.field_our_legacy_member_image?.field_media_image?.image_style_uri?.home_our_leadership || ''"
                               :aria-label="'Managing Director & CEO Image'"
-                              :alt="legacyy?.data?.[2].field_our_legacy_member_image.field_media_image?.meta?.alt" />
+                              :alt="legacyy?.data?.[2]?.field_our_legacy_member_image?.field_media_image?.meta?.alt" />
                           </div>
 
-                          <p tabindex="0" class="pt-0 mt-0  " >{{ legacyy?.data?.[2].field_message }}</p>
+                          <p tabindex="0" class="pt-0 mt-0  " >{{ legacyy?.data?.[2]?.field_message }}</p>
                           <div class="continue-reading text-left mt-3" >
                             <button  tabindex="0" aria-label="Click here to Continue reading"
                               @click="showPopup(legacyy?.data?.[2], $event)" class="d-flex align-items-center">
                               Continue reading
-                              <img src="/assets/img/continue-reading-arrow.svg" alt="" class="ml-2" rel="preload"  />
+                              <img src="~/assets/img/continue-reading-arrow.svg" alt="" class="ml-2" rel="preload"  />
                             </button>
                           </div>
                           <div class="member-info px-0 text-end pt-3 pt-lg-5 "  tabindex="0">
-                            <h5>{{ legacyy?.data?.[2].field_board_member_name }}</h5>
-                            <span>{{ legacyy?.data?.[2].field_designation }}</span>
+                            <h5>{{ legacyy?.data?.[2]?.field_board_member_name }}</h5>
+                            <span>{{ legacyy?.data?.[2]?.field_designation }}</span>
                           </div>
 
                         </div>
@@ -577,7 +577,7 @@
                       </div>
                       <div class="post-box dn-s dn-d dn-m">
                         <div class="text-start d-flex" tabindex="0">
-                          <h1 class="mb-2 pe-2 pe-2">{{homepage?.data?.field_sections?.[3]?.field_no_of_regions}}</h1>
+                          <h1 class="mb-2 pe-2">{{homepage?.data?.field_sections?.[3]?.field_no_of_regions}}</h1>
                           <p class="fs-5 mb-0 text-secondary">{{homepage?.data?.field_sections?.[3]?.field_regions_title}}
                           </p>
                         </div>
@@ -646,7 +646,7 @@
    <div id="globalPresense">
     <Popup :isVisible="isOpen" class="globeModal" @close="closePopup1" tabindex="0">
       <div class="row globpopup">
-        <div class="col-xxl-6 col-xl-6 col-lg-6 col-md-12 col-sm-12 popupglob v-if="legacyy?.data?.length > 1">
+        <div class="col-xxl-6 col-xl-6 col-lg-6 col-md-12 col-sm-12 popupglob" v-if="legacyy?.data?.length > 1">
           <h1 class="fs-4 text-primary mb-4" tabindex="0">{{ selectedMapData.name }}</h1>
           <!-- <UButton color="gray" variant="ghost" icon="i-heroicons-x-mark-20-solid" class="-my-1" @click="isOpen = false" /> -->
           <p tabindex="0">{{ selectedMapData.city }}, {{ selectedMapData.country }}</p>
@@ -658,7 +658,7 @@
             <button @click="moveNext"><img v-if="legacyy?.data?.length > 1" src="/assets/icons/arrow-bl-media.svg" rel="preload"></button>
           </div>
         </div>
-        <div class="col-xxl-6 col-xl-6 col-lg-6 col-md-12 col-sm-12 img-popup" tabindex="0 v-if="legacyy?.data?.length > 1">
+        <div class="col-xxl-6 col-xl-6 col-lg-6 col-md-12 col-sm-12 img-popup" tabindex="0" v-if="legacyy?.data?.length > 1">
           <div class="globe_img_container" :style="{ backgroundImage: `url(${selectedMapData.image_url})` }">
           </div>
           <!-- <img :src="selectedMapData.image_url" :alt="selectedMapData.image_alt" class="h-100" /> -->
@@ -668,7 +668,8 @@
   </div>
 </template>
 <script setup lang="ts">
-  import { onMounted, onUnmounted, nextTick, ref } from 'vue';
+  import { computed, onMounted, onUnmounted, nextTick, ref } from 'vue';
+  import { useFetch, useRuntimeConfig } from '#imports';
   import gsap from 'gsap';
   import PopupComponent from '../components/Popup.vue';
   import { InitSmoothness, pauseSmoother } from '~/helpers/gsap/InitGSAP';
@@ -681,7 +682,7 @@
   let videoBtnTxt = ref('');
   videoBtnTxt.value = '<span class="px-1"></span>||<span class="px-1"></span>';
   const myVideo = ref();
-  const selectedMapData =ref();
+  const selectedMapData = ref<any>(null);
   const isOpen = ref(false)
   const closePopup1 = () => {isOpen.value = false;selectedMapData.value=''};
   const selectedCurrentKey=ref(1);
@@ -693,13 +694,17 @@
   const apiBaseURL = config.public.API_BASE_URL;
   const apiAuthKey = config.public.API_AUTH_KEY;
   const isPopupVisible = ref(false);
-  const legacyPopupData = ref();
-  const shareClickedItem = ref(null)
+  const legacyPopupData = ref<any>(null);
+  const shareClickedItem = ref<HTMLElement | null>(null)
 
-  const showPopup = (legacyData, event) => {
+  const navigateToPage = (path: string) => {
+    window.location.href = path.startsWith('/') ? path : `/${path}`;
+  };
+
+  const showPopup = (legacyData: any, event: MouseEvent) => {
     isPopupVisible.value = true;
     legacyPopupData.value = legacyData;
-    shareClickedItem.value = event.target.closest('button');
+    shareClickedItem.value = (event.currentTarget as HTMLElement | null) ?? null;
   };
   const closePopup = () => {
     isPopupVisible.value = false;
@@ -710,18 +715,43 @@
       }
     });
   };
-  const handleKeydownFocusToClose = () => {
+  const handleKeydownFocusToClose = (event: KeyboardEvent) => {
     if (event.key === 'Tab') {
-      const event = new CustomEvent('focus-close-button');
-      window.dispatchEvent(event);
+      const focusEvent = new CustomEvent('focus-close-button');
+      window.dispatchEvent(focusEvent);
     }
   }
-  const homepage = ref();
-  const portfolios = ref();
-  const businesses = ref();
-  const news = ref();
-  const partners = ref();
-  const legacyy = ref();
+  const homepage = ref<any>({ data: {} });
+  const portfolios = ref<any>({ data: [] });
+  const businesses = ref<any>({ data: [] });
+  const news = ref<any>({ data: [] });
+  const partners = ref<any>({ data: [] });
+  const legacyy = ref<any>({ data: [] });
+  const title = ref<HTMLElement | null>(null);
+  const subtitle = ref<HTMLElement | null>(null);
+  const main = ref<HTMLElement | null>(null);
+  let ctx: gsap.Context | null = null;
+  const partnerImages = [
+    new URL('../assets/img/partners/partner1.png', import.meta.url).href,
+    new URL('../assets/img/partners/partner2.png', import.meta.url).href,
+    new URL('../assets/img/partners/partner3.png', import.meta.url).href,
+    new URL('../assets/img/partners/partner4.png', import.meta.url).href,
+    new URL('../assets/img/partners/partner5.png', import.meta.url).href,
+    new URL('../assets/img/partners/partner6.png', import.meta.url).href,
+    new URL('../assets/img/partners/partner7.png', import.meta.url).href,
+    new URL('../assets/img/partners/partner8.png', import.meta.url).href,
+    new URL('../assets/img/partners/partner9.png', import.meta.url).href
+  ];
+  const partnerCards = computed(() => {
+    return partnerImages.map((image, index) => {
+      const partner = partners.value?.data?.[index];
+      return {
+        image,
+        alt: partner?.field_partners_logo?.field_media_image?.meta?.alt || partner?.name || `Partner ${index + 1}`
+      };
+    });
+  });
+
   function videoPlay() {
 
     if (isPlaying) {
@@ -785,7 +815,7 @@
     }
   ];
   // Combined api call
-   const { data: combined } = await useFetch(apiBaseURL + '/subrequests?_format=json', {
+  const { data: combined } = await useFetch<any>(apiBaseURL + '/subrequests?_format=json', {
      method: "POST",
      headers: {
        "Authorization": `Basic ${apiAuthKey}`
@@ -997,7 +1027,6 @@ const movePrev = () => {
   }
 };
 
-console.log('legacyy:', legacyy.value)
 // console.log('error:', error.value)
 const secondLeader = computed(() => {
  return legacyy?.value?.data?.[1] || null
@@ -1076,7 +1105,7 @@ onMounted(async () => {
       .catch(e => {
         console.log(e);
       });
-  }, main.value);
+  }, main.value || undefined);
 });
 
 onUnmounted(() => {

@@ -32,7 +32,6 @@
   import * as THREE from 'three';
   import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
   import {RGBELoader } from "three/addons/loaders/RGBELoader.js";
-  import { render } from 'vue';
 
   import { gsap } from 'gsap';
   import { ScrollTrigger } from 'gsap/ScrollTrigger';
@@ -41,12 +40,12 @@
 const isOpen = ref(false)
 const selectedMapData =ref();
 let clickedMarkerData:any;
-const props = defineProps<Props>();
-  interface Props {
-    markersData: {
-      type: Array
-    }
+interface Props {
+  markersData?: Array<any>
 }
+const props = withDefaults(defineProps<Props>(), {
+  markersData: () => []
+});
 const emit = defineEmits(['selectedMapData1']);
 
   
@@ -61,7 +60,7 @@ const emit = defineEmits(['selectedMapData1']);
 // let winWidth=window.innerWidth;
 // alert(winheight+'='+winWidth);
 // }
-const container = ref(null);
+const container = ref<HTMLElement | null>(null);
 let scene:any,camera:any , renderer:any ,controls :any, globe:any,markerMesh:any;
 let markerGreen:any, markerBlack:any , envMapLoader : any;
 let raycaster = new THREE.Raycaster(),mouse = new THREE.Vector2(),SELECTED:any;
@@ -69,7 +68,7 @@ let markerStore: any[] = [];
 
 onMounted(() => {
   // Target the globe element
-  const globe = document.querySelector(".gsapGlobe");
+  const globeElement = document.getElementById('globeViz');
 
   // Check for passive event listener support
   let supportsPassive = false;
@@ -80,8 +79,9 @@ onMounted(() => {
         return false;
       }
     };
-    window.addEventListener("testPassive", null as any, options);
-    window.removeEventListener("testPassive", null as any, options);
+    const noop = () => {};
+    (window as unknown as EventTarget).addEventListener("testPassive", noop as EventListener, options as unknown as AddEventListenerOptions);
+    (window as unknown as EventTarget).removeEventListener("testPassive", noop as EventListener, options as unknown as EventListenerOptions);
   } catch (e) {}
 
   loadingScene();
@@ -92,18 +92,18 @@ onMounted(() => {
     : false;
 
   // Add event listeners only for the globe rendering area
-  if (globe) {
-    globe.addEventListener('touchmove', (event: TouchEvent) => {
-      if (event.target === globe) {
+  if (globeElement) {
+    (globeElement as unknown as EventTarget).addEventListener('touchmove', ((event: Event) => {
+      if (event.target === globeElement) {
         event.preventDefault(); // Prevent default touch behavior only within the globe area
       }
-    }, passiveOption as AddEventListenerOptions);
+    }) as EventListener, passiveOption as AddEventListenerOptions);
 
-    globe.addEventListener('wheel', (event: WheelEvent) => {
-      if (event.target === globe) {
+    (globeElement as unknown as EventTarget).addEventListener('wheel', ((event: Event) => {
+      if (event.target === globeElement) {
         event.preventDefault(); // Prevent default scroll behavior only within the globe area
       }
-    }, passiveOption as AddEventListenerOptions);
+    }) as EventListener, passiveOption as AddEventListenerOptions);
   }
 
   // Pointer down event to start interactions
@@ -175,7 +175,10 @@ const createScene = async()=>{
   // renderer.outputEncoding = THREE.sRGBEncoding;
   // renderer.toneMapping    = THREE.ACESFilmicToneMapping;
   // renderer.toneMappingExposure = 1.25;
-  container.value.appendChild(renderer.domElement);
+  const mountNode = container.value;
+  if (mountNode) {
+    mountNode.appendChild(renderer.domElement);
+  }
   envMapLoader = new THREE.PMREMGenerator(renderer);
 }
 const loadControls = async () => {
@@ -264,8 +267,8 @@ geometry.faceVertexUvs[0][1][2].set(1, 1);
 geometry.faceVertexUvs[0][3][0].set(0.5, 1);
 geometry.faceVertexUvs[0][3][1].set(1, 1);
 geometry.faceVertexUvs[0][3][2].set(0, 0);
-var material = materials;
-var sphere = new THREE.Mesh(geometry, material);
+var multiMaterial = materials;
+var sphere = new THREE.Mesh(geometry, multiMaterial);
 scene.add(sphere);
 
 /*
@@ -306,7 +309,8 @@ const loadMarkers = async () => {
   let sMat = new THREE.MeshBasicMaterial({ color: 0xffffff });
   markerMesh = new THREE.Mesh(sGeo, sMat);
   scene.add(markerMesh);
-  props.markersData.forEach((element: { field_latitude: any; field_longitude: any; field_city_name: any; }) => {
+  const markers = Array.isArray(props.markersData) ? props.markersData : [];
+  markers.forEach((element: { field_latitude: any; field_longitude: any; field_city_name: any; }) => {
     let marker = createMarker(element.field_latitude, element.field_longitude, element.field_city_name); // Red marker
     markerMesh.add(marker);
   });
@@ -354,7 +358,8 @@ let onDocumentMouseDown = (event: { preventDefault: () => void; clientX: number;
         }
       }
     })
-  clickedMarkerData = props.markersData.filter((e: { field_city_name: any; }) => e.field_city_name === SELECTED.name).map((e: { field_latitude: any; field_longitude: any; field_city_name: any; field_country: any; field_website_link: any; field_property_name: any; field_image: { field_media_image: { image_style_uri: { map_image: any; }; meta: { alt: any; }; }; }; }) => { return {id:props.markersData.indexOf(e),lat: e.field_latitude,long: e.field_longitude, city:e.field_city_name, country:e.field_country,website:e.field_website_link,name:e.field_property_name,image_url:e.field_image.field_media_image.image_style_uri.map_image,image_alt:e.field_image.field_media_image.meta.alt}});
+  const markers = Array.isArray(props.markersData) ? props.markersData : [];
+  clickedMarkerData = markers.filter((e: { field_city_name: any; }) => e.field_city_name === SELECTED.name).map((e: { field_latitude: any; field_longitude: any; field_city_name: any; field_country: any; field_website_link: any; field_property_name: any; field_image: { field_media_image: { image_style_uri: { map_image: any; }; meta: { alt: any; }; }; }; }) => { return {id:markers.indexOf(e),lat: e.field_latitude,long: e.field_longitude, city:e.field_city_name, country:e.field_country,website:e.field_website_link,name:e.field_property_name,image_url:e.field_image.field_media_image.image_style_uri.map_image,image_alt:e.field_image.field_media_image.meta.alt}});
         selectedMapData.value=clickedMarkerData[0];
         emit("selectedMapData1",selectedMapData.value)
         
@@ -396,12 +401,12 @@ const onWindowResize = () => {
   }
 };
 // Debounce function
-const debounce = (fn: { apply: (arg0: any, arg1: any[]) => void; }, delay: number | undefined) => {
-  let timeoutId: string | number | NodeJS.Timeout | undefined;
-  return function(...args: any) {
+const debounce = (fn: (...args: any[]) => void, delay: number | undefined) => {
+  let timeoutId: ReturnType<typeof setTimeout> | undefined;
+  return (...args: any[]) => {
     clearTimeout(timeoutId);
     timeoutId = setTimeout(() => {
-      fn.apply(this, args);
+      fn(...args);
     }, delay);
   };
 };

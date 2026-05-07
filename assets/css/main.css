@@ -1654,7 +1654,7 @@ ul.mobile-menu li ul li a.nav-link.scrollto {
 /*--------------------------------------------------------------
 # introduction
 --------------------------------------------------------------*/
-.introduction{ background-image: url(/assets/img/bg-intro.png); background-repeat: no-repeat; background-position: center; background-size: cover;}
+.introduction{ background-image: url(../img/bg-intro.png); background-repeat: no-repeat; background-position: center; background-size: cover;}
 .introduction .verticalLine {
 	border-color: white;
 }
@@ -1862,7 +1862,7 @@ ul.mobile-menu li ul li a.nav-link.scrollto {
 # Featured Services Section
 --------------------------------------------------------------*/
 /*section#featured-services {
-  background-image: url(/assets/img/bg-intro.png);
+  background-image: url(../img/bg-intro.png);
     background-repeat: no-repeat;
     background-position: center -768px;
 }*/
@@ -2942,7 +2942,7 @@ select {
 #about-hero-image {
   width: 100%;
   min-height: 100vh;
-  background: url("/assets/img/about/about-main-banner.jpg") center center;
+  background: url("../img/about/about-main-banner.jpg") center center;
   background-size: cover;
   position: relative;
   padding: 120px 0 60px;
@@ -4456,7 +4456,7 @@ section#nextproject h2 {  font-size: 36px;  padding: 0px !important;    margin: 
   align-items: flex-start;
 }
 #nextproject .next-btn {
-  background: url(/assets/img/port/btnnext.jpg) center center;
+  background: url(../img/port/btnnext.jpg) center center;
   background-size: 120px 120px;
   width: 120px;
   height: 120px;
@@ -4467,7 +4467,7 @@ section#nextproject h2 {  font-size: 36px;  padding: 0px !important;    margin: 
 }
 .portfolio-intro .post-box .post-img.map-sec img{width: 100%;}
 #nextproject .next-btn:hover {
-  background: url(/assets/img/port/btnnext_hover.jpg) center center;
+  background: url(../img/port/btnnext_hover.jpg) center center;
 
 }
 .portfolio-detail-p .section-header .heading-l a {
@@ -4862,7 +4862,7 @@ hr { opacity: 0.7;}
   border-bottom: solid 2px #243C6C;
 }
 .contact .info-item .post-box.mapdown p .email:hover:after {
-  background: url(/assets/img/arrow-top.svg) center right;
+  background: url(../img/arrow-top.svg) center right;
   background-repeat: no-repeat;
   content: "";
   position: absolute;
@@ -5365,8 +5365,8 @@ i.bi.bi-arrow-down {
 .sitemap .sitemapbtn button { color: #0065BE;  margin: 0 5px;  display: inline-flex;  align-items: center;  justify-content: center;  transition: 0s;  position: relative;  font-family: var(--font-secondary);  font-weight: 500;}
 .sitemap .sitemapbtn button i {  position: relative;  left: 0px;  line-height: 0;  transition: all 0s;}
 .sitemap .sitemapbtn button:hover span {  text-decoration: underline}
-.sitemap .sitemapbtn button:hover i {  left: 0px;  height: 17px;  background-image: url(/assets/img/arrow-blue-sitemap.svg);  background-repeat: no-repeat;  background-size: 20px;  background-position: center right;  width: 20px;}
-.sitemap .sitemapbtn i {  background-image: url(/assets/img/arrow-blue-small-sitemap.svg);  background-repeat: no-repeat;  background-size: 17px;  font-size: 18px;  margin: 0 10px;  height: 14px;  width: 17px;}
+.sitemap .sitemapbtn button:hover i {  left: 0px;  height: 17px;  background-image: url(../img/arrow-blue-sitemap.svg);  background-repeat: no-repeat;  background-size: 20px;  background-position: center right;  width: 20px;}
+.sitemap .sitemapbtn i {  background-image: url(../img/arrow-blue-small-sitemap.svg);  background-repeat: no-repeat;  background-size: 17px;  font-size: 18px;  margin: 0 10px;  height: 14px;  width: 17px;}
 .sitemap .sitemapbtn button{margin:0;}
 .sitemapbtn-wrap { padding-bottom: 61px;  margin-bottom: 82px;}
 .sitemapbtn-wrap h2 {
