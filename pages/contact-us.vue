@@ -2,8 +2,8 @@
   <div>
 
     <Head>
-      <Title>{{ contact?.data?.metatag[0]?.attributes?.content }}</Title>
-      <Meta name="description" :content="contact?.data?.metatag[1]?.attributes?.content" />
+      <Title>{{ contact?.data?.metatag?.[0]?.attributes?.content }}</Title>
+      <Meta name="description" :content="contact?.data?.metatag?.[1]?.attributes?.content" />
     </Head>
 
     <div id="smooth-wrapper">
@@ -140,8 +140,8 @@
                                 class="gmap_iframe" 
                                 width="519" 
                                 height="231" 
-                                :src="`https://maps.google.com/maps?width=521&height=231&hl=en&q=${encodeURIComponent(contact?.data?.field_sections[0]?.field_address?.value)}&t=&z=13&ie=UTF8&iwloc=B&output=embed`" 
-                                title="Map showing {{ contact?.data?.field_sections[0]?.field_address?.value }}" 
+                                :src="`https://maps.google.com/maps?width=521&height=231&hl=en&q=${encodeURIComponent(contact?.data?.field_sections?.[0]?.field_address?.value)}&t=&z=13&ie=UTF8&iwloc=B&output=embed`" 
+                                title="Map showing {{ contact?.data?.field_sections?.[0]?.field_address?.value }}" 
                                 role="presentation">
                             </iframe>
                             </div>
@@ -152,25 +152,25 @@
                         <div class="aos-init aos-animate" data-aos="fade-up" data-aos-delay="400">
                           <div class="post-box mapdown" >
                             <div class="mt-4 pt-1 mt-m-20 pt-m papdescontact" >
-                              <div tabindex="0" v-html="contact?.data?.field_sections[0]?.field_address?.value"></div>
+                              <div tabindex="0" v-html="contact?.data?.field_sections?.[0]?.field_address?.value"></div>
                             </div>
                             <hr>
                             <p tabindex="0">
                                 <span aria-label="Our Email address">Email: </span>
                                 <span class="email">
-                                  <a :href="`mailto:${contact?.data?.field_sections[0].field_email}`" target="_blank" title="Email Id">{{ contact?.data?.field_sections[0].field_email }}</a>
+                                  <a :href="`mailto:${contact?.data?.field_sections?.[0]?.field_email || ''}`" target="_blank" title="Email Id">{{ contact?.data?.field_sections?.[0]?.field_email }}</a>
                                 </span>
                             </p>
                             <hr>
                             <p role="contentinfo" tabindex="0" aria-label="Telephone number">
                               Tel: 
-                              <NuxtLink :to="`tel:${contact?.data?.field_sections[0]?.field_tel.split(' ').join('')}`">
-                                {{contact?.data?.field_sections[0]?.field_tel }}
+                              <NuxtLink :to="`tel:${(contact?.data?.field_sections?.[0]?.field_tel || '').split(' ').join('')}`">
+                                {{contact?.data?.field_sections?.[0]?.field_tel }}
                               </NuxtLink>
                             </p>
                             <hr>
                             <p role="contentinfo" tabindex="0" aria-label="Fax number">
-                              Fax: {{contact?.data?.field_sections[0]?.field_fax }}
+                              Fax: {{contact?.data?.field_sections?.[0]?.field_fax }}
                             </p>
                             <hr>
                           </div>
@@ -206,14 +206,14 @@
                     <div class="info-item d-flex">
                       <div class="post-box">
                         <div class="post-img map-sec" tabindex="0"
-                          :aria-label="contact.data.field_sections[1].field_image.field_media_image.meta.alt"><img
-                            :src="contact?.data?.field_sections[1]?.field_image?.field_media_image?.image_style_uri?.procurement_supply_chain"
+                          :aria-label="contact?.data?.field_sections?.[1]?.field_image?.field_media_image?.meta?.alt || ''"><img
+                            :src="contact?.data?.field_sections?.[1]?.field_image?.field_media_image?.image_style_uri?.procurement_supply_chain"
                             class="img-fluid w-100"
-                            :alt="contact.data.field_sections[1].field_image.field_media_image.meta.alt"></div>
+                            :alt="contact?.data?.field_sections?.[1]?.field_image?.field_media_image?.meta?.alt || ''"></div>
                         <div class="aos-init aos-animate " data-aos="fade-up" data-aos-delay="400">
                           <div class="post-box mapdown" data-v-inspector="">
-                            <h4 tabindex="0">{{ contact.data.field_sections[1].field_title_sustanability }}</h4>
-                            <p tabindex="0">{{ contact.data.field_sections[1].field_description_sustanability }}</p>
+                            <h4 tabindex="0">{{ contact?.data?.field_sections?.[1]?.field_title_sustanability }}</h4>
+                            <p tabindex="0">{{ contact?.data?.field_sections?.[1]?.field_description_sustanability }}</p>
                           </div>
                         </div>
 
@@ -247,18 +247,18 @@
                     <div class="info-item d-flex">
                       <div class="post-box">
                         <div class="post-img map-sec" tabindex="0"
-                          :aria-label="contact?.data?.field_sections[1]?.field_image?.field_media_image?.meta?.alt"
+                          :aria-label="contact?.data?.field_sections?.[1]?.field_image?.field_media_image?.meta?.alt"
                           role="img">
                           <img
-                            :src="contact?.data?.field_sections[1]?.field_image?.field_media_image?.image_style_uri?.procurement_supply_chain"
+                            :src="contact?.data?.field_sections?.[1]?.field_image?.field_media_image?.image_style_uri?.procurement_supply_chain"
                             class="img-fluid w-100"
-                            :alt="contact?.data?.field_sections[1]?.field_image?.field_media_image?.meta?.alt">
+                            :alt="contact?.data?.field_sections?.[1]?.field_image?.field_media_image?.meta?.alt">
                         </div>
                         <div class="aos-init aos-animate" data-aos="fade-up" data-aos-delay="400">
                           <div class="post-box mapdown" >
-                            <h4 tabindex="0">{{ contact?.data?.field_sections[1]?.field_title_sustanability }}</h4>
+                            <h4 tabindex="0">{{ contact?.data?.field_sections?.[1]?.field_title_sustanability }}</h4>
                             <p tabindex="0" class="mb-4 pb-2 mb-m">{{
-                              contact?.data?.field_sections[1]?.field_description_sustanability }}</p>
+                              contact?.data?.field_sections?.[1]?.field_description_sustanability }}</p>
                             <p tabindex="0" class="py-3">To join our team, please send your updated resume</p>
 
                             <p tabindex="0"><span class="email" aria-label="Our recruitment Email address"><a
@@ -388,16 +388,22 @@
     }
   }
 
-  const contact = ref<any>(null)
-  const { data: contactResponse } = await useFetch<any>('/jsonapi/node/landing_page/d2341547-1e41-4dac-be26-2c731dacc502', {
-    // immediate: false,
-    baseURL: apiBaseURL,
-    method: "GET",
-    headers: {
-      "Authorization": `Basic ${apiAuthKey}`
-    },
+  const contact = ref<any>({
+    data: {
+      metatag: [],
+      field_sections: [{}, {}]
+    }
   })
-  contact.value = contactResponse.value
+    try {
+      const { data: contactResponse } = await useFetch<any>('/jsonapi/node/landing_page/d2341547-1e41-4dac-be26-2c731dacc502?include=field_sections,field_sections.field_image.field_media_image', {
+        baseURL: apiBaseURL,
+        method: "GET",
+        headers: {
+          "Authorization": `Basic ${apiAuthKey}`
+        },
+      })
+      if (contactResponse.value) contact.value = contactResponse.value
+  } catch (e) { console.error('Contact fetch failed:', e) }
   function isNumber(evt: any) {
     evt = (evt) ? evt : window.event;
     var charCode = (evt.which) ? evt.which : evt.keyCode;

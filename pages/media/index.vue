@@ -108,7 +108,7 @@
                                                             <h3 tabindex="0" @click="navigateTo('/news')">
                                                                 {{news?.data?.[0]?.title}}
                                                             </h3>
-                                                            <!-- [v-html]="news?.data[0]?.body?.value" -->
+                                                            <!-- [v-html]="news?.data?.[0]?.body?.value" -->
                                                             <p tabindex="0" class="mt-4 mb-0"
                                                                 @click="navigateTo('/news')">
                                                                 {{news?.data?.[0]?.body?.summary}}
@@ -269,7 +269,7 @@
                                                     </p>
                                                 </div>
                                                 <!-- Arrows -->
-                                                <div v-if="item?.field_news_gallery.length > 1">
+                                                <div v-if="item?.field_news_gallery?.length > 1">
                                                     <button aria-label="previous slide" tabindex="0"
                                                         class="carousel-control-prev" type="button"
                                                         :data-bs-target="'#SliderNewsSM_' + index" data-bs-slide="prev">
@@ -771,24 +771,24 @@
             { field_news_gallery: [], body: {} }
         ]
     });
-    const { data: newsResponse } = await useFetch(apiBaseURL + '/jsonapi/node/news?fields[node--news]=field_published_date,title,body,field_news_gallery&page[limit]=5', {
+    const { data: newsResponse } = await useFetch(apiBaseURL + '/jsonapi/node/news?fields[node--news]=field_published_date,title,body,field_news_gallery&page[limit]=5&include=field_news_gallery.field_media_image', {
         method: "GET",
         headers: {
             "Authorization": `Basic ${apiAuthKey}`
         }
     });
-    news.value = newsResponse.value || news.value;
+    if (newsResponse.value) news.value = newsResponse.value;
 
 
     // Press Release api call
     const pressRelease = ref({ data: [] });
-    const { data: pressReleaseResponse } = await useFetch(apiBaseURL + '/jsonapi/node/press_release?fields[node--press_release]=field_published_date,title,field_download,field_download_english&page[limit]=5', {
+    const { data: pressReleaseResponse } = await useFetch(apiBaseURL + '/jsonapi/node/press_release?fields[node--press_release]=field_published_date,title,field_download,field_download_english&page[limit]=5&include=field_download.field_media_document,field_download_english.field_media_document', {
         method: "GET",
         headers: {
             "Authorization": `Basic ${apiAuthKey}`
         }
     });
-    pressRelease.value = pressReleaseResponse.value || pressRelease.value;
+    if (pressReleaseResponse.value) pressRelease.value = pressReleaseResponse.value;
 
 
     // Video Gallery api call
@@ -802,13 +802,13 @@
             ]
         }
     });
-    const { data: videoGalleryResponse } = await useFetch(apiBaseURL + '/jsonapi/node/landing_page/d7c412c3-cce4-4b3f-aafd-a00dd815f39a', {
+    const { data: videoGalleryResponse } = await useFetch(apiBaseURL + '/jsonapi/node/landing_page/d7c412c3-cce4-4b3f-aafd-a00dd815f39a?include=field_sections,field_sections.field_video_section,field_sections.field_video_section.field_video.field_media_video_file,field_sections.field_video_section.field_video_thumbnail.field_media_image', {
         method: "GET",
         headers: {
             "Authorization": `Basic ${apiAuthKey}`
         }
     });
-    videoGallery.value = videoGalleryResponse.value || videoGallery.value;
+    if (videoGalleryResponse.value) videoGallery.value = videoGalleryResponse.value;
 
 
     // Helping Functions

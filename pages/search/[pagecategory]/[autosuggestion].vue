@@ -76,7 +76,7 @@
                       <span class="count">{{ searchItems?.meta?.count }}</span>
                     </a>
 
-                    <div v-for="(subPage,index) in searchItems?.meta?.facets[0]?.terms">
+                    <div v-for="(subPage,index) in searchItems?.meta?.facets?.[0]?.terms">
                       <a href="javascript:void(0)" :class="defaultCategory==subPage.values.label? 'active':''">
                         <span class="link" @click="searchOnPageCat(subPage.values.label)">{{ subPage.values.label
                           }}</span>
@@ -124,7 +124,7 @@
                     </a>
 
                     <div class="search-result-item-description mt-2">
-                      <div v-html="queryitem?.body?.value.slice(0,300)"></div>
+                      <div v-html="queryitem?.body?.value?.slice(0,300)"></div>
                     </div>
 
                   </div>

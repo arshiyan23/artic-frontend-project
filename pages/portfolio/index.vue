@@ -119,11 +119,11 @@
                   <div v-for="(portfolioLists,index) in portfolioList.data" :key="index" :class="`col pb-4 mb-1 plp-d gsapYPartners200 gsapYPartners200-${Number(index) + 1}`">
                     <div class="portfolio-list-member overflow-hidden">
                       <div class="member-img position-relative ">
-                        <div tabindex="0" :aria-label="portfolioLists.field_property_image?.field_media_image?.meta.alt">
+                        <div tabindex="0" :aria-label="portfolioLists.field_property_image?.field_media_image?.meta?.alt">
                           <img
-                            :src="portfolioLists?.field_property_image?.field_media_image?.image_style_uri?.portfolio_listing"
+                            :src="getImageUrl(portfolioLists)"
                             class="img-fluid "
-                            :alt="portfolioLists.field_property_image?.field_media_image?.meta.alt || 'Member Image'">
+                            :alt="portfolioLists.field_property_image?.field_media_image?.meta?.alt || 'Member Image'">
                         </div>
                         <div class="social">
                           <!-- <NuxLink :to="`/portfolio/${portfolioLists.id}`" class="btn btn-success">
@@ -211,10 +211,11 @@
   </div>
 </template>
 <script setup lang="ts">
-  import { ref, onMounted, onUnmounted, computed, nextTick } from 'vue';
+  import { ref, onMounted, onUnmounted, computed, nextTick, watch } from 'vue';
   import { navigateTo, useFetch, useRuntimeConfig, useState } from '#imports';
   import { useRoute } from 'vue-router';
   import PopupComponent from '../../components/Popup.vue';
+
 
   import gsap from 'gsap';
   import { InitSmoothness, pauseSmoother, refreshSmoother } from '~/helpers/gsap/InitGSAP';
@@ -235,6 +236,7 @@
   const portfolioList = useState<any>('portfolioList');
   const customKey = ref(0);
 
+  watch(() => portfolioList.value, (val) => { if (val) enrichPortfolioImages(val); }, { deep: true });
   const isPopupVisible = ref(false);
   const downloadInvestmentPortfolio = ref < HTMLDivElement | null > (null);
   const pageTopPosition = ref < HTMLDivElement | null > (null);
@@ -309,7 +311,7 @@ async function loadMore() {
   const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
   try {
     page.value += 15;
-    const loadMorePortfolio = await $fetch(`${apiBaseURL}/jsonapi/node/portfolio?fields[node--portfolio]=path,field_property_image,field_tags,title,field_city_country`, {
+    const loadMorePortfolio = await $fetch(`${apiBaseURL}/jsonapi/node/portfolio?fields[node--portfolio]=path,field_property_image,field_tags,title,field_city_country&include=field_property_image.field_media_image,field_tags`, {
       method: "GET",
       params: {
         'page[limit]': page.value
@@ -365,7 +367,7 @@ let combinedReqData = [
     },
     {
       "requestId": "plp_list",
-      "uri": "/jsonapi/node/portfolio?fields[node--portfolio]=path,field_property_image,field_tags,title,field_city_country&page[limit]=15",
+      "uri": "/jsonapi/node/portfolio?fields[node--portfolio]=path,field_property_image,field_tags,title,field_city_country&page[limit]=15&include=field_property_image.field_media_image,field_tags",
       "action": "view",
       "headers": {
         "Accept": "application/json"
@@ -386,6 +388,7 @@ let combinedReqData = [
   })
   portfolioList.value = portfolio.value?.plp_list?.body ? JSON.parse(portfolio.value.plp_list.body) : { data: [] };
   investment.value = portfolio.value?.plp_download?.body ? JSON.parse(portfolio.value.plp_download.body) : { data: [] };
+  enrichPortfolioImages(portfolioList.value);
   const catType = ['Hotel', 'Retail', 'Residential', 'Service']
   const allSortBy = ['MENA', 'Algeria', 'Egypt', 'Saudi Arabia', 'Qatar', 'Europe', 'USA']
   const sortBy = ref(allSortBy[0])
@@ -422,7 +425,7 @@ let combinedReqData = [
       if (defaultCategory1.value == 'all') {
 
         isLoading.value = true;
-        const portfolioByCountry = await $fetch(`${apiBaseURL}/jsonapi/node/portfolio?fields[node--portfolio]=path,field_property_image,field_tags,title,field_city_country,&filter[taxonomy_term--portfolio_countries][condition][path]=field_protfolio_country.name&filter[taxonomy_term--portfolio_countries][condition][operator]=IN&filter[taxonomy_term--portfolio_countries][condition][value][]=${encodeURIComponent(countryN.value)}`, {
+        const portfolioByCountry = await $fetch(`${apiBaseURL}/jsonapi/node/portfolio?fields[node--portfolio]=path,field_property_image,field_tags,title,field_city_country&include=field_property_image.field_media_image,field_tags&filter[taxonomy_term--portfolio_countries][condition][path]=field_protfolio_country.name&filter[taxonomy_term--portfolio_countries][condition][operator]=IN&filter[taxonomy_term--portfolio_countries][condition][value][]=${encodeURIComponent(countryN.value)}`, {
           method: "GET",
           headers: {
             "Authorization": `Basic ${apiAuthKey}`
@@ -436,7 +439,7 @@ let combinedReqData = [
       } else {
 
         isLoading.value = true;
-        const portfolioByCountry = await $fetch(`${apiBaseURL}/jsonapi/node/portfolio?fields[node--portfolio]=path,field_property_image,field_tags,title,field_city_country&filter[taxonomy_term--tags][condition][path]=field_tags.name&filter[taxonomy_term--tags][condition][operator]=IN&filter[taxonomy_term--tags][condition][value][]=${defaultCategory1.value}&filter[taxonomy_term--portfolio_countries][condition][path]=field_protfolio_country.name&filter[taxonomy_term--portfolio_countries][condition][operator]=IN&filter[taxonomy_term--portfolio_countries][condition][value][]=${encodeURIComponent(countryN.value)}`, {
+        const portfolioByCountry = await $fetch(`${apiBaseURL}/jsonapi/node/portfolio?fields[node--portfolio]=path,field_property_image,field_tags,title,field_city_country&include=field_property_image.field_media_image,field_tags&filter[taxonomy_term--tags][condition][path]=field_tags.name&filter[taxonomy_term--tags][condition][operator]=IN&filter[taxonomy_term--tags][condition][value][]=${defaultCategory1.value}&filter[taxonomy_term--portfolio_countries][condition][path]=field_protfolio_country.name&filter[taxonomy_term--portfolio_countries][condition][operator]=IN&filter[taxonomy_term--portfolio_countries][condition][value][]=${encodeURIComponent(countryN.value)}`, {
           method: "GET",
           headers: {
             "Authorization": `Basic ${apiAuthKey}`
@@ -524,7 +527,7 @@ let combinedReqData = [
         defaultCategory.value = 'all';
         defaultCategory1.value = 'all';
         // Fetch the default portfolio
-        const portfolio = await $fetch(`${apiBaseURL}/jsonapi/node/portfolio?fields[node--portfolio]=path,field_property_image,field_tags,title,field_city_country&page[limit]=15`, {
+        const portfolio = await $fetch(`${apiBaseURL}/jsonapi/node/portfolio?fields[node--portfolio]=path,field_property_image,field_tags,title,field_city_country&page[limit]=15&include=field_property_image.field_media_image,field_tags`, {
           method: "GET",
           headers: {
             "Authorization": `Basic ${apiAuthKey}`
@@ -535,7 +538,7 @@ let combinedReqData = [
       } else if (defaultCategory1.value != 'all' && defaultCountry.value == 'all') {
         sortBy.value = allSortBy[0];
         // Fetch the portfolio by filter
-        const portfolioByFilter = await $fetch(`${apiBaseURL}/jsonapi/node/portfolio?fields[node--portfolio]=path,field_property_image,field_tags,title,field_city_country&filter[taxonomy_term--tags][condition][path]=field_tags.name&filter[taxonomy_term--tags][condition][operator]=IN&filter[taxonomy_term--tags][condition][value][]=${encodeURIComponent(pType.value)}`, {
+        const portfolioByFilter = await $fetch(`${apiBaseURL}/jsonapi/node/portfolio?fields[node--portfolio]=path,field_property_image,field_tags,title,field_city_country&include=field_property_image.field_media_image,field_tags&filter[taxonomy_term--tags][condition][path]=field_tags.name&filter[taxonomy_term--tags][condition][operator]=IN&filter[taxonomy_term--tags][condition][value][]=${encodeURIComponent(pType.value)}`, {
           method: "GET",
           headers: {
             "Authorization": `Basic ${apiAuthKey}`
@@ -548,7 +551,7 @@ let combinedReqData = [
         sortBy.value = allSortBy[0];
         defaultCategory.value == 'all'
         // Fetch the portfolio by filter
-        const portfolioByFilter = await $fetch(`${apiBaseURL}/jsonapi/node/portfolio?fields[node--portfolio]=path,field_property_image,field_tags,title,field_city_country,&filter[taxonomy_term--portfolio_countries][condition][path]=field_protfolio_country.name&filter[taxonomy_term--portfolio_countries][condition][operator]=IN&filter[taxonomy_term--portfolio_countries][condition][value][]=${encodeURIComponent(defaultCountry.value)}`, {
+        const portfolioByFilter = await $fetch(`${apiBaseURL}/jsonapi/node/portfolio?fields[node--portfolio]=path,field_property_image,field_tags,title,field_city_country&include=field_property_image.field_media_image,field_tags&filter[taxonomy_term--portfolio_countries][condition][path]=field_protfolio_country.name&filter[taxonomy_term--portfolio_countries][condition][operator]=IN&filter[taxonomy_term--portfolio_countries][condition][value][]=${encodeURIComponent(defaultCountry.value)}`, {
           method: "GET",
           headers: {
             "Authorization": `Basic ${apiAuthKey}`
@@ -561,7 +564,7 @@ let combinedReqData = [
 
         sortBy.value = allSortBy[0];
         // Fetch the portfolio by filter
-        const portfolioByFilter = await $fetch(`${apiBaseURL}/jsonapi/node/portfolio?fields[node--portfolio]=path,field_property_image,field_tags,title,field_city_country&filter[taxonomy_term--tags][condition][path]=field_tags.name&filter[taxonomy_term--tags][condition][operator]=IN&filter[taxonomy_term--tags][condition][value][]=${defaultCategory1.value}&filter[taxonomy_term--portfolio_countries][condition][path]=field_protfolio_country.name&filter[taxonomy_term--portfolio_countries][condition][operator]=IN&filter[taxonomy_term--portfolio_countries][condition][value][]=${encodeURIComponent(defaultCountry.value)}`, {
+        const portfolioByFilter = await $fetch(`${apiBaseURL}/jsonapi/node/portfolio?fields[node--portfolio]=path,field_property_image,field_tags,title,field_city_country&include=field_property_image.field_media_image,field_tags&filter[taxonomy_term--tags][condition][path]=field_tags.name&filter[taxonomy_term--tags][condition][operator]=IN&filter[taxonomy_term--tags][condition][value][]=${defaultCategory1.value}&filter[taxonomy_term--portfolio_countries][condition][path]=field_protfolio_country.name&filter[taxonomy_term--portfolio_countries][condition][operator]=IN&filter[taxonomy_term--portfolio_countries][condition][value][]=${encodeURIComponent(defaultCountry.value)}`, {
           method: "GET",
           headers: {
             "Authorization": `Basic ${apiAuthKey}`
@@ -580,6 +583,25 @@ let combinedReqData = [
     isLoading.value = false;
     runAnimationSmother();
   }
+  const fileCache = ref<Record<string, any>>({});
+  async function enrichPortfolioImages(list: any) {
+    const items = list?.data || [];
+    const ids: string[] = [...new Set(items.map((i: any) => i?.field_property_image?.field_media_image?.id).filter(Boolean))] as string[];
+    const newIds = ids.filter(id => !fileCache.value[id]);
+    if (!newIds.length) return;
+    const reqs = newIds.map((id, i) => ({ requestId: `f${i}`, uri: `/jsonapi/file/file/${id}?fields[file--file]=image_style_uri`, action: 'view', headers: { 'Accept': 'application/json' } }));
+    try {
+      const res: Record<string, { body: string }> = await $fetch(`${apiBaseURL}/subrequests?_format=json`, { method: 'POST', headers: { 'Authorization': `Basic ${apiAuthKey}` }, body: reqs });
+      for (const k of Object.keys(res)) {
+        const d = JSON.parse(res[k].body);
+        if (d?.data?.id) fileCache.value[d.data.id] = d.data.image_style_uri;
+      }
+    } catch (e) { console.error('Image fetch failed', e); }
+  }
+  function getImageUrl(item: any) {
+    return item?.field_property_image?.field_media_image?.image_style_uri?.portfolio_listing
+      || fileCache.value[item?.field_property_image?.field_media_image?.id]?.portfolio_listing;
+  }
   async function getFilter2(propertyType: any) {
 
     if (!propertyType || (typeof propertyType === 'string' && propertyType.trim() === '')) {
@@ -593,7 +615,7 @@ let combinedReqData = [
     if (isStringType && ['Hotels', 'Retail', 'Residences', 'Services'].includes(propertyType)) {
       isLoading.value = true;
       // Fetch the portfolio by filter
-      const portfolioByFilter = await $fetch(`${apiBaseURL}/jsonapi/node/portfolio?fields[node--portfolio]=path,field_property_image,field_tags,title,field_city_country&filter[taxonomy_term--tags][condition][path]=field_tags.name&filter[taxonomy_term--tags][condition][operator]=IN&filter[taxonomy_term--tags][condition][value][]=${encodeURIComponent(propertyType)}`, {
+      const portfolioByFilter = await $fetch(`${apiBaseURL}/jsonapi/node/portfolio?fields[node--portfolio]=path,field_property_image,field_tags,title,field_city_country&include=field_property_image.field_media_image,field_tags&filter[taxonomy_term--tags][condition][path]=field_tags.name&filter[taxonomy_term--tags][condition][operator]=IN&filter[taxonomy_term--tags][condition][value][]=${encodeURIComponent(propertyType)}`, {
         method: "GET",
         headers: {
           "Authorization": `Basic ${apiAuthKey}`
@@ -603,7 +625,7 @@ let combinedReqData = [
     } else if (propertyType == 'all') {
       isLoading.value = true;
       // Fetch the default portfolio
-      const portfolio = await $fetch(`${apiBaseURL}/jsonapi/node/portfolio?fields[node--portfolio]=path,field_property_image,field_tags,title,field_city_country&page[limit]=15`, {
+      const portfolio = await $fetch(`${apiBaseURL}/jsonapi/node/portfolio?fields[node--portfolio]=path,field_property_image,field_tags,title,field_city_country&page[limit]=15&include=field_property_image.field_media_image,field_tags`, {
         method: "GET",
         headers: {
           "Authorization": `Basic ${apiAuthKey}`

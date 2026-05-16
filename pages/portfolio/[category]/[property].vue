@@ -1,7 +1,7 @@
 <template>
   <Head>
-    <Title>{{ pfolioDetail?.data[0]?.metatag[0]?.attributes?.content }}---</Title>
-    <Meta name="description" :content="pfolioDetail?.data[0]?.metatag[1]?.attributes?.content" />
+    <Title>{{ pfolioDetail?.data?.[0]?.metatag?.[0]?.attributes?.content }}---</Title>
+    <Meta name="description" :content="pfolioDetail?.data?.[0]?.metatag?.[1]?.attributes?.content" />
   </Head>
   <div ref="main">
     <div id="smooth-wrapper">
@@ -29,7 +29,7 @@
 
                     <h1 tabindex="0" ref="pageHeadingRef"
                       class="page-main-heading arfs-2 font-primary color-primary mb-0 mt-3">
-                      {{ pfolioDetail?.data[0]?.title }}</h1>
+                      {{ pfolioDetail?.data?.[0]?.title }}</h1>
                   </div>
                   <div class="heading-r gsapHeadingPage">
                     <button @click="showPopup" class="btn-orange align-self-start">
@@ -39,15 +39,15 @@
                       </i>
                     </button>
                     <h4 class="mt-4 mb-0 pt-2 arfs-7 color-default text-uppercase" tabindex="0">
-                      {{ pfolioDetail?.data[0]?.field_city_country }}</h4>
+                      {{ pfolioDetail?.data?.[0]?.field_city_country }}</h4>
                   </div>
                 </div>
               </div>
               <div class="d-flex align-items-center">
                 <div class="gsapPaperSlideEffect d-flex flex-column align-items-center position-relative w-100"
-                  tabindex="0" :aria-label="pfolioDetail?.data[0]?.field_hero_banner.field_media_image.meta.alt">
-                  <img :src="pfolioDetail?.data[0]?.field_hero_banner?.field_media_image?.image_style_uri?.portfolio_banner"
-                    class="img-fluid " :alt="pfolioDetail?.data[0]?.field_hero_banner.field_media_image.meta.alt">
+                  tabindex="0" :aria-label="pfolioDetail?.data?.[0]?.field_hero_banner?.field_media_image?.meta?.alt">
+                  <img :src="pfolioDetail?.data?.[0]?.field_hero_banner?.field_media_image?.image_style_uri?.portfolio_banner"
+                    class="img-fluid " :alt="pfolioDetail?.data?.[0]?.field_hero_banner?.field_media_image?.meta?.alt">
                 </div>
               </div>
             </section>
@@ -86,7 +86,7 @@
                           <div class="col-lg-7 ">
                             <div class="post-box">
                               <div tabindex="0" class="post-img pb-0 pdp-des gsapSlideTop">
-                                <span v-html="pfolioDetail?.data[0]?.body.value"></span>
+                                <span v-html="pfolioDetail?.data?.[0]?.body?.value"></span>
                                 <!-- <p class="arfs-6 font-weight-medium pt-0 mt-0 pb-4">The St. Regis Bal Harbour Resort is located
                               at 9703 Collins
                               Avenue, directly opposite the luxurious Bal Harbour Shops and near Miami’s vibrant South
@@ -103,7 +103,7 @@
                               function space and several outdoor venues, ideal for grand weddings and private receptions.
                             </p> -->
                                 <div class="member-info px-0 text-sm-center text-lg-start mt-3 pt-2 dn-s">
-                                  <!--<a :href="apiBaseURL+pfolioDetail?.data[0]?.field_download_to_learn_more?.field_media_document?.uri?.url" target="_blank" class="btn-white align-self-start">
+                                  <!--<a :href="apiBaseURL+pfolioDetail?.data?.[0]?.field_download_to_learn_more?.field_media_document?.uri?.url" target="_blank" class="btn-white align-self-start">
                                   <span>Download to Learn More</span><i
                                   class="bi bi-arrow-down"></i>
                             </a>-->
@@ -122,37 +122,37 @@
                                 <div class="mapouter">
                                   <div class="gmap_canvas">
                                     <iframe class="gmap_iframe"
-                                      :src="`https://maps.google.com/maps?width=600&height=500&hl=en&q=${pfolioDetail?.data[0]?.field_map_address}&t=&z=13&ie=UTF8&iwloc=B&output=embed`"
-                                      title="Map showing {{ pfolioDetail?.data[0]?.field_map_address }}" role="none">
+                                      :src="`https://maps.google.com/maps?width=600&height=500&hl=en&q=${pfolioDetail?.data?.[0]?.field_map_address}&t=&z=13&ie=UTF8&iwloc=B&output=embed`"
+                                      title="Map showing {{ pfolioDetail?.data?.[0]?.field_map_address }}" role="none">
                                     </iframe>
                                     <a href="https://embedmapfree.com">embed google map</a>
                                   </div>
                                 </div>
                                 <!-- <img
-                                  :src="pfolioDetail?.data[0]?.field_map_image?.field_media_image?.image_style_uri?.portfolio_map_image"
+                                  :src="pfolioDetail?.data?.[0]?.field_map_image?.field_media_image?.image_style_uri?.portfolio_map_image"
                                   class="img-fluid" alt="Map Image"> -->
                               </div>
                               <div class="">
                                 <div class="post-box mapdown">
                                   <p tabindex="0" role="note" aria-label="Telephone number"
-                                    class="mt-4 pt-1 mt-m-20 pt-m">{{ pfolioDetail?.data[0]?.field_address }}</p>
+                                    class="mt-4 pt-1 mt-m-20 pt-m">{{ pfolioDetail?.data?.[0]?.field_address }}</p>
                                   <!-- <p class="mt-5 pt-1 mt-m-20 pt-m">9703 Collins Ave<br>Bal Harbour, FL, United States</p> -->
                                   <hr class="gsapX-line1">
                                   <p tabindex="0" class="mt-0"  title="Telephone number">
                                     Tel:
                                     <NuxtLink 
-                                      :to="`tel:${pfolioDetail?.data[0]?.field_telephone}`" 
-                                      aria-label="Call {{ pfolioDetail?.data[0]?.field_telephone }}" 
-                                      title="Telephone: {{ pfolioDetail?.data[0]?.field_telephone }}">
-                                      {{ pfolioDetail?.data[0]?.field_telephone }}
+                                      :to="`tel:${pfolioDetail?.data?.[0]?.field_telephone}`" 
+                                      aria-label="Call {{ pfolioDetail?.data?.[0]?.field_telephone }}" 
+                                      title="Telephone: {{ pfolioDetail?.data?.[0]?.field_telephone }}">
+                                      {{ pfolioDetail?.data?.[0]?.field_telephone }}
                                     </NuxtLink>
                                   </p>
                                   <hr class="gsapX-line2">
                                   <a class="mt-0 onhoverlink" tabindex="0" aria-label="Visit Website"
-                                    :href="pfolioDetail?.data[0]?.field_website" role="link">
+                                    :href="pfolioDetail?.data?.[0]?.field_website" role="link">
                                     <p class="m-0">Visit Website</p>
-                                    <!--  <a :href="pfolioDetail?.data[0]?.field_website" class="website-link btn d-flex align-items-center justify-content-between p-0" target="_blank">
-                                      <span>{{pfolioDetail?.data[0]?.field_website}}</span>
+                                    <!--  <a :href="pfolioDetail?.data?.[0]?.field_website" class="website-link btn d-flex align-items-center justify-content-between p-0" target="_blank">
+                                      <span>{{pfolioDetail?.data?.[0]?.field_website}}</span>
                               </a>
                               <a href="https://www.marriott.com" class="website-link btn d-flex align-items-center justify-content-between p-0">
                                 www.project.com
@@ -187,12 +187,12 @@
                   <div class="col-lg-12 ">
                     <div class="post-box">
                       <div class="post-img pb-4 gsapPaperImgEffect gsapFeatureIMGJS1" tabindex="0"
-                        :aria-label="pfolioDetail?.data[0]?.field_property_gallery[0]?.field_media_image?.meta?.alt"
+                        :aria-label="pfolioDetail?.data?.[0]?.field_property_gallery?.[0]?.field_media_image?.meta?.alt"
                         role="img">
                         <img
-                          :src="pfolioDetail?.data[0]?.field_property_gallery[0]?.field_media_image?.image_style_uri?.portfolio_top_image"
+                          :src="pfolioDetail?.data?.[0]?.field_property_gallery?.[0]?.field_media_image?.image_style_uri?.portfolio_top_image"
                           class="--img-fluid"
-                          :alt="pfolioDetail?.data[0]?.field_property_gallery[0]?.field_media_image?.meta?.alt || 'Image'">
+                          :alt="pfolioDetail?.data?.[0]?.field_property_gallery?.[0]?.field_media_image?.meta?.alt || 'Image'">
                       </div>
                     </div>
                   </div>
@@ -201,11 +201,11 @@
                   <div class="col ">
                     <div class="post-box">
                       <div class="post-img pb-0 gsapPaperImgEffect gsapFeatureIMG2" tabindex="0"
-                        :aria-label="pfolioDetail?.data[0]?.field_property_gallery[1]?.field_media_image?.meta?.alt">
+                        :aria-label="pfolioDetail?.data?.[0]?.field_property_gallery?.[1]?.field_media_image?.meta?.alt">
                         <img
-                          :src="pfolioDetail?.data[0]?.field_property_gallery[1]?.field_media_image?.image_style_uri?.portfolio_left_image"
+                          :src="pfolioDetail?.data?.[0]?.field_property_gallery?.[1]?.field_media_image?.image_style_uri?.portfolio_left_image"
                           class="img-fluid"
-                          :alt="pfolioDetail?.data[0]?.field_property_gallery[1]?.field_media_image?.meta?.alt || 'Image'">
+                          :alt="pfolioDetail?.data?.[0]?.field_property_gallery?.[1]?.field_media_image?.meta?.alt || 'Image'">
                       </div>
                       <div class="text-start dn-m">
                         <div class="lineleft">
@@ -227,7 +227,7 @@
                         <div class="col-lg-6  rightf">
                           <div class="post-box">
                             <div
-                              v-for="(fetures, index) in pfolioDetail?.data[0]?.field_features[0]?.field_startegic_approach">
+                              v-for="(fetures, index) in pfolioDetail?.data?.[0]?.field_features?.[0]?.field_startegic_approach">
                               <p tabindex="0" class="mt-0">{{ fetures }}</p>
                               <hr :class="`gsapX-line-loop-${index}`">
                             </div>
@@ -247,12 +247,12 @@
                   <div class="col">
                     <div class="post-box">
                       <div class="post-img gsapPaperImgEffect gsapFeatureIMG3" tabindex="0"
-                        :aria-label="pfolioDetail?.data[0]?.field_property_gallery[2]?.field_media_image?.meta?.alt">
+                        :aria-label="pfolioDetail?.data?.[0]?.field_property_gallery?.[2]?.field_media_image?.meta?.alt">
                         <img
-                          :src="pfolioDetail?.data[0]?.field_property_gallery[2]?.field_media_image?.image_style_uri?.portfolio_right_image"
+                          :src="pfolioDetail?.data?.[0]?.field_property_gallery?.[2]?.field_media_image?.image_style_uri?.portfolio_right_image"
                           class="--img-fluid"
-                          :aria-label="pfolioDetail?.data[0]?.field_property_gallery[2]?.field_media_image?.meta?.alt"
-                          :alt="pfolioDetail?.data[0]?.field_property_gallery[2]?.field_media_image?.meta?.alt || 'Image'">
+                          :aria-label="pfolioDetail?.data?.[0]?.field_property_gallery?.[2]?.field_media_image?.meta?.alt"
+                          :alt="pfolioDetail?.data?.[0]?.field_property_gallery?.[2]?.field_media_image?.meta?.alt || 'Image'">
                       </div>
                     </div>
                   </div>
@@ -265,21 +265,21 @@
                     <div class="col-xl-6 col-md-6 ">
                       <div class="post-box">
                         <div class="post-img gsapPaperImgEffect gsapFeatureIMG4" tabindex="0"
-                          :aria-label="pfolioDetail?.data[0]?.field_property_gallery[1].field_media_image.meta.alt">
+                          :aria-label="pfolioDetail?.data?.[0]?.field_property_gallery?.[1]?.field_media_image?.meta?.alt">
                           <img
-                            :src="apiBaseURL + pfolioDetail?.data[0]?.field_property_gallery[1]?.field_media_image?.uri?.url"
+                            :src="imgBaseURL + pfolioDetail?.data?.[0]?.field_property_gallery?.[1]?.field_media_image?.uri?.url"
                             class="img-fluid"
-                            :alt="pfolioDetail?.data[0]?.field_property_gallery[1].field_media_image.meta.alt || 'Image'">
+                            :alt="pfolioDetail?.data?.[0]?.field_property_gallery?.[1]?.field_media_image?.meta?.alt || 'Image'">
                         </div>
                       </div>
                     </div>
                     <div class="col-xl-6 col-md-6 pt-s-20">
                       <div class="post-box">
                         <div class="post-img h-100 gsapPaperImgEffect gsapFeatureIMG5" tabindex="0"
-                          :aria-label="pfolioDetail?.data[0]?.field_property_gallery[2].field_media_image.meta.alt"><img
-                            :src="apiBaseURL + pfolioDetail?.data[0]?.field_property_gallery[2]?.field_media_image?.uri?.url"
+                          :aria-label="pfolioDetail?.data?.[0]?.field_property_gallery?.[2]?.field_media_image?.meta?.alt"><img
+                            :src="imgBaseURL + pfolioDetail?.data?.[0]?.field_property_gallery?.[2]?.field_media_image?.uri?.url"
                             class="img-fluid h-100"
-                            :alt="pfolioDetail?.data[0]?.field_property_gallery[2].field_media_image.meta.alt || 'Image'">
+                            :alt="pfolioDetail?.data?.[0]?.field_property_gallery?.[2]?.field_media_image?.meta?.alt || 'Image'">
                         </div>
                       </div>
                     </div>
@@ -308,7 +308,7 @@
 
 
                               <div
-                                v-for="(fetures, index) in pfolioDetail?.data[0]?.field_features[0]?.field_startegic_approach"
+                                v-for="(fetures, index) in pfolioDetail?.data?.[0]?.field_features?.[0]?.field_startegic_approach"
                                 :key="index">
                                 <p class="mt-0" tabindex="0">{{ fetures }}</p>
                                 <hr :class="`gsapX-line5-${Number(index) + 1}`">
@@ -364,11 +364,11 @@
                     <div class="post-box">
                       <div class="pt-5 mt-5 mt-t-0 pt-t-0 nextprojecttxt">
                         <h2 tabindex="0" class="arfs-1 pb-4 mt-4 pt-3 gsapSlideTop1">
-                          {{ pfolioDetail?.data[0]?.field_next_project.title }}
+                          {{ pfolioDetail?.data?.[0]?.field_next_project?.title }}
                           <br>
-                          {{ pfolioDetail?.data[0]?.field_next_project.field_city_country }}
+                          {{ pfolioDetail?.data?.[0]?.field_next_project?.field_city_country }}
                         </h2>
-                        <a :href="`/portfolio/${pfolioDetail?.data[0]?.field_next_project.field_tags.name.toLowerCase()+pfolioDetail?.data[0]?.field_next_project.path.alias}`"
+                        <a :href="`/portfolio/${pfolioDetail?.data?.[0]?.field_next_project?.field_tags?.name?.toLowerCase?.() ?? ''}${pfolioDetail?.data?.[0]?.field_next_project?.path?.alias ?? ''}`"
                           class="mt-3 gsapSlideTop1 next-btn" name="next" aria-label="Next Project">
                           <span class="sr-only">Next Project</span> &nbsp;
                         </a>
@@ -380,13 +380,13 @@
                   <div class="col-lg-4 ">
                     <div class="post-box">
                       <div class="post-img gsapPaperImgEffect gsapFeatureIMG5" tabindex="0"
-                        :aria-label="pfolioDetail?.data[0]?.field_next_project?.field_property_image?.field_media_image?.meta?.alt"
+                        :aria-label="pfolioDetail?.data?.[0]?.field_next_project?.field_property_image?.field_media_image?.meta?.alt"
                         role="img">
                         <img
-                          :src="pfolioDetail?.data[0]?.field_next_project?.field_property_image?.field_media_image?.image_style_uri?.portfolio_next_image"
+                          :src="pfolioDetail?.data?.[0]?.field_next_project?.field_property_image?.field_media_image?.image_style_uri?.portfolio_next_image"
                           class="img-fluid w-100"
-                          :aria-label="pfolioDetail?.data[0]?.field_next_project?.field_property_image?.field_media_image?.meta?.alt"
-                          :alt="pfolioDetail?.data[0]?.field_next_project?.field_property_image?.field_media_image?.meta?.alt || 'Image'">
+                          :aria-label="pfolioDetail?.data?.[0]?.field_next_project?.field_property_image?.field_media_image?.meta?.alt"
+                          :alt="pfolioDetail?.data?.[0]?.field_next_project?.field_property_image?.field_media_image?.meta?.alt || 'Image'">
                       </div>
 
                     </div>
@@ -407,7 +407,7 @@
                   </svg><span>Previous</span> </a>
                 <a role="button" class="btn" href="/portfolio">Portfolio</a>
                 <a role="button" class="btn d-flex  align-item-center btn-right"
-                  :href="`/portfolio/${pfolioDetail?.data[0]?.field_next_project.field_tags.name.toLowerCase()+pfolioDetail?.data[0]?.field_next_project.path.alias}`"><span>Next</span> <svg
+                  :href="`/portfolio/${pfolioDetail?.data?.[0]?.field_next_project?.field_tags?.name?.toLowerCase?.() ?? ''}${pfolioDetail?.data?.[0]?.field_next_project?.path?.alias ?? ''}`"><span>Next</span> <svg
                     xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                     class="bi bi-arrow-right" viewBox="0 0 16 16">
                     <path fill-rule="evenodd"
@@ -516,7 +516,9 @@
   const router = useRouter();
   const config = useRuntimeConfig();
   const apiBaseURL = String(config.public.API_BASE_URL || '');
+  const imgBaseURL = String(config.public.IMG_BASE_URL || '');
   const apiAuthKey = String(config.public.API_AUTH_KEY || '');
+  const fileCache = ref<Record<string, any>>({});
   const propertyId = route.params.property;
   console.log("propertyId",propertyId)
   // Define a ref to track the visibility of the popup
@@ -610,12 +612,13 @@
       closeButtonRef.value?.focus();
     }
   };
-  const { data: pfolioDetail } = await useFetch<any>(apiBaseURL + '/jsonapi/node/portfolio?filter[field_path][value]=/' + propertyId, {
+  const { data: pfolioDetail } = await useFetch<any>(apiBaseURL + '/jsonapi/node/portfolio?filter[field_path][value]=/' + propertyId + '&include=field_property_image.field_media_image,field_hero_banner.field_media_image,field_property_gallery.field_media_image,field_tags', {
       method: "GET",
       headers: {
         "Authorization": `Basic ${apiAuthKey}`
       }
     });
+  enrichPropertyImages();
   const isOpen = ref(false)
   const schema = z.object({
     name: z.string().min(4, 'Name is very short').max(25, 'Name must be no longer than 25 characters'),
@@ -681,6 +684,27 @@
 
     }
   }
+  async function enrichPropertyImages() {
+    const item = pfolioDetail.value?.data?.[0];
+    if (!item) return;
+    const items: any[] = [];
+    const addRef = (obj: any) => { if (obj?.id) items.push(obj); };
+    addRef(item.field_hero_banner?.field_media_image);
+    (item.field_property_gallery || []).forEach((g: any) => addRef(g.field_media_image));
+    addRef(item.field_next_project?.field_property_image?.field_media_image);
+    const ids: string[] = [...new Set(items.map(i => i.id).filter(Boolean))] as string[];
+    const newIds = ids.filter(id => !fileCache.value[id]);
+    if (!newIds.length) return;
+    const reqs = newIds.map((id, i) => ({ requestId: `f${i}`, uri: `/jsonapi/file/file/${id}?fields[file--file]=image_style_uri`, action: 'view', headers: { 'Accept': 'application/json' } }));
+    try {
+      const res: Record<string, { body: string }> = await $fetch(`${apiBaseURL}/subrequests?_format=json`, { method: 'POST', headers: { 'Authorization': `Basic ${apiAuthKey}` }, body: reqs });
+      for (const k of Object.keys(res)) {
+        const d = JSON.parse(res[k].body);
+        if (d?.data?.id) { fileCache.value[d.data.id] = d.data.image_style_uri; const match = items.find(i => i.id === d.data.id); if (match) match.image_style_uri = d.data.image_style_uri; }
+      }
+    } catch (e) { console.error('Image fetch failed', e); }
+  }
+
   function isNumber(evt: any) {
     evt = (evt) ? evt : window.event;
     var charCode = (evt.which) ? evt.which : evt.keyCode;

@@ -102,7 +102,7 @@
             <div class="searchform-wrap" :class="{ focused: isSearchFocues }">
               <div class="d-flex align-items-stretch w-full">
                 <label for="search-artic" class="sr-only">Search</label>
-                <input :tabindex="tabIndex" @focus="handleFocus()" @blur="handleFocusOut" @input="onInputSearch"
+                <input :tabindex="tabIndex" @focus="handleFocus()" @input="onInputSearch"
                   @keyup.enter="searchItems" type="text" placeholder="Search ARTIC" aria-label="Write keyword"
                   name="search" v-model="searchQuery" id="search-artic" autocomplete="off">
 
@@ -288,18 +288,21 @@ watch(
 
 // Search
 const toggleSearchBar = () => {
-  isSearchBarActive.value = !isSearchBarActive.value;
-  handleFocus();
+  const wasActive = isSearchBarActive.value;
+  isSearchBarActive.value = !wasActive;
+  if (wasActive) {
+    isSearchFocues.value = false;
+    isSearchTyping.value = false;
+    removeBackdrop();
+  } else {
+    handleFocus();
+  }
   searchQuery.value = "";
 };
 
 const handleFocus = () => {
   isSearchFocues.value = true;
   addBackdrop();
-};
-
-const handleFocusOut = () => {
-  removeBackdrop();
 };
 
 const clearSearch = () => {
@@ -498,6 +501,20 @@ const searchOnPageCat = async (label: string) => {
       },
     }
   );
+  // Fallback mock menu when backend is unavailable
+  if (!menu.value?.linkset?.length) {
+    menu.value = {
+      linkset: [{
+        item: [
+          { title: 'About', href: '/about-us', hierarchy: ['1'] },
+          { title: 'Portfolio', href: '/portfolio', hierarchy: ['2'] },
+          { title: 'Sustainability', href: '/sustainability', hierarchy: ['3'] },
+          { title: 'Media', href: '/media', hierarchy: ['4'] },
+          { title: 'Contact', href: '/contact-us', hierarchy: ['5'] }
+        ]
+      }]
+    };
+  }
 </script>
 <style scoped>
   
@@ -572,6 +589,10 @@ const searchOnPageCat = async (label: string) => {
     color: #29292980;
     font-weight: 500;
     line-height: 19.5px;
+  }
+
+  .searchform-wrap button.bg-orange {
+    background-color: #F5B342 !important;
   }
 
   .searchform-suggestion-result-col a {

@@ -2,8 +2,8 @@
   <div class="about" ref="main">
 
     <Head>
-      <Title>{{ about?.data?.metatag[0]?.attributes?.content }}</Title>
-      <Meta name="description" :content="about?.data?.metatag[1]?.attributes?.content" />
+      <Title>{{ about?.data?.metatag?.[0]?.attributes?.content }}</Title>
+      <Meta name="description" :content="about?.data?.metatag?.[1]?.attributes?.content" />
     </Head>
     
     <div id="smooth-wrapper">
@@ -17,18 +17,15 @@
               </h1>
 
               <div class="banner text-right" :aria-label="about?.data?.field_video_image_banner?.field_media_image?.meta?.alt">
-                <div class="d-flex ml-auto play-video-btn " :style="imageStyle"
-                  v-if="about?.data?.field_video_image_banner?.field_media_video_file?.uri?.url">
+                <div class="d-flex ml-auto play-video-btn " :style="imageStyle" v-if="true">
                    <!--  :style="imageStyle"  -->
                     <video 
                     tabindex="0"
                     aria-label="Video"  
-                      v-if="about?.data?.field_video_image_banner?.field_media_video_file?.uri?.url" width="100%"
-                      autoplay muted loop id="myVideo" ref="myVideo" 
-                      preload="none">
-                      <source muted
-                        :src="imgBaseURL + about?.data?.field_video_image_banner?.field_media_video_file?.uri?.url"
-                        :type="about?.data?.field_video_image_banner?.field_media_video_file?.filemime === 'image/gif' ? 'video/mp4' : about?.data?.field_video_image_banner?.field_media_video_file?.filemime" />
+                      v-if="true" width="100%"
+                      autoplay muted loop playsInline id="myVideo" ref="myVideo" 
+                      preload="none"
+                      src="https://artcwbsv0007-prod.azurewebsites.net/sites/default/files/2024-10/About.mp4">
                       Your browser does not support HTML5 video.
                     </video>
                     <button 
@@ -84,7 +81,7 @@
                             <div class="servicesbox_inner">
                               <div class="sb-icon" :aria-label="aboutVision?.field_icon?.field_media_svg?.meta?.alt">
                                 <NuxtImg tabindex="0"
-                                  :src="imgBaseURL + aboutVision?.field_icon?.field_media_image?.uri?.url" width="200"
+                                  :src="imgUrl(aboutVision?.field_icon?.field_media_image?.uri?.url)" width="200"
                                   height="200"
                                   :alt="aboutVision?.field_icon?.field_media_svg?.meta?.alt || 'about us- Mission Vision Values'" 
                                   sizes="(max-width: 200px) 100vw, 200px" :quality="75" />
@@ -119,7 +116,7 @@
                             <div class="sb-icon" tabindex="0"
                               :aria-label="about?.data?.field_sections?.[0]?.field_icon_text_main?.[0]?.field_icon?.field_media_svg?.meta?.alt">
                               <NuxtImg tabindex="0" sizes="(max-width: 64px) 100vw, 61px" :quality="75"
-                                :src="imgBaseURL + (about?.data?.field_sections?.[0]?.field_icon_text_main?.[0]?.field_icon?.field_media_image?.uri?.url || '')"
+                                :src="imgUrl(about?.data?.field_sections?.[0]?.field_icon_text_main?.[0]?.field_icon?.field_media_image?.uri?.url)"
                                 width="61" height="64"
                                 :alt="about?.data?.field_sections?.[0]?.field_icon_text_main?.[0]?.field_icon?.field_media_svg?.meta?.alt || 'about us- Mission Vision Values'" />
                             </div>
@@ -145,7 +142,7 @@
                             <div class="sb-icon" tabindex="0"
                               :aria-label="about?.data?.field_sections?.[0]?.field_icon_text_main?.[1]?.field_icon?.field_media_svg?.meta?.alt">
                               <NuxtImg sizes="(max-width: 64px) 100vw, 61px" :quality="75"
-                                :src="imgBaseURL + (about?.data?.field_sections?.[0]?.field_icon_text_main?.[1]?.field_icon?.field_media_image?.uri?.url || '')"
+                                :src="imgUrl(about?.data?.field_sections?.[0]?.field_icon_text_main?.[1]?.field_icon?.field_media_image?.uri?.url)"
                                 width="61" height="64"
                                 :alt="about?.data?.field_sections?.[0]?.field_icon_text_main?.[1]?.field_icon?.field_media_svg?.meta?.alt || 'about us- Mission Vision Values'" />
                             </div>
@@ -167,7 +164,7 @@
                           <div id="collapsevalues" class="accordion-collapse collapse"
                             data-bs-parent="#accordionExample">
                             <div class="sb-icon" tabindex="0"><img tabindex="0"
-                                :src="imgBaseURL + (about?.data?.field_sections?.[0]?.field_icon_text_main?.[2]?.field_icon?.field_media_image?.uri?.url || '')"
+                                :src="imgUrl(about?.data?.field_sections?.[0]?.field_icon_text_main?.[2]?.field_icon?.field_media_image?.uri?.url)"
                                 width="61" height="64" alt="Arrow"></div>
                             <div class="accordion-body">
                               <p>{{ about?.data?.field_sections?.[0]?.field_icon_text_main?.[2]?.field_hwd_description }}</p>
@@ -467,6 +464,10 @@
   const apiBaseURL = config.public.API_BASE_URL;
   const apiAuthKey = config.public.API_AUTH_KEY;
 
+  const imgUrl = (url: string | null | undefined) => {
+    if (!url) return ''
+    return url.startsWith('http') ? url : imgBaseURL + url
+  }
   let isPlaying = ref(true);
   let videoBtnTxt = ref('');
   // videoBtnTxt.value = '<span class="px-1"></span>PAUSE<span class="px-1"></span>';
@@ -666,29 +667,21 @@
       ]
     }
   })
-  const { data: aboutResponse } = await useFetch<any>(apiBaseURL + '/jsonapi/node/landing_page/72537377-4833-4d5d-b1fe-beaa7b92a1ec', {
+  const members = ref<any>({ data: [] })
+  const executives = ref<any>({ data: [] })
+  const { data: aboutResponse } = await useFetch<any>(apiBaseURL + '/jsonapi/node/landing_page/72537377-4833-4d5d-b1fe-beaa7b92a1ec?include=field_sections,field_sections.field_icon_text_main,field_sections.field_icon_text_main.field_icon.field_media_image,field_sections.field_icon_text_main.field_icon.field_media_svg,field_sections.field_startegic_approach_about,field_video_image_banner,field_video_image_banner.field_media_video_file,field_video_image_banner.field_media_image', {
     method: 'GET',
-    headers: {
-      Authorization: `Basic ${apiAuthKey}`,
-    },
+    headers: { Authorization: `Basic ${apiAuthKey}` },
   });
   about.value = aboutResponse.value || about.value
-  // Board Members API call
-  const members = ref<any>({ data: [] })
-  const { data: membersResponse } = await useFetch<any>(apiBaseURL + '/jsonapi/node/board_members', {
+  const { data: membersResponse } = await useFetch<any>(apiBaseURL + '/jsonapi/node/board_members?include=field_about_us_image.field_media_image,field_our_legacy_member_image.field_media_image', {
     method: 'GET',
-    headers: {
-      Authorization: `Basic ${apiAuthKey}`,
-    },
+    headers: { Authorization: `Basic ${apiAuthKey}` },
   });
   members.value = membersResponse.value || members.value
-  // Executive API call
-  const executives = ref<any>({ data: [] })
-  const { data: executivesResponse } = await useFetch<any>(apiBaseURL + '/jsonapi/node/executive_management', {
+  const { data: executivesResponse } = await useFetch<any>(apiBaseURL + '/jsonapi/node/executive_management?include=field_executive_member_image.field_media_image', {
     method: 'GET',
-    headers: {
-      Authorization: `Basic ${apiAuthKey}`,
-    },
+    headers: { Authorization: `Basic ${apiAuthKey}` },
   });
   executives.value = executivesResponse.value || executives.value
 

@@ -21,21 +21,19 @@
               </div>
 
               <!-- Banner -->
-              <div v-if="homepage?.data.field_video_image_banner?.field_media_image?.image_style_uri" class="header_parallax__container">
+              <div v-if="homepage?.data?.field_video_image_banner?.field_media_image?.image_style_uri" class="header_parallax__container">
                 <div class="header_parallax__item"
-                  :style="{ backgroundImage: `url(${homepage?.data.field_video_image_banner?.field_media_image?.image_style_uri?.portfolio_banner})` }"
+                  :style="{ backgroundImage: `url(${homepage?.data?.field_video_image_banner?.field_media_image?.image_style_uri?.portfolio_banner})` }"
                   role="img"
                   aria-label="A portfolio banner showing [briefly describe the objects and text in the image]">
                 </div>
               </div>
               <div class="d-flex justify-content-center">
               <!-- Video USE -->
-              <video v-if="homepage?.data.field_video_image_banner?.field_media_video_file" class="artic-video"
+              <video class="artic-video"
                 width="100%" autoplay muted loop playsInline id="myVideo" ref="myVideo"
-                preload="none">
-                <source muted
-                  :src="homepage?.data.field_video_image_banner?.field_media_video_file?.uri?.url ? imgBaseURL + homepage.data.field_video_image_banner.field_media_video_file.uri.url : ''"
-                  :type="homepage?.data?.field_video_image_banner?.field_media_video_file?.filemime" />
+                preload="none"
+                src="https://artcwbsv0007-prod.azurewebsites.net/sites/default/files/2024-10/Homepage.mp4">
                 Your browser does not support HTML5 video.
               </video>
               
@@ -109,7 +107,7 @@
                           <div class="post-img pb-1 gsapLatestNewsThumb" tabindex="0" role="img"
                             :aria-label="(newss.field_news_thumbnail?.field_media_image?.meta?.alt || '') + index">
                             <NuxtImg width="100%" height="100%" loading="lazy"
-                              :src="newss.field_news_thumbnail.field_media_image?.image_style_uri.home_news"
+                              :src="newss.field_news_thumbnail?.field_media_image?.image_style_uri?.home_news"
                               class="img-fluid  "
                               :alt="(newss.field_news_thumbnail?.field_media_image?.meta?.alt || '') + index" />
                           </div>
@@ -230,7 +228,7 @@
                         <div class="" tabindex="0"
                           :aria-label="portfolio?.field_property_image?.field_media_image?.meta?.alt">
                           <NuxtImg :quality="75" loading="lazy"
-                            :src="portfolio?.field_property_image?.field_media_image?.image_style_uri?.portfolio_listing"
+                            :src="getPfolioImgUrl(portfolio)"
                             class="--img-fluid gsapPaperSlideEffectImg"
                             :alt="portfolio?.field_property_image?.field_media_image?.meta?.alt" />
                         </div>
@@ -390,15 +388,15 @@
                           <div class="post-img d-lg-none pb-3">
                             <NuxtImg role="img" tabindex="0" width="100%" height="100%" sizes="(max-width: 645px) 100vw, 761px" :quality="75" loading="lazy"
                               aria-label="chairmain"
-                              :src="legacyy?.data[0]?.field_our_legacy_member_image?.field_media_image?.image_style_uri?.home_our_legacy"
+                              :src="legacyy?.data?.[0]?.field_our_legacy_member_image?.field_media_image?.image_style_uri?.home_our_legacy"
                               class="img-fluid h-md-100"
-                              :alt="legacyy?.data[0]?.field_our_legacy_member_image?.field_media_image?.meta?.alt" />
+                              :alt="legacyy?.data?.[0]?.field_our_legacy_member_image?.field_media_image?.meta?.alt" />
                           </div>
                         </div>
                       </div>
                       <div class="col-lg-7">
                         <div class="post-box gsapLegacyContent">
-                          <p tabindex="0" class="pt-0 mt-0">{{ legacyy?.data[0]?.field_message }}</p>
+                          <p tabindex="0" class="pt-0 mt-0">{{ legacyy?.data?.[0]?.field_message }}</p>
                           <div class="continue-reading text-left mt-3">
                             <button @click="showPopup(legacyy.data[0], $event)"
                               aria-label="Click here to Continue reading Chairman message"
@@ -409,8 +407,8 @@
                             </button>
                           </div>
                           <div class="member-info px-0 text-end pt-4 pb-4" tabindex="0">
-                            <h5>{{ legacyy?.data[0]?.field_board_member_name }}</h5><span>{{
-                              legacyy?.data[0]?.field_designation
+                            <h5>{{ legacyy?.data?.[0]?.field_board_member_name }}</h5><span>{{
+                              legacyy?.data?.[0]?.field_designation
                               }}</span>
                           </div>
                         </div>
@@ -452,8 +450,8 @@
                       <div class="post-box h-100 ps-lg-5">
                         <div class="post-img  Chairman-IMG  gsapChairManImg gsapPaperAnimationwrap">
                           <NuxtImg role="img" tabindex="0" width="100%" height="100%" loading="lazy"
-                            :src="legacyy?.data[0]?.field_our_legacy_member_image?.field_media_image?.image_style_uri?.home_our_legacy"
-                            :alt="legacyy?.data[0]?.field_our_legacy_member_image?.field_media_image?.meta?.alt" />
+                            :src="legacyy?.data?.[0]?.field_our_legacy_member_image?.field_media_image?.image_style_uri?.home_our_legacy"
+                            :alt="legacyy?.data?.[0]?.field_our_legacy_member_image?.field_media_image?.meta?.alt" />
                         </div>
                       </div>
                     </div>
@@ -488,9 +486,9 @@
                           <div class="post-img pb-4 pb-lg-5 gsapPaperSlideEffect vice-chairman-IMG">
                             <NuxtImg role="img" tabindex="0" width="100%" height="100%" loading="lazy"
                               aria-label="Vice Chairman Image"
-                              :src="legacyy?.data?.[1]?.field_our_legacy_member_image.field_media_image?.image_style_uri?.home_our_leadership || ''"
+                              :src="legacyy?.data?.[1]?.field_our_legacy_member_image?.field_media_image?.image_style_uri?.home_our_leadership || ''"
                               class="img-fluid"
-                              :alt="legacyy?.data?.[1]?.field_our_legacy_member_image.field_media_image?.meta?.alt" />
+                              :alt="legacyy?.data?.[1]?.field_our_legacy_member_image?.field_media_image?.meta?.alt" />
                           </div>
                           <p tabindex="0" class="pt-0 mt-0  ">{{ legacyy?.data?.[1]?.field_message || '' }}</p>
                           <div class="continue-reading text-left mt-3">
@@ -502,8 +500,8 @@
                             </button>
                           </div>
                           <div class="member-info px-0 text-end pt-4 pt-lg-5 "tabindex="0">
-                            <h5>{{ legacyy?.data?.[1].field_board_member_name }}</h5><span>{{
-                              legacyy?.data?.[1].field_designation}}</span>
+                            <h5>{{ legacyy?.data?.[1]?.field_board_member_name }}</h5><span>{{
+                              legacyy?.data?.[1]?.field_designation}}</span>
                           </div>
                         </div>
                       </div>
@@ -633,7 +631,7 @@
               <h1 tabindex="0">{{ legacyPopupData?.field_board_member_name }}</h1>
               <h5 tabindex="0">{{ legacyPopupData?.field_designation }}</h5>
               <div class="message-detail">
-                <div v-html="legacyPopupData?.body.value" tabindex="0" @keydown="handleKeydownFocusToClose"></div>
+                <div v-html="legacyPopupData?.body?.value" tabindex="0" @keydown="handleKeydownFocusToClose"></div>
               </div>
             </div>
           </div>
@@ -677,6 +675,7 @@
   import { initTextFadeInOnScroll, initSectionMarginAnimation } from '~/helpers/gsap/ParallaxBGTextFade';
   import { initPaperSlideAnimation, initPortfolioImageAnimation, initSlidingAnimation, initPortfolioImageAnimationWithTrigger } from '~/helpers/gsap/InitSlidingImage';
   import { initBatchWidthAnimation, initHeightAnimation, initWidthAnimation } from '~/helpers/gsap/LineAnimations';
+
 
   let isPlaying = true;
   let videoBtnTxt = ref('');
@@ -727,6 +726,7 @@
   const news = ref<any>({ data: [] });
   const partners = ref<any>({ data: [] });
   const legacyy = ref<any>({ data: [] });
+  const fileCache = ref<Record<string, any>>({});
   const title = ref<HTMLElement | null>(null);
   const subtitle = ref<HTMLElement | null>(null);
   const main = ref<HTMLElement | null>(null);
@@ -764,129 +764,48 @@
       videoBtnTxt.value = '<span class="px-1"></span>||<span class="px-1"></span>';
     }
   }
-  let combinedReqData = [
-    {
-      "requestId": "herobanner",
-      "uri": "/jsonapi/node/landing_page/c5bc3535-c8b8-446c-8a33-fefdb728061a",
-      "action": "view",
-      "headers": {
-        "Accept": "application/json"
-      }
-    },
-    {
-      "requestId": "news",
-      "uri": "/jsonapi/node/news?fields[node--news]=title,field_news_thumbnail&page[limit]=3",
-      "action": "view",
-      "headers": {
-        "Accept": "application/json"
-      }
-    },
-    {
-      "requestId": "ourcorebusinesses",
-      "uri": "/jsonapi/taxonomy_term/our_core_businesses",
-      "action": "view",
-      "headers": {
-        "Accept": "application/json"
-      }
-    },
-    {
-      "requestId": "portfolio",
-      "uri": "/jsonapi/node/portfolio?page[limit]=6&filter[field_show_on_home][value]=1",
-      "action": "view",
-      "headers": {
-        "Accept": "application/json"
-      }
-    },
-    {
-      "requestId": "ourpartners",
-      "uri": "/jsonapi/taxonomy_term/our_partners",
-      "action": "view",
-      "headers": {
-        "Accept": "application/json"
-      }
-    },
-    {
-      "requestId": "boardmembers",
-      "uri": "/jsonapi/node/board_members?fields[node--board_members]=field_board_member_name,field_designation,field_message,field_our_legacy_member_image,body",
-      "action": "view",
-      "headers": {
-        "Accept": "application/json"
-      }
-    }
-  ];
-  // Combined api call
-  const { data: combined } = await useFetch<any>(apiBaseURL + '/subrequests?_format=json', {
-     method: "POST",
-     headers: {
-       "Authorization": `Basic ${apiAuthKey}`
-     },
-     body: combinedReqData
-   })
-// homepage.value = combined.value?.herobanner?.body
-//   ? JSON.parse(combined.value.herobanner.body)
-//   : { data: {} };
-
-// portfolios.value = combined.value?.portfolio?.body
-//   ? JSON.parse(combined.value.portfolio.body)
-//   : { data: [] };
-
-// businesses.value = combined.value?.ourcorebusinesses?.body
-//   ? JSON.parse(combined.value.ourcorebusinesses.body)
-//   : { data: [] };
-
-// news.value = combined.value?.news?.body
-//   ? JSON.parse(combined.value.news.body)
-//   : { data: [] };
-
-// partners.value = combined.value?.ourpartners?.body
-//   ? JSON.parse(combined.value.ourpartners.body)
-//   : { data: [] };
-
-// legacyy.value = combined.value?.boardmembers?.body
-//   ? JSON.parse(combined.value.boardmembers.body)
-//   : { data: [] };
-
-//   // Refs
-//   const title = ref < HTMLElement | null > (null);
-//   const subtitle = ref < HTMLElement | null > (null);
-
-//   const main: any = ref(null);
-//   let ctx: any = null;
-
-try {
-  homepage.value = combined.value?.herobanner?.body
-    ? JSON.parse(combined.value.herobanner.body)
-    : { data: {} };
-
-  portfolios.value = combined.value?.portfolio?.body
-    ? JSON.parse(combined.value.portfolio.body)
-    : { data: [] };
-
-  businesses.value = combined.value?.ourcorebusinesses?.body
-    ? JSON.parse(combined.value.ourcorebusinesses.body)
-    : { data: [] };
-
-  news.value = combined.value?.news?.body
-    ? JSON.parse(combined.value.news.body)
-    : { data: [] };
-
-  partners.value = combined.value?.ourpartners?.body
-    ? JSON.parse(combined.value.ourpartners.body)
-    : { data: [] };
-
-  legacyy.value = combined.value?.boardmembers?.body
-    ? JSON.parse(combined.value.boardmembers.body)
-    : { data: [] };
-} catch (error) {
-  console.error("Error parsing API response:", error);
-  // Fallback to default values in case of an error
-  homepage.value = { data: {} };
-  portfolios.value = { data: [] };
-  businesses.value = { data: [] };
-  news.value = { data: [] };
-  partners.value = { data: [] };
-  legacyy.value = { data: [] };
-}
+  try {
+    const { data: homepageData } = await useFetch<any>(
+      `${apiBaseURL}/jsonapi/node/landing_page/c5bc3535-c8b8-446c-8a33-fefdb728061a?include=field_sections,field_sections.field_data_details,field_sections.field_map_markers_data,field_sections.field_map_markers_data.field_image.field_media_image,field_sections.field_big_image,field_sections.field_big_image.field_media_image,field_sections.field_small_image,field_sections.field_small_image.field_media_image,field_video_image_banner,field_video_image_banner.field_media_video_file,field_video_image_banner.field_media_image,field_sections.field_icon_text_main,field_sections.field_icon_text_main.field_icon.field_media_image,field_sections.field_startegic_approach_about`,
+      { method: 'GET', headers: { Authorization: `Basic ${apiAuthKey}` } }
+    )
+    if (homepageData.value) homepage.value = homepageData.value
+  } catch (e) { console.error('Homepage fetch failed:', e) }
+  try {
+    const { data: portfoliosData } = await useFetch<any>(
+      `${apiBaseURL}/jsonapi/node/portfolio?page[limit]=6&sort[sort-field-created][path]=created&sort[sort-field-created][direction]=DESC&include=field_property_image.field_media_image,field_tags`,
+      { method: 'GET', headers: { Authorization: `Basic ${apiAuthKey}` } }
+    )
+    if (portfoliosData.value) portfolios.value = portfoliosData.value
+  } catch (e) { console.error('Portfolio fetch failed:', e) }
+  try {
+    const { data: businessesData } = await useFetch<any>(
+      `${apiBaseURL}/jsonapi/taxonomy_term/our_core_businesses`,
+      { method: 'GET', headers: { Authorization: `Basic ${apiAuthKey}` } }
+    )
+    if (businessesData.value) businesses.value = businessesData.value
+  } catch (e) { console.error('Businesses fetch failed:', e) }
+  try {
+    const { data: newsData } = await useFetch<any>(
+      `${apiBaseURL}/jsonapi/node/news?page[limit]=3&sort[sort-field_published_date][path]=field_published_date&sort[sort-field_published_date][direction]=DESC&include=field_news_thumbnail.field_media_image`,
+      { method: 'GET', headers: { Authorization: `Basic ${apiAuthKey}` } }
+    )
+    if (newsData.value) news.value = newsData.value
+  } catch (e) { console.error('News fetch failed:', e) }
+  try {
+    const { data: partnersData } = await useFetch<any>(
+      `${apiBaseURL}/jsonapi/taxonomy_term/our_partners`,
+      { method: 'GET', headers: { Authorization: `Basic ${apiAuthKey}` }, default: () => ({ data: [] }) }
+    )
+    if (partnersData.value) partners.value = partnersData.value
+  } catch (e) { console.error('Partners fetch failed:', e) }
+  try {
+    const { data: legacyData } = await useFetch<any>(
+      `${apiBaseURL}/jsonapi/node/board_members?include=field_our_legacy_member_image.field_media_image`,
+      { method: 'GET', headers: { Authorization: `Basic ${apiAuthKey}` } }
+    )
+    if (legacyData.value) legacyy.value = legacyData.value
+  } catch (e) { console.error('Board members fetch failed:', e) }
 
 // Refs
 // const title = ref<HTMLElement | null>(null);
@@ -946,6 +865,11 @@ try {
 //   };
   
 // };
+
+function getPfolioImgUrl(item: any) {
+  return item?.field_property_image?.field_media_image?.image_style_uri?.portfolio_listing
+    || fileCache.value[item?.field_property_image?.field_media_image?.id]?.portfolio_listing;
+}
 
 const moveNext = () => {
   const markerData = homepage.value?.data?.field_sections?.[2]?.field_map_markers_data;

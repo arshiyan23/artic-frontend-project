@@ -37,15 +37,15 @@
                     <div class="leadershipmessage-content aos-init aos-animate" data-aos="fade-up" data-aos-delay="400">
                       <h2 tabindex="0"
                         class="arfs-2 text-primary font-primary font-weight-medium text-uppercase py-sm-5 py-4 my-xl-5 page-main-heading">
-                        {{supplyChainBlock?.data[0]?.field_supply_title}}
+                        {{supplyChainBlock?.data?.[0]?.field_supply_title}}
                       </h2>
-                      <div tabindex="0" class="m-0" v-html="supplyChainBlock?.data[0]?.body?.value"></div>
+                      <div tabindex="0" class="m-0" v-html="supplyChainBlock?.data?.[0]?.body?.value"></div>
                     </div>
 
                     <!-- Mobile -->
                     <div tabindex="0" aria-label="supplyChain Banner"
                       class="leadershipmessage-thumb bg-light-blue-400 p-5 mt-0"
-                      :style="supplyChainBlock?.data[0] ? { backgroundImage: `url(${getImageUrl(supplyChainBlock.data[0].field_supply_image.field_media_image.image_style_uri.artic_supply_chain_banner)})` } : {}">
+                      :style="supplyChainBlock?.data?.[0] ? { backgroundImage: `url(${getImageUrl(supplyChainBlock.data[0].field_supply_image.field_media_image.image_style_uri.artic_supply_chain_banner)})` } : {}">
                     </div>
                   </div>
                 </div>
@@ -127,7 +127,7 @@
                           <div class="mapouter">
                             <div class="gmap_canvas">
                               <iframe class="gmap_iframe" width="521" height="231"  
-                                          :src="`https://maps.google.com/maps?width=521&height=231&hl=en&q=${supplyChainContact?.data?.field_sections[0]?.field_address?.value}&t=&z=13&ie=UTF8&iwloc=B&output=embed`"></iframe>
+                                          :src="`https://maps.google.com/maps?width=521&height=231&hl=en&q=${supplyChainContact?.data?.field_sections?.[0]?.field_address?.value}&t=&z=13&ie=UTF8&iwloc=B&output=embed`"></iframe>
                                           
                             </div>
                           </div>
@@ -135,23 +135,23 @@
                         </div>
                         <div >
                           <div class="post-box mapdown" >
-                            <div tabindex="-1" class="mt-4 pt-1 mt-m-20 pt-m papdescontact" v-html="supplyChainContact?.data?.field_sections[0]?.field_address?.value"></div>
+                            <div tabindex="-1" class="mt-4 pt-1 mt-m-20 pt-m papdescontact" v-html="supplyChainContact?.data?.field_sections?.[0]?.field_address?.value"></div>
                             
                             <hr>
                             <p tabindex="0">
                               <span>Email: </span>
-                              <a :href="'mailto:' + (supplyChainContact?.data?.field_sections[0]?.field_email || '')"
+                              <a :href="'mailto:' + (supplyChainContact?.data?.field_sections?.[0]?.field_email || '')"
                                 class="email">
-                                {{ supplyChainContact?.data?.field_sections[0]?.field_email }}
+                                {{ supplyChainContact?.data?.field_sections?.[0]?.field_email }}
                               </a>
                             </p>
                             <hr>
                             <p role="contentinfo" tabindex="0" aria-label="Telephone number">Tel: <NuxtLink
-                                :to="`tel:${supplyChainContact?.data?.field_sections[0]?.field_tel}`">{{
-                                supplyChainContact?.data?.field_sections[0]?.field_tel }}</NuxtLink>
+                                :to="`tel:${supplyChainContact?.data?.field_sections?.[0]?.field_tel}`">{{
+                                supplyChainContact?.data?.field_sections?.[0]?.field_tel }}</NuxtLink>
                             </p>
                             <hr>
-                            <p tabindex="0">Fax: {{ supplyChainContact?.data?.field_sections[0]?.field_fax }}</p>
+                            <p tabindex="0">Fax: {{ supplyChainContact?.data?.field_sections?.[0]?.field_fax }}</p>
                             <hr>
                           </div>
                         </div>

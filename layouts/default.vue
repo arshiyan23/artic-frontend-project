@@ -1,6 +1,6 @@
 <template>
 
-  <div id="Siteloader" >
+  <div id="Siteloader">
     <div class="flex flex-column gap-5 text-center align-items-center justify-content-center">
       <img class="img-fluid" src="~/assets/img/logow.svg" alt="Footer Logo" />
        <!-- Spinner Element -->
@@ -118,7 +118,8 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue';
+import { nextTick, ref, onMounted } from 'vue';
+
 import { useRoute } from 'vue-router';
 import Cookies from 'js-cookie';
 import PopupComponent from '../components/Popup.vue';
@@ -128,6 +129,16 @@ const isPopupVisible = ref(false);
 const consentGiven = ref(false);
 const necessary = ref(true);
 const performance = ref(false);
+const hideAfterPagePaint = async () => {
+  const loader = document.getElementById('Siteloader');
+  if (!loader) return;
+  await nextTick();
+  window.requestAnimationFrame(() => {
+    window.setTimeout(() => {
+      loader.classList.add('is-hidden');
+    }, 450);
+  });
+};
 
 // Show or close popup
 const showPopup = () => {
@@ -216,6 +227,8 @@ const redirectToPage = () => {
 };
 // Handle the popup visibility on page load
 onMounted(() => {
+  hideAfterPagePaint();
+
   const consent = Cookies.get('consentGiven');
   if (consent === 'true' || consent === 'false') {
     isPopupVisible.value = false;
@@ -225,25 +238,6 @@ onMounted(() => {
     const event = new CustomEvent('focus-close-button');
     window.dispatchEvent(event);
   }
-
-
-
-  // Hide loader when DOM is ready
-  const hideLoader = () => {
-    const loader = document.getElementById('Siteloader');
-    if (loader) {
-      loader.style.display = 'none';
-      document.body.style.overflow = 'auto';
-    }
-  };
-  window.onload = hideLoader;
-  if (document.readyState === 'complete') {
-    hideLoader();
-  } else {
-    document.addEventListener('DOMContentLoaded', hideLoader);
-  }
-
-
 });
 </script>
 <style scoped>

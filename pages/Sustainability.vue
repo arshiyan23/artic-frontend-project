@@ -1,7 +1,7 @@
 <template>
   <Head>
-    <Title>{{ title_desc?.data?.metatag[0]?.attributes?.content }}</Title>
-    <Meta name="description" :content="title_desc?.data?.metatag[1]?.attributes?.content" />
+    <Title>{{ sustainability?.data?.metatag?.[0]?.attributes?.content }}</Title>
+    <Meta name="description" :content="sustainability?.data?.metatag?.[1]?.attributes?.content" />
   </Head>
 
   <div id="smooth-wrapper">
@@ -16,17 +16,17 @@
   
                 <div class="leadershipmessage-content">
                   <h1 tabindex="0" class="text-primary page-main-heading">
-                    {{ title_desc.data.field_sections[0].field_title_sustanability }}
+                    {{ sustainability?.data?.field_sections?.[0]?.field_title_sustanability }}
                   </h1>
                   <p tabindex="0" class="m-0 gsap_page_paragrap">
-                    {{ title_desc.data.field_sections[0].field_description_sustanability }}
+                    {{ sustainability?.data?.field_sections?.[0]?.field_description_sustanability }}
                   </p>
                 </div>
   
                 <!-- Cover -->
                  <div class="gsap_leadershipmessage_paperAnimation w-100">
                    <div class="leadershipmessage-thumb bg-gray p-5" tabindex="0" role="banner" aria-label="Sustainability Banner"
-                   :style="{ backgroundImage: 'url(' + title_desc?.data.field_sections[0]?.field_image?.field_media_image?.image_style_uri?.sustainability_banner + ')' }">
+                   :style="{ backgroundImage: 'url(' + sustainability?.data?.field_sections?.[0]?.field_image?.field_media_image?.image_style_uri?.sustainability_banner + ')' }">
                   </div>
                 </div>
 
@@ -54,15 +54,15 @@
                 <div class="col-lg-9 " >
                   <div class="">
                     <h2 class="gsapSection2Heading" tabindex="0">
-                      {{title_desc?.data?.field_sections[1]?.field_hwd_main_title }}
+                      {{sustainability?.data?.field_sections?.[1]?.field_hwd_main_title }}
                     </h2>
                     <p class="gsapSection2paragraph" tabindex="0">{{
-                      title_desc?.data?.field_sections[1]?.field_hwd_description_1 }}
+                      sustainability?.data?.field_sections?.[1]?.field_hwd_description_1 }}
                     </p>
 
                     <div class="col-lg-12">
                       <div class="row  row-cols-2 row-cols-sm-2 row-cols-md-3 row-cols-lg-3">
-                        <div v-for="(envInit,index) in title_desc.data.field_sections[1].field_icon_text_main"
+                        <div v-for="(envInit,index) in sustainability?.data?.field_sections?.[1]?.field_icon_text_main || []"
                           :key="index" class="col-xl-4 col-md-6 px-md-3 px-2 my-md-3 my-2 gsapYPartners200">
                           <div class="services-box">
                             <div class="sb-inner-box">
@@ -76,7 +76,7 @@
                       </div>
                       <div class="d-flex justify-content-left pt-3 pb-sm-1 pb-3 mb-sm-5 mb-1 gsapSection2paragraph2">
                         <p tabindex="0" class="field_hwd_description_2">{{
-                          title_desc?.data?.field_sections[1]?.field_hwd_description_2 }}</p>
+                          sustainability?.data?.field_sections?.[1]?.field_hwd_description_2 }}</p>
                       </div>
                     </div>
                   </div>
@@ -98,15 +98,15 @@
                 <div class="col-lg-9 " >
                   <div class="weCare-section-content">
                     <h2 tabindex="0" class="gsapSection3Heading">
-                      {{title_desc?.data?.field_sections[2]?.field_hwd_main_title }}
+                      {{sustainability?.data?.field_sections?.[2]?.field_hwd_main_title }}
                     </h2>
                     <p class="field_hwd_description_1 gsapSection3paragraph" tabindex="0">
-                      {{ title_desc?.data?.field_sections[2]?.field_hwd_description_1 }}
+                      {{ sustainability?.data?.field_sections?.[2]?.field_hwd_description_1 }}
                     </p>
 
                     <div class="col-lg-12 pt-2" >
                       <div class="row row-cols-2 row-cols-sm-2 row-cols-md-3 row-cols-lg-3">
-                        <div v-for="(socialResp,index) in title_desc?.data?.field_sections[2]?.field_icon_text_main"
+                        <div v-for="(socialResp,index) in sustainability?.data?.field_sections?.[2]?.field_icon_text_main"
                           :key="index" class="col-xl-4 col-md-6 px-md-3 px-2 my-md-3 my-2 gsapSection3Boxes">
                           <div class="services-box">
                             <div class="sb-inner-box">
@@ -120,14 +120,14 @@
                         </div>
                       </div>
                       <div class="d-flex justify-content-md-start justify-content-center py-md-5 py-4 mb-2 px-1 field_hwd_download">
-                        <a :href="apiBaseURL + title_desc?.data?.field_sections[1]?.field_hwd_download?.field_media_document?.uri?.url"
+                        <a :href="imgBaseURL + sustainability?.data?.field_sections?.[1]?.field_hwd_download?.field_media_document?.uri?.url"
                           target="_blank" aria-label="Download Learn More"
                           class="btn-white align-self-start"><span>Download to Learn More</span><i
                             class="bi bi-arrow-down"></i>
                         </a>
                         <!-- <button aria-label="Download Learn More" class="btn-white align-self-start" @click="downloadPDF"><span >Download to Learn More</span><i
                           class="bi bi-arrow-down"></i></button> -->
-                          <!-- <button aria-label="Download Learn More"  :click="downloadPDF(apiBaseURL + title_desc?.data?.field_sections[1]?.field_hwd_download?.field_media_document?.uri?.url)"><span >..</span></button> -->
+                          <!-- <button aria-label="Download Learn More"  :click="downloadPDF(apiBaseURL + sustainability?.data?.field_sections?.[1]?.field_hwd_download?.field_media_document?.uri?.url)"><span >..</span></button> -->
                       </div>
                     </div>
 
@@ -241,12 +241,25 @@
 // };
 
   // Title description api call
-  const { data: title_desc } = await useFetch<any>(apiBaseURL + '/jsonapi/node/landing_page/fd90d888-712e-411a-947d-d4a6cfb42d43', {
-    method: "GET",
-    headers: {
-      "Authorization": `Basic ${apiAuthKey}`
+  const sustainability = ref<any>({
+    data: {
+      metatag: [],
+      field_sections: [
+        { field_title_sustanability: '', field_description_sustanability: '', field_image: {} },
+        { field_hwd_main_title: '', field_hwd_description_1: '', field_hwd_description_2: '', field_hwd_download: {}, field_icon_text_main: [] },
+        { field_hwd_main_title: '', field_hwd_description_1: '', field_icon_text_main: [] }
+      ]
     }
   })
+  try {
+    const { data } = await useFetch<any>(apiBaseURL + '/jsonapi/node/landing_page/fd90d888-712e-411a-947d-d4a6cfb42d43?include=field_sections,field_sections.field_image.field_media_image,field_sections.field_icon_text_main,field_sections.field_icon_text_main.field_icon.field_media_svg,field_sections.field_hwd_download.field_media_document', {
+      method: "GET",
+      headers: {
+        "Authorization": `Basic ${apiAuthKey}`
+      }
+    })
+    if (data.value) sustainability.value = data.value
+  } catch (e) { console.error('Sustainability fetch failed:', e) }
 </script>
 <style>
  

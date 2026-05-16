@@ -2,8 +2,8 @@
   <div class="details-pressrelease-template" ref="main">
 
     <Head>
-      <Title>{{ pressRelease?.data?.metatag[0]?.attributes?.content }}</Title>
-      <Meta name="description" :content="pressRelease?.data?.metatag[1]?.attributes?.content" />
+      <Title>{{ pressRelease?.data?.metatag?.[0]?.attributes?.content }}</Title>
+      <Meta name="description" :content="pressRelease?.data?.metatag?.[1]?.attributes?.content" />
     </Head>
 
     <div id="smooth-wrapper">
@@ -200,7 +200,7 @@
 
 
                       <!-- Bottom part -->
-                      <div tabindex="0" v-html="BodyContent2?.data[0]?.body?.value" class="details-body2-content gsapSection3paragraph">
+                      <div tabindex="0" v-html="BodyContent2?.data?.[0]?.body?.value" class="details-body2-content gsapSection3paragraph">
                       </div>
                     </div>
                   </div>

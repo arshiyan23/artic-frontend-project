@@ -1,8 +1,8 @@
 <template>
     <div class="pressrelease-page-template page-template" ref="main">
         <Head>
-            <Title>{{ videoGallery?.data?.metatag[0]?.attributes?.content }}</Title>
-            <Meta name="description" :content="videoGallery?.data?.metatag[1]?.attributes?.content" />
+            <Title>{{ videoGallery?.data?.metatag?.[0]?.attributes?.content }}</Title>
+            <Meta name="description" :content="videoGallery?.data?.metatag?.[1]?.attributes?.content" />
         </Head>
         <div id="smooth-wrapper">
             <div id="smooth-content">
@@ -27,7 +27,7 @@
                                 <div class="section-head ">
                                     <h2 tabindex="0" class="page-main-heading" aria-label="Page ">MEDIA GALLery</h2>
                                     <p tabindex="0" class="d-sm-block d-none gsap_page_paragrap" >
-                                        {{videoGallery?.data?.field_sections[0]?.field_short_description}}</p>
+                                        {{videoGallery?.data?.field_sections?.[0]?.field_short_description}}</p>
                                 </div>
                                 <!-- Body -->
                                 <div class="section-body">
@@ -213,22 +213,29 @@
 
 
     // Video Gallery api call
-    const { data: videoGallery } = await useFetch(apiBaseURL + '/jsonapi/node/landing_page/d7c412c3-cce4-4b3f-aafd-a00dd815f39a', {
-        method: "GET",
-        headers: {
-        "Authorization": `Basic ${apiAuthKey}`
-        }
-    });
-    videoGalleryList.value = videoGallery?.value?.data?.field_sections[0]?.field_video_section;
+    try {
+      const { data: videoGallery } = await useFetch(apiBaseURL + '/jsonapi/node/landing_page/d7c412c3-cce4-4b3f-aafd-a00dd815f39a?include=field_sections,field_sections.field_video_section,field_sections.field_video_section.field_video_thumbnail.field_media_image,field_sections.field_video_section.field_video.field_media_video_file', {
+          method: "GET",
+          headers: {
+          "Authorization": `Basic ${apiAuthKey}`
+          }
+      });
+      if (videoGallery.value) {
+        videoGalleryList.value = videoGallery.value?.data?.field_sections?.[0]?.field_video_section;
+      }
+    } catch (e) { console.error('Video gallery fetch failed:', e) }
 
 
     // Helping Functions
     // Function to format the date
     const getImageUrl = (uri) => {
-      return uri || '';
+      if (!uri) return '';
+      return uri.startsWith('http') ? uri : imgBaseURL + uri;
     }
     const getVideoUrl = (videoData) =>{
-      return imgBaseURL + videoData?.field_media_video_file?.uri?.url || '';
+      const url = videoData?.field_media_video_file?.uri?.url;
+      if (!url) return '';
+      return url.startsWith('http') ? url : imgBaseURL + url;
     }
 </script>
 <style scoped>

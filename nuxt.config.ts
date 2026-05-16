@@ -39,16 +39,10 @@ export default defineNuxtConfig({
     drupalBaseUrl,
     public: {
       API_BASE_URL: process.env.NUXT_PUBLIC_API_BASE_URL || '/drupal',
-      IMG_BASE_URL: process.env.NUXT_PUBLIC_IMG_BASE_URL || drupalBaseUrl,
+      IMG_BASE_URL: process.env.NUXT_PUBLIC_IMG_BASE_URL || '/drupal',
       FRONTEND_BASE_URL: process.env.NUXT_PUBLIC_FRONTEND_BASE_URL || 'http://localhost:3001/',
       API_AUTH_KEY: process.env.NUXT_PUBLIC_API_AUTH_KEY || 'YXBpYWRtaW5HM2g3UjpQIzJzNkxqQDlFIXE=',
       gtagId: process.env.NUXT_PUBLIC_GTAG_ID || 'G-TTNXS1ZH7X'
-    }
-  },
-
-  routeRules: {
-    '/drupal/**': {
-      proxy: `${drupalBaseUrl}/**`
     }
   },
 
@@ -85,6 +79,10 @@ export default defineNuxtConfig({
     'nuxt-purgecss',
     '@dargmuesli/nuxt-cookie-control'
   ],
+
+  image: {
+    provider: 'none'
+  },
 
   plugins: [
     { src: '~/plugins/aos.client.js', mode: 'client' },
