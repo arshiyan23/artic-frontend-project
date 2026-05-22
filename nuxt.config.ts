@@ -2,7 +2,7 @@ import viteCompression from 'vite-plugin-compression'
 
 const drupalBaseUrl = process.env.NUXT_DRUPAL_BASE_URL
   || process.env.DRUPAL_BASE_URL
-  || 'https://8cf3-2401-4900-1f38-65d-45a4-63a7-363a-147a.ngrok-free.app'
+  || 'https://artic-backend.azurewebsites.net/index.php'
 
 import { defineNuxtConfig } from 'nuxt/config'
 

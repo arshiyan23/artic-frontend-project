@@ -68,6 +68,8 @@ export default defineEventHandler(async (event) => {
     headers.set(key, Array.isArray(value) ? value.join(',') : value)
   }
 
+  headers.set('ngrok-skip-browser-warning', 'true')
+
   const method = event.method || 'GET'
   const body = method === 'GET' || method === 'HEAD' ? undefined : await readRawBody(event)
   const response = await fetch(targetUrl, {
