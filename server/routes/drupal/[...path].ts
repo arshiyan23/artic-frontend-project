@@ -10,11 +10,24 @@ const hopByHopHeaders = new Set([
   'te',
   'trailer',
   'transfer-encoding',
-  'upgrade'
+  'upgrade',
+  'expect'
 ])
 
+function escapeRegExp(value: string): string {
+  return value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+}
+
 function rewriteDrupalUrls(value: string, drupalBaseUrl: string): string {
+  const parsedBaseUrl = new URL(drupalBaseUrl)
+  const normalizedBasePath = parsedBaseUrl.pathname.replace(/\/$/, '')
+  const baseUrlPattern = new RegExp(
+    `https?:\\/\\/${escapeRegExp(parsedBaseUrl.hostname)}(?::\\d+)?${escapeRegExp(normalizedBasePath)}`,
+    'g'
+  )
+
   return value
+    .replace(baseUrlPattern, '/drupal')
     .split(drupalBaseUrl).join('/drupal')
     .split(drupalBaseUrl.replaceAll('/', '\\/')).join('\/drupal')
 }
@@ -58,9 +71,13 @@ function rewriteJsonResponse(text: string, drupalBaseUrl: string) {
 export default defineEventHandler(async (event) => {
   const config = useRuntimeConfig(event)
   const drupalBaseUrl = String(config.drupalBaseUrl || '').replace(/\/$/, '')
+  const drupalSiteBaseUrl = drupalBaseUrl.replace(/\/index\.php$/, '')
   const requestUrl = getRequestURL(event)
   const targetPath = requestUrl.pathname.replace(/^\/drupal/, '') || '/'
-  const targetUrl = `${drupalBaseUrl}${targetPath}${requestUrl.search}`
+  const isStyledDrupalFile = targetPath.startsWith('/sites/default/files/styles/')
+  const isDrupalFileAsset = targetPath.startsWith('/sites/default/files/')
+  const upstreamBaseUrl = isStyledDrupalFile ? drupalBaseUrl : isDrupalFileAsset ? `${drupalSiteBaseUrl}/web` : drupalBaseUrl
+  const targetUrl = `${upstreamBaseUrl}${targetPath}${requestUrl.search}`
   const headers = new Headers()
 
   for (const [key, value] of Object.entries(getRequestHeaders(event))) {
