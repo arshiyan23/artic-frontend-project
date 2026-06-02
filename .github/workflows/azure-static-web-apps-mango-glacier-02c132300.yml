@@ -18,10 +18,12 @@ jobs:
       id-token: write
       contents: read
     env:
-      NUXT_DRUPAL_BASE_URL: https://artic-backend.azurewebsites.net/index.php
-      NUXT_PUBLIC_API_BASE_URL: https://artic-backend.azurewebsites.net/index.php
-      NUXT_PUBLIC_IMG_BASE_URL: https://artic-backend.azurewebsites.net/index.php
-      NUXT_PUBLIC_FRONTEND_BASE_URL: https://mango-glacier-02c132300.7.azurestaticapps.net/
+      NUXT_DRUPAL_BASE_URL: ${{ vars.NUXT_DRUPAL_BASE_URL }}
+      NUXT_PUBLIC_API_BASE_URL: ${{ vars.NUXT_PUBLIC_API_BASE_URL }}
+      NUXT_PUBLIC_IMG_BASE_URL: ${{ vars.NUXT_PUBLIC_IMG_BASE_URL }}
+      NUXT_PUBLIC_FRONTEND_BASE_URL: ${{ vars.NUXT_PUBLIC_FRONTEND_BASE_URL }}
+      NUXT_PUBLIC_GTAG_ID: ${{ vars.NUXT_PUBLIC_GTAG_ID }}
+      NUXT_PUBLIC_API_AUTH_KEY: ${{ secrets.NUXT_PUBLIC_API_AUTH_KEY }}
     steps:
       - uses: actions/checkout@v3
         with:
