@@ -41,7 +41,7 @@ export default defineNuxtConfig({
       API_BASE_URL: process.env.NUXT_PUBLIC_API_BASE_URL || '/drupal',
       IMG_BASE_URL: process.env.NUXT_PUBLIC_IMG_BASE_URL || '/drupal',
       FRONTEND_BASE_URL: process.env.NUXT_PUBLIC_FRONTEND_BASE_URL || 'http://localhost:3001/',
-      API_AUTH_KEY: process.env.NUXT_PUBLIC_API_AUTH_KEY || 'YXBpYWRtaW5HM2g3UjpQIzJzNkxqQDlFIXE=',
+      API_AUTH_KEY: process.env.NUXT_PUBLIC_API_AUTH_KEY || 'YXBpYXJ0aWM6Q044Wk1XUEEwemJm',
       gtagId: process.env.NUXT_PUBLIC_GTAG_ID || 'G-TTNXS1ZH7X'
     }
   },
