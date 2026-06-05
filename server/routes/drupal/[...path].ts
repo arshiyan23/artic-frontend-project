@@ -76,8 +76,16 @@ export default defineEventHandler(async (event) => {
   const targetPath = requestUrl.pathname.replace(/^\/drupal/, '') || '/'
   const isStyledDrupalFile = targetPath.startsWith('/sites/default/files/styles/')
   const isDrupalFileAsset = targetPath.startsWith('/sites/default/files/')
-  const upstreamBaseUrl = isStyledDrupalFile ? drupalBaseUrl : isDrupalFileAsset ? `${drupalSiteBaseUrl}/web` : drupalBaseUrl
-  const targetUrl = `${upstreamBaseUrl}${targetPath}${requestUrl.search}`
+  const isApiPath = !isStyledDrupalFile && !isDrupalFileAsset
+
+  let targetUrl: string
+  if (isDrupalFileAsset || isStyledDrupalFile) {
+    const upstreamBaseUrl = isStyledDrupalFile ? drupalBaseUrl : `${drupalSiteBaseUrl}/web`
+    targetUrl = `${upstreamBaseUrl}${targetPath}${requestUrl.search}`
+  } else {
+    const qPath = targetPath.startsWith('/') ? targetPath.slice(1) : targetPath
+    targetUrl = `${drupalBaseUrl}?q=${qPath}${requestUrl.search}`
+  }
   const headers = new Headers()
 
   for (const [key, value] of Object.entries(getRequestHeaders(event))) {
