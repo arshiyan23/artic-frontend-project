@@ -84,7 +84,7 @@ export default defineEventHandler(async (event) => {
     targetUrl = `${upstreamBaseUrl}${targetPath}${requestUrl.search}`
   } else {
     const qPath = targetPath.startsWith('/') ? targetPath.slice(1) : targetPath
-    targetUrl = `${drupalBaseUrl}?q=${qPath}${requestUrl.search}`
+    targetUrl = `${drupalBaseUrl}?_path=${qPath}${requestUrl.search}`
   }
   const headers = new Headers()
 
