@@ -2,7 +2,7 @@ import viteCompression from 'vite-plugin-compression'
 
 const drupalBaseUrl = process.env.NUXT_DRUPAL_BASE_URL
   || process.env.DRUPAL_BASE_URL
-  || 'https://artic-backend.azurewebsites.net/index.php'
+  || 'https://be-artic-arsh-bhgvfrdzhjegb7bg.uaenorth-01.azurewebsites.net/index.php'
 
 import { defineNuxtConfig } from 'nuxt/config'
 
@@ -41,7 +41,7 @@ export default defineNuxtConfig({
       API_BASE_URL: process.env.NUXT_PUBLIC_API_BASE_URL || '/drupal',
       IMG_BASE_URL: process.env.NUXT_PUBLIC_IMG_BASE_URL || '/drupal',
       FRONTEND_BASE_URL: process.env.NUXT_PUBLIC_FRONTEND_BASE_URL || 'http://localhost:3001/',
-      API_AUTH_KEY: process.env.NUXT_PUBLIC_API_AUTH_KEY || 'YXBpYXJ0aWM6Q044Wk1XUEEwemJm',
+      API_AUTH_KEY: process.env.NUXT_PUBLIC_API_AUTH_KEY || 'YXBpYWRtaW5HM2g3UjpQIzJzNkxqQDlFIXE=',
       gtagId: process.env.NUXT_PUBLIC_GTAG_ID || 'G-TTNXS1ZH7X'
     }
   },
