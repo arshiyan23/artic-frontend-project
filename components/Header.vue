@@ -501,6 +501,14 @@ const searchOnPageCat = async (label: string) => {
       },
     }
   );
+  // Strip /index.php prefix from menu hrefs
+  if (menu.value?.linkset?.[0]?.item) {
+    menu.value.linkset[0].item.forEach((item: any) => {
+      if (item.href && item.href.startsWith('/index.php/')) {
+        item.href = item.href.replace('/index.php', '');
+      }
+    });
+  }
   // Fallback mock menu when backend is unavailable
   if (!menu.value?.linkset?.length) {
     menu.value = {
