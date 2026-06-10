@@ -1,18 +1,4 @@
 <template>
-
-  <div id="Siteloader">
-    <div class="flex flex-column gap-5 text-center align-items-center justify-content-center">
-      <img class="img-fluid" src="~/assets/img/logow.svg" alt="Footer Logo" />
-       <!-- Spinner Element -->
-       <div class="spinner-container">
-        <div class="spinner"></div>
-      </div>
-    </div>
-</div>
-
-
-
-
   <Header />
   <slot />
 
@@ -118,7 +104,7 @@
 </template>
 
 <script setup lang="ts">
-import { nextTick, ref, onMounted } from 'vue';
+import { ref, onMounted } from 'vue';
 
 import { useRoute } from 'vue-router';
 import Cookies from 'js-cookie';
@@ -129,16 +115,6 @@ const isPopupVisible = ref(false);
 const consentGiven = ref(false);
 const necessary = ref(true);
 const performance = ref(false);
-const hideAfterPagePaint = async () => {
-  const loader = document.getElementById('Siteloader');
-  if (!loader) return;
-  await nextTick();
-  window.requestAnimationFrame(() => {
-    window.setTimeout(() => {
-      loader.classList.add('is-hidden');
-    }, 450);
-  });
-};
 
 // Show or close popup
 const showPopup = () => {
@@ -227,8 +203,6 @@ const redirectToPage = () => {
 };
 // Handle the popup visibility on page load
 onMounted(() => {
-  hideAfterPagePaint();
-
   const consent = Cookies.get('consentGiven');
   if (consent === 'true' || consent === 'false') {
     isPopupVisible.value = false;
@@ -239,6 +213,7 @@ onMounted(() => {
     window.dispatchEvent(event);
   }
 });
+
 </script>
 <style scoped>
 .dropdown {

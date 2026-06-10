@@ -1,6 +1,14 @@
 <!-- App.vue -->
 <template>
     <div :class="pageClass">
+      <div id="Siteloader" :class="{ 'is-hidden': !isLoaderVisible }" role="status" aria-label="Loading ARTIC website">
+        <div class="flex flex-column gap-5 text-center align-items-center justify-content-center">
+          <img class="img-fluid" src="/logow.svg" alt="ARTIC" />
+          <div class="spinner-container">
+            <div class="spinner"></div>
+          </div>
+        </div>
+      </div>
       <NuxtLoadingIndicator 
       :height="10"
       errorColor="repeating-linear-gradient(to right,#f87171 0%,#ef4444 100%)" 
@@ -14,16 +22,52 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue';
+import { computed, nextTick, onBeforeUnmount, ref } from 'vue';
 import { useRoute } from 'vue-router';
 const route = useRoute();
+const nuxtApp = useNuxtApp();
+const isLoaderVisible = ref(true);
+let loaderHideTimer: ReturnType<typeof window.setTimeout> | null = null;
 
 const pageClass = computed(() => {
   return route.path.startsWith('/supply-chain') ? 'supply-chain-page' : '';
 });
+
+const showLoader = () => {
+  if (loaderHideTimer) {
+    window.clearTimeout(loaderHideTimer);
+    loaderHideTimer = null;
+  }
+  isLoaderVisible.value = true;
+};
+
+const hideAfterPagePaint = async () => {
+  await nextTick();
+  window.requestAnimationFrame(() => {
+    window.requestAnimationFrame(() => {
+      loaderHideTimer = window.setTimeout(() => {
+        isLoaderVisible.value = false;
+        loaderHideTimer = null;
+      }, 150);
+    });
+  });
+};
+
+nuxtApp.hook('page:start', showLoader);
+nuxtApp.hook('page:finish', hideAfterPagePaint);
+nuxtApp.hook('app:suspense:resolve', hideAfterPagePaint);
+
+onBeforeUnmount(() => {
+  if (loaderHideTimer) window.clearTimeout(loaderHideTimer);
+});
 </script>
 
 <style>
+html,
+body {
+  background: #e09235;
+}
+
 #app {
   text-align: center;
   margin-top: 50px;

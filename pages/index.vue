@@ -764,48 +764,50 @@
       videoBtnTxt.value = '<span class="px-1"></span>||<span class="px-1"></span>';
     }
   }
-  try {
-    const { data: homepageData } = await useFetch<any>(
+  const [homepageResult, portfoliosResult, businessesResult, newsResult, partnersResult, legacyResult] = await Promise.allSettled([
+    useFetch<any>(
       `${apiBaseURL}/jsonapi/node/landing_page/c5bc3535-c8b8-446c-8a33-fefdb728061a?include=field_sections,field_sections.field_data_details,field_sections.field_map_markers_data,field_sections.field_map_markers_data.field_image.field_media_image,field_sections.field_big_image,field_sections.field_big_image.field_media_image,field_sections.field_small_image,field_sections.field_small_image.field_media_image,field_video_image_banner,field_video_image_banner.field_media_video_file,field_video_image_banner.field_media_image,field_sections.field_icon_text_main,field_sections.field_icon_text_main.field_icon.field_media_image,field_sections.field_startegic_approach_about`,
       { method: 'GET', headers: { Authorization: `Basic ${apiAuthKey}` } }
-    )
-    if (homepageData.value) homepage.value = homepageData.value
-  } catch (e) { console.error('Homepage fetch failed:', e) }
-  try {
-    const { data: portfoliosData } = await useFetch<any>(
+    ),
+    useFetch<any>(
       `${apiBaseURL}/jsonapi/node/portfolio?page[limit]=6&sort[sort-field-created][path]=created&sort[sort-field-created][direction]=DESC&include=field_property_image.field_media_image,field_tags`,
       { method: 'GET', headers: { Authorization: `Basic ${apiAuthKey}` } }
-    )
-    if (portfoliosData.value) portfolios.value = portfoliosData.value
-  } catch (e) { console.error('Portfolio fetch failed:', e) }
-  try {
-    const { data: businessesData } = await useFetch<any>(
+    ),
+    useFetch<any>(
       `${apiBaseURL}/jsonapi/taxonomy_term/our_core_businesses`,
       { method: 'GET', headers: { Authorization: `Basic ${apiAuthKey}` } }
-    )
-    if (businessesData.value) businesses.value = businessesData.value
-  } catch (e) { console.error('Businesses fetch failed:', e) }
-  try {
-    const { data: newsData } = await useFetch<any>(
+    ),
+    useFetch<any>(
       `${apiBaseURL}/jsonapi/node/news?page[limit]=3&sort[sort-field_published_date][path]=field_published_date&sort[sort-field_published_date][direction]=DESC&include=field_news_thumbnail.field_media_image`,
       { method: 'GET', headers: { Authorization: `Basic ${apiAuthKey}` } }
-    )
-    if (newsData.value) news.value = newsData.value
-  } catch (e) { console.error('News fetch failed:', e) }
-  try {
-    const { data: partnersData } = await useFetch<any>(
+    ),
+    useFetch<any>(
       `${apiBaseURL}/jsonapi/taxonomy_term/our_partners`,
       { method: 'GET', headers: { Authorization: `Basic ${apiAuthKey}` }, default: () => ({ data: [] }) }
-    )
-    if (partnersData.value) partners.value = partnersData.value
-  } catch (e) { console.error('Partners fetch failed:', e) }
-  try {
-    const { data: legacyData } = await useFetch<any>(
+    ),
+    useFetch<any>(
       `${apiBaseURL}/jsonapi/node/board_members?include=field_our_legacy_member_image.field_media_image`,
       { method: 'GET', headers: { Authorization: `Basic ${apiAuthKey}` } }
     )
-    if (legacyData.value) legacyy.value = legacyData.value
-  } catch (e) { console.error('Board members fetch failed:', e) }
+  ]);
+
+  if (homepageResult.status === 'fulfilled' && homepageResult.value.data.value) homepage.value = homepageResult.value.data.value;
+  else if (homepageResult.status === 'rejected') console.error('Homepage fetch failed:', homepageResult.reason);
+
+  if (portfoliosResult.status === 'fulfilled' && portfoliosResult.value.data.value) portfolios.value = portfoliosResult.value.data.value;
+  else if (portfoliosResult.status === 'rejected') console.error('Portfolio fetch failed:', portfoliosResult.reason);
+
+  if (businessesResult.status === 'fulfilled' && businessesResult.value.data.value) businesses.value = businessesResult.value.data.value;
+  else if (businessesResult.status === 'rejected') console.error('Businesses fetch failed:', businessesResult.reason);
+
+  if (newsResult.status === 'fulfilled' && newsResult.value.data.value) news.value = newsResult.value.data.value;
+  else if (newsResult.status === 'rejected') console.error('News fetch failed:', newsResult.reason);
+
+  if (partnersResult.status === 'fulfilled' && partnersResult.value.data.value) partners.value = partnersResult.value.data.value;
+  else if (partnersResult.status === 'rejected') console.error('Partners fetch failed:', partnersResult.reason);
+
+  if (legacyResult.status === 'fulfilled' && legacyResult.value.data.value) legacyy.value = legacyResult.value.data.value;
+  else if (legacyResult.status === 'rejected') console.error('Board members fetch failed:', legacyResult.reason);
 
 // Refs
 // const title = ref<HTMLElement | null>(null);

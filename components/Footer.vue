@@ -9,45 +9,44 @@ const route = useRoute()
 const apiBaseURL = config.public.API_BASE_URL
 const apiAuthKey = config.public.API_AUTH_KEY
 
-const { data: footerContact } = await useFetch<any>(
-  `${apiBaseURL}/jsonapi/block_content/footer_block`,
-  {
-    headers: {
-      Authorization: `Basic ${apiAuthKey}`
-    },
-    default: () => ({ data: [] })
-  }
-)
-
-const { data: social } = await useFetch<any>(
-  `${apiBaseURL}/system/menu/social-media/linkset`,
-  {
-    headers: {
-      Authorization: `Basic ${apiAuthKey}`
-    },
-    default: () => ({ linkset: [] })
-  }
-)
-
-const { data: privacy } = await useFetch<any>(
-  `${apiBaseURL}/system/menu/footer/linkset`,
-  {
-    headers: {
-      Authorization: `Basic ${apiAuthKey}`
-    },
-    default: () => ({ linkset: [] })
-  }
-)
-
-const { data: footerMenu } = await useFetch<any>(
-  `${apiBaseURL}/system/menu/footer-menu/linkset`,
-  {
-    headers: {
-      Authorization: `Basic ${apiAuthKey}`
-    },
-    default: () => ({ linkset: [] })
-  }
-)
+const [{ data: footerContact }, { data: social }, { data: privacy }, { data: footerMenu }] = await Promise.all([
+  useFetch<any>(
+    `${apiBaseURL}/jsonapi/block_content/footer_block`,
+    {
+      headers: {
+        Authorization: `Basic ${apiAuthKey}`
+      },
+      default: () => ({ data: [] })
+    }
+  ),
+  useFetch<any>(
+    `${apiBaseURL}/system/menu/social-media/linkset`,
+    {
+      headers: {
+        Authorization: `Basic ${apiAuthKey}`
+      },
+      default: () => ({ linkset: [] })
+    }
+  ),
+  useFetch<any>(
+    `${apiBaseURL}/system/menu/footer/linkset`,
+    {
+      headers: {
+        Authorization: `Basic ${apiAuthKey}`
+      },
+      default: () => ({ linkset: [] })
+    }
+  ),
+  useFetch<any>(
+    `${apiBaseURL}/system/menu/footer-menu/linkset`,
+    {
+      headers: {
+        Authorization: `Basic ${apiAuthKey}`
+      },
+      default: () => ({ linkset: [] })
+    }
+  )
+])
 
 // Fallback mock data when backend is unavailable
 if (!footerContact.value?.data?.length) {
