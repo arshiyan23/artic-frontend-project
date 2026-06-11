@@ -55,7 +55,6 @@ const hideAfterPagePaint = async () => {
 
 nuxtApp.hook('page:start', showLoader);
 nuxtApp.hook('page:finish', hideAfterPagePaint);
-nuxtApp.hook('app:suspense:resolve', hideAfterPagePaint);
 
 onBeforeUnmount(() => {
   if (loaderHideTimer) window.clearTimeout(loaderHideTimer);
@@ -63,11 +62,6 @@ onBeforeUnmount(() => {
 </script>
 
 <style>
-html,
-body {
-  background: #e09235;
-}
-
 #app {
   text-align: center;
   margin-top: 50px;
