@@ -1,14 +1,6 @@
 <!-- App.vue -->
 <template>
     <div :class="pageClass">
-      <div id="Siteloader" :class="{ 'is-hidden': !isLoaderVisible }" role="status" aria-label="Loading ARTIC website">
-        <div class="flex flex-column gap-5 text-center align-items-center justify-content-center">
-          <img class="img-fluid" src="/logow.svg" alt="ARTIC" />
-          <div class="spinner-container">
-            <div class="spinner"></div>
-          </div>
-        </div>
-      </div>
       <NuxtLoadingIndicator 
       :height="10"
       errorColor="repeating-linear-gradient(to right,#f87171 0%,#ef4444 100%)" 
@@ -22,12 +14,11 @@
 </template>
 
 <script setup lang="ts">
-import { computed, nextTick, onBeforeUnmount, ref } from 'vue';
+import { computed, nextTick } from 'vue';
 import { useRoute } from 'vue-router';
 const route = useRoute();
 const nuxtApp = useNuxtApp();
-const isLoaderVisible = ref(true);
-let loaderHideTimer: ReturnType<typeof window.setTimeout> | null = null;
+let loaderHideTimer: ReturnType<typeof setTimeout> | null = null;
 
 const pageClass = computed(() => {
   return route.path.startsWith('/supply-chain') ? 'supply-chain-page' : '';
@@ -35,18 +26,18 @@ const pageClass = computed(() => {
 
 const showLoader = () => {
   if (loaderHideTimer) {
-    window.clearTimeout(loaderHideTimer);
+    clearTimeout(loaderHideTimer);
     loaderHideTimer = null;
   }
-  isLoaderVisible.value = true;
+  document.documentElement.classList.add('artic-is-loading');
 };
 
 const hideAfterPagePaint = async () => {
   await nextTick();
   window.requestAnimationFrame(() => {
     window.requestAnimationFrame(() => {
-      loaderHideTimer = window.setTimeout(() => {
-        isLoaderVisible.value = false;
+      loaderHideTimer = setTimeout(() => {
+        document.documentElement.classList.remove('artic-is-loading');
         loaderHideTimer = null;
       }, 150);
     });
@@ -55,10 +46,6 @@ const hideAfterPagePaint = async () => {
 
 nuxtApp.hook('page:start', showLoader);
 nuxtApp.hook('page:finish', hideAfterPagePaint);
-
-onBeforeUnmount(() => {
-  if (loaderHideTimer) window.clearTimeout(loaderHideTimer);
-});
 </script>
 
 <style>
