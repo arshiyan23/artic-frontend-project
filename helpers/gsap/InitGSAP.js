@@ -14,7 +14,7 @@ export const InitSmoothness = (scrollZero = true) => {
                 smooth: 2,
                 effects: true,
                 autoRefresh: true,
-                normalizeScroll: true,
+                normalizeScroll: false,
                 ignoreMobileResize: true,
             });
             if(scrollZero){
@@ -37,6 +37,10 @@ export const pauseSmoother = () => {
     ScrollTrigger.getAll().forEach((trigger) => trigger.kill());
     console.log("Killing existing ScrollSmoother instance");
   }
+  document.documentElement.style.overflow = '';
+  document.body.style.overflow = '';
+  document.documentElement.style.height = '';
+  document.body.style.height = '';
 };
 
 export const resumeSmoother = () => {

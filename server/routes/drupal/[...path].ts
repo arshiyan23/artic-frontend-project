@@ -80,7 +80,7 @@ export default defineEventHandler(async (event) => {
 
   let targetUrl: string
   if (isDrupalFileAsset || isStyledDrupalFile) {
-    const upstreamBaseUrl = isStyledDrupalFile ? drupalBaseUrl : `${drupalSiteBaseUrl}/web`
+    const upstreamBaseUrl = drupalBaseUrl
     targetUrl = `${upstreamBaseUrl}${targetPath}${requestUrl.search}`
   } else {
     const qPath = targetPath.startsWith('/') ? targetPath.slice(1) : targetPath

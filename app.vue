@@ -14,38 +14,17 @@
 </template>
 
 <script setup lang="ts">
-import { computed, nextTick } from 'vue';
+import { computed, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
 const route = useRoute();
-const nuxtApp = useNuxtApp();
-let loaderHideTimer: ReturnType<typeof setTimeout> | null = null;
 
 const pageClass = computed(() => {
   return route.path.startsWith('/supply-chain') ? 'supply-chain-page' : '';
 });
 
-const showLoader = () => {
-  if (loaderHideTimer) {
-    clearTimeout(loaderHideTimer);
-    loaderHideTimer = null;
-  }
-  document.documentElement.classList.add('artic-is-loading');
-};
-
-const hideAfterPagePaint = async () => {
-  await nextTick();
-  window.requestAnimationFrame(() => {
-    window.requestAnimationFrame(() => {
-      loaderHideTimer = setTimeout(() => {
-        document.documentElement.classList.remove('artic-is-loading');
-        loaderHideTimer = null;
-      }, 150);
-    });
-  });
-};
-
-nuxtApp.hook('page:start', showLoader);
-nuxtApp.hook('page:finish', hideAfterPagePaint);
+onMounted(() => {
+  document.documentElement.classList.remove('artic-is-loading');
+});
 </script>
 
 <style>
