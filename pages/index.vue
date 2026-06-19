@@ -868,9 +868,24 @@
   
 // };
 
+function withDrupalIndexPrefix(url?: string) {
+  if (!url) return url;
+
+  try {
+    const parsed = new URL(url);
+    if (parsed.pathname.startsWith('/sites/default/files/styles/')) {
+      parsed.pathname = `/index.php${parsed.pathname}`;
+    }
+    return parsed.toString();
+  } catch {
+    return url;
+  }
+}
+
 function getPfolioImgUrl(item: any) {
-  return item?.field_property_image?.field_media_image?.image_style_uri?.portfolio_listing
+  const imageUrl = item?.field_property_image?.field_media_image?.image_style_uri?.portfolio_listing
     || fileCache.value[item?.field_property_image?.field_media_image?.id]?.portfolio_listing;
+  return withDrupalIndexPrefix(imageUrl);
 }
 
 const moveNext = () => {
