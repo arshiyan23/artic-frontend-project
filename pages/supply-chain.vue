@@ -303,25 +303,18 @@
   supplyChainContact.value = contact.value || { data: { field_sections: [] } };
 
 
-  const getImageUrl = (uri?: string) => {
-    return uri ? (uri) : placeholderImage;
+  const getImageUrl = (uri) => {
+    if (!uri) return placeholderImage;
+    const url = uri.startsWith('http') ? uri : imgBaseURL + uri;
+    return withDrupalIndexPrefix(url);
   };
-  const formatDate = (dateString?: string) => {
-    const options: Intl.DateTimeFormatOptions = { day: '2-digit', month: 'short', year: 'numeric' };
+  const formatDate = (dateString) => {
+    const options = { day: '2-digit', month: 'short', year: 'numeric' };
     return dateString ? new Date(dateString).toLocaleDateString('en-US', options) : '';
   };
-  const getPDFDownloadLink = (downloadItem: any) => {
+  const getPDFDownloadLink = (downloadItem) => {
     return downloadItem?.field_media_document?.uri?.url ? imgBaseURL + downloadItem.field_media_document.uri.url : '';
   };
-
-  // Watch for popup visibility changes
-  watch(isPopupVisible, (newValue: boolean) => {
-    if (newValue) {
-      document.body.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = '';
-    }
-  });
 </script>
 <style scoped>
 .mapouter {

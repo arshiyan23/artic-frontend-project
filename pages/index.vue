@@ -868,7 +868,7 @@
   
 // };
 
-function withDrupalIndexPrefix(url?: string) {
+function withDrupalIndexPrefix(url) {
   if (!url) return url;
 
   try {
@@ -882,7 +882,7 @@ function withDrupalIndexPrefix(url?: string) {
   }
 }
 
-function getPfolioImgUrl(item: any) {
+function getPfolioImgUrl(item) {
   const imageUrl = item?.field_property_image?.field_media_image?.image_style_uri?.portfolio_listing
     || fileCache.value[item?.field_property_image?.field_media_image?.id]?.portfolio_listing;
   return withDrupalIndexPrefix(imageUrl);

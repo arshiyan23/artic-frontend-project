@@ -453,9 +453,11 @@
 
   // Helping Functions
   // Function to format the date
-  const getImageUrl = (uri) => {
-    return uri ? (uri) : placeholderImage;
-  }
+    const getImageUrl = (uri) => {
+      if (!uri) return '';
+      const url = uri.startsWith('http') ? uri : imgBaseURL + uri;
+      return withDrupalIndexPrefix(url);
+    }
   const formatDate = (dateString) => {
     const options = { day: '2-digit', month: 'short', year: 'numeric' };
     return dateString ? new Date(dateString).toLocaleDateString('en-US', options) : '';

@@ -227,10 +227,22 @@
 
 
     // Helping Functions
-    // Function to format the date
+    function withDrupalIndexPrefix(url) {
+      if (!url) return url;
+      try {
+        const parsed = new URL(url);
+        if (parsed.pathname.startsWith('/sites/default/files/styles/')) {
+          parsed.pathname = `/index.php${parsed.pathname}`;
+        }
+        return parsed.toString();
+      } catch {
+        return url;
+      }
+    }
     const getImageUrl = (uri) => {
       if (!uri) return '';
-      return uri.startsWith('http') ? uri : imgBaseURL + uri;
+      const url = uri.startsWith('http') ? uri : imgBaseURL + uri;
+      return withDrupalIndexPrefix(url);
     }
     const getVideoUrl = (videoData) =>{
       const url = videoData?.field_media_video_file?.uri?.url;

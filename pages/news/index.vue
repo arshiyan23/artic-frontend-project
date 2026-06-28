@@ -353,7 +353,9 @@
         return index % 2 === 0;
     }
     const getImageUrl = (uri) => {
-        return uri ?? placeholderImage;
+      if (!uri) return '';
+      const url = uri.startsWith('http') ? uri : imgBaseURL + uri;
+      return withDrupalIndexPrefix(url);
     }
     const getVideoUrl = (videoData) => {
         return imgBaseURL + videoData.field_media_video_file.uri.url || '';
