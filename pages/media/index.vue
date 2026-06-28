@@ -54,7 +54,7 @@
                                                             :alt="image.field_media_image?.meta?.alt || 'Slide Image'"> -->
 
                                                             <NuxtImg
-                                                                :src="image.field_media_image?.image_style_uri?.media_news_1"
+                                                                :src="imgSrc(image.field_media_image?.image_style_uri?.media_news_1)"
                                                                 class="d-block w-100"
                                                                 :alt="image.field_media_image?.meta?.alt || 'Slide Image'"
                                                                 :width="1000" :height="500" :placeholder="[50, 25]" />
@@ -158,11 +158,11 @@
                                                         :key="index"
                                                         :class="{ 'carousel-item gsap_video_paperAnimation gsapPaperSlideEffect': true, 'active': index === 0 }">
                                                         <img @click="navigateTo('/news')"
-                                                            :src="image.field_media_image?.image_style_uri?.media_news_2"
+                                                            :src="imgSrc(image.field_media_image?.image_style_uri?.media_news_2)"
                                                             class="d-block w-100"
                                                             :alt="image.field_media_image?.meta?.alt || 'Slide Image'">
                                                         <!-- <NuxtImg 
-                                                        :src="image.field_media_image?.image_style_uri?.media_news_2" 
+                                                        :src="imgSrc(image.field_media_image?.image_style_uri?.media_news_2)" 
                                                         class="d-block w-100" 
                                                         :alt="image.field_media_image?.meta?.alt || 'Slide Image'"
                                                         :width="1000"  
@@ -238,7 +238,7 @@
                                                         :alt="image.field_media_image?.meta?.alt || 'Slide Item'"> -->
 
                                                         <NuxtImg
-                                                            :src="image.field_media_image?.image_style_uri?.media_news_2"
+                                                            :src="imgSrc(image.field_media_image?.image_style_uri?.media_news_2)"
                                                             class="d-block w-100" loading="lazy"
                                                             :alt="image.field_media_image?.meta?.alt || 'Slide Item'" />
 
@@ -394,7 +394,7 @@
                                             <div class="mediaVideo-listing mediaVideo-listing-lg ">
                                                 <div
                                                     class="mediaVideo-container gsap_video_paperAnimation gsapPaperSlideEffect">
-                                                    <img :src="videoGallery?.data?.field_sections?.[0]?.field_video_section?.[0]?.field_video_thumbnail?.field_media_image?.image_style_uri?.media_video_1"
+                                                    <img :src="imgSrc(videoGallery?.data?.field_sections?.[0]?.field_video_section?.[0]?.field_video_thumbnail?.field_media_image?.image_style_uri?.media_video_1)"
                                                         alt="Video Poster" class="mediaVideo-poster">
                                                     <button tabindex="0" class="mediaVideo-playbutton"
                                                         @click="openVideo(getVideoUrl(videoGallery?.data?.field_sections?.[0]?.field_video_section?.[0]?.field_video), 0)"
@@ -421,7 +421,7 @@
                                             <div class="mediaVideo-listing mediaVideo-listing-sm mb-md-5 mb-3 w-100 ">
                                                 <div
                                                     class="mediaVideo-container-full gsap_video_paperAnimation gsapPaperSlideEffect">
-                                                    <img :src="videoGallery?.data?.field_sections?.[0]?.field_video_section?.[1]?.field_video_thumbnail?.field_media_image?.image_style_uri?.media_news_2"
+                                                    <img :src="imgSrc(videoGallery?.data?.field_sections?.[0]?.field_video_section?.[1]?.field_video_thumbnail?.field_media_image?.image_style_uri?.media_news_2)"
                                                         alt="Video Poster 2" class="mediaVideo-poster">
                                                     <button tabindex="0"
                                                         class="mediaVideo-playbutton mediaVideo-playbutton-sm"
@@ -447,7 +447,7 @@
                                             <div class="mediaVideo-listing mediaVideo-listing-sm mb-md-5 mb-3 w-100">
                                                 <div
                                                     class="mediaVideo-container-full gsap_video_paperAnimation gsapPaperSlideEffect">
-                                                    <img :src="videoGallery?.data?.field_sections?.[0]?.field_video_section?.[2]?.field_video_thumbnail?.field_media_image?.image_style_uri?.media_news_1"
+                                                    <img :src="imgSrc(videoGallery?.data?.field_sections?.[0]?.field_video_section?.[2]?.field_video_thumbnail?.field_media_image?.image_style_uri?.media_news_1)"
                                                         alt="Video Poster 3" class="mediaVideo-poster">
                                                     <button aria-label="Play video" tabindex="0"
                                                         class="mediaVideo-playbutton mediaVideo-playbutton-sm"
@@ -690,6 +690,21 @@
     import { initPortfolioImageAnimation, initSlidingAnimation } from '~/helpers/gsap/InitSlidingImage';
     import { initHeightAnimation, initWidthAnimation } from '~/helpers/gsap/LineAnimations';
 
+    function withDrupalIndexPrefix(url?: string) {
+      if (!url) return url;
+      try {
+        const parsed = new URL(url);
+        if (parsed.pathname.startsWith('/sites/default/files/styles/')) {
+          parsed.pathname = `/index.php${parsed.pathname}`;
+        }
+        return parsed.toString();
+      } catch {
+        return url;
+      }
+    }
+    function imgSrc(url?: string) {
+      return withDrupalIndexPrefix(url);
+    }
     let isLoading = false;
     const config = useRuntimeConfig();
     const imgBaseURL = config.public.IMG_BASE_URL;
