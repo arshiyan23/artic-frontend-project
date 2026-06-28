@@ -690,7 +690,7 @@
     import { initPortfolioImageAnimation, initSlidingAnimation } from '~/helpers/gsap/InitSlidingImage';
     import { initHeightAnimation, initWidthAnimation } from '~/helpers/gsap/LineAnimations';
 
-    function withDrupalIndexPrefix(url?: string) {
+    function withDrupalIndexPrefix(url) {
       if (!url) return url;
       try {
         const parsed = new URL(url);
@@ -702,7 +702,7 @@
         return url;
       }
     }
-    function imgSrc(url?: string) {
+    function imgSrc(url) {
       return withDrupalIndexPrefix(url);
     }
     let isLoading = false;
