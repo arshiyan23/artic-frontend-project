@@ -279,7 +279,7 @@
                               <NuxtImg width="420" height="460" sizes="(max-width: 460px) 100vw, 460px" 
                                 aria-label="Thumbnail"
                                 :quality="75"
-                                :src="member.field_about_us_image?.field_media_image?.image_style_uri?.board_members_section"
+                                 :src="withDrupalIndexPrefix(member.field_about_us_image?.field_media_image?.image_style_uri?.board_members_section)"
                                 :alt="member.field_our_legacy_member_image?.field_media_image?.meta?.alt || 'image'"
                                 class="img-fluid w-100" />
                             </div>
@@ -327,7 +327,7 @@
                             <div class="member-img position-relative" tabindex="0"
                               :aria-label="executive?.field_executive_member_image?.field_media_image?.meta?.alt">
                               <NuxtImg width="420" height="460" sizes="(max-width: 420px) 100vw, 420px" :quality="75"
-                                :src="executive?.field_executive_member_image?.field_media_image?.image_style_uri?.board_members_section"
+                                :src="withDrupalIndexPrefix(executive?.field_executive_member_image?.field_media_image?.image_style_uri?.board_members_section)"
                                 :alt="executive?.field_executive_member_image?.field_media_image?.meta?.alt || 'Executive Member Image'"
                                 class="img-fluid w-100" />
                             </div>
@@ -363,7 +363,7 @@
             <div class="col-xxl-5 col-xl-5 col-lg-5 col-md-6 col-sm-12 img-popup" tabindex="0"
               :aria-label="memberPopupData?.field_about_us_image?.field_media_image?.meta?.alt">
               <NuxtImg class="cursor-pointer h-100" sizes="(max-width: 469px) 100vw, 460px" :quality="75"
-                :src="memberPopupData?.field_about_us_image?.field_media_image?.image_style_uri?.board_members_section"
+                :src="withDrupalIndexPrefix(memberPopupData?.field_about_us_image?.field_media_image?.image_style_uri?.board_members_section)"
                 width="469" height="638"
                 :alt="memberPopupData?.field_about_us_image?.field_media_image?.meta?.alt || 'Board Member Image'" />
             </div>
@@ -409,7 +409,7 @@
             <div class="col-xxl-5 col-xl-5 col-lg-5 col-md-6 col-sm-12 img-popup" tabindex="0"
               :aria-label="memberPopupData?.field_executive_member_image?.field_media_image?.meta?.alt">
               <NuxtImg class="cursor-pointer h-100" sizes="(max-width: 469px) 100vw, 469px" :quality="75"
-                :src="executivePopupData?.field_executive_member_image?.field_media_image?.image_style_uri?.board_members_section"
+                :src="withDrupalIndexPrefix(executivePopupData?.field_executive_member_image?.field_media_image?.image_style_uri?.board_members_section)"
                 width="469" height="638"
                 :alt="memberPopupData?.field_executive_member_image?.field_media_image?.meta?.alt || 'Executive Member Image'" />
             </div>

@@ -46,7 +46,7 @@
               <div class="d-flex align-items-center">
                 <div class="gsapPaperSlideEffect d-flex flex-column align-items-center position-relative w-100"
                   tabindex="0" :aria-label="pfolioDetail?.data?.[0]?.field_hero_banner?.field_media_image?.meta?.alt">
-                  <img :src="pfolioDetail?.data?.[0]?.field_hero_banner?.field_media_image?.image_style_uri?.portfolio_banner"
+                  <img :src="withDrupalIndexPrefix(pfolioDetail?.data?.[0]?.field_hero_banner?.field_media_image?.image_style_uri?.portfolio_banner)"
                     class="img-fluid " :alt="pfolioDetail?.data?.[0]?.field_hero_banner?.field_media_image?.meta?.alt">
                 </div>
               </div>
@@ -129,7 +129,7 @@
                                   </div>
                                 </div>
                                 <!-- <img
-                                  :src="pfolioDetail?.data?.[0]?.field_map_image?.field_media_image?.image_style_uri?.portfolio_map_image"
+                                  :src="withDrupalIndexPrefix(pfolioDetail?.data?.[0]?.field_map_image?.field_media_image?.image_style_uri?.portfolio_map_image)"
                                   class="img-fluid" alt="Map Image"> -->
                               </div>
                               <div class="">
@@ -190,7 +190,7 @@
                         :aria-label="pfolioDetail?.data?.[0]?.field_property_gallery?.[0]?.field_media_image?.meta?.alt"
                         role="img">
                         <img
-                          :src="pfolioDetail?.data?.[0]?.field_property_gallery?.[0]?.field_media_image?.image_style_uri?.portfolio_top_image"
+                          :src="withDrupalIndexPrefix(pfolioDetail?.data?.[0]?.field_property_gallery?.[0]?.field_media_image?.image_style_uri?.portfolio_top_image)"
                           class="--img-fluid"
                           :alt="pfolioDetail?.data?.[0]?.field_property_gallery?.[0]?.field_media_image?.meta?.alt || 'Image'">
                       </div>
@@ -203,7 +203,7 @@
                       <div class="post-img pb-0 gsapPaperImgEffect gsapFeatureIMG2" tabindex="0"
                         :aria-label="pfolioDetail?.data?.[0]?.field_property_gallery?.[1]?.field_media_image?.meta?.alt">
                         <img
-                          :src="pfolioDetail?.data?.[0]?.field_property_gallery?.[1]?.field_media_image?.image_style_uri?.portfolio_left_image"
+                          :src="withDrupalIndexPrefix(pfolioDetail?.data?.[0]?.field_property_gallery?.[1]?.field_media_image?.image_style_uri?.portfolio_left_image)"
                           class="img-fluid"
                           :alt="pfolioDetail?.data?.[0]?.field_property_gallery?.[1]?.field_media_image?.meta?.alt || 'Image'">
                       </div>
@@ -249,7 +249,7 @@
                       <div class="post-img gsapPaperImgEffect gsapFeatureIMG3" tabindex="0"
                         :aria-label="pfolioDetail?.data?.[0]?.field_property_gallery?.[2]?.field_media_image?.meta?.alt">
                         <img
-                          :src="pfolioDetail?.data?.[0]?.field_property_gallery?.[2]?.field_media_image?.image_style_uri?.portfolio_right_image"
+                          :src="withDrupalIndexPrefix(pfolioDetail?.data?.[0]?.field_property_gallery?.[2]?.field_media_image?.image_style_uri?.portfolio_right_image)"
                           class="--img-fluid"
                           :aria-label="pfolioDetail?.data?.[0]?.field_property_gallery?.[2]?.field_media_image?.meta?.alt"
                           :alt="pfolioDetail?.data?.[0]?.field_property_gallery?.[2]?.field_media_image?.meta?.alt || 'Image'">
@@ -383,7 +383,7 @@
                         :aria-label="pfolioDetail?.data?.[0]?.field_next_project?.field_property_image?.field_media_image?.meta?.alt"
                         role="img">
                         <img
-                          :src="pfolioDetail?.data?.[0]?.field_next_project?.field_property_image?.field_media_image?.image_style_uri?.portfolio_next_image"
+                          :src="withDrupalIndexPrefix(pfolioDetail?.data?.[0]?.field_next_project?.field_property_image?.field_media_image?.image_style_uri?.portfolio_next_image)"
                           class="img-fluid w-100"
                           :aria-label="pfolioDetail?.data?.[0]?.field_next_project?.field_property_image?.field_media_image?.meta?.alt"
                           :alt="pfolioDetail?.data?.[0]?.field_next_project?.field_property_image?.field_media_image?.meta?.alt || 'Image'">

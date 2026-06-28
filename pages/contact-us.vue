@@ -207,7 +207,7 @@
                       <div class="post-box">
                         <div class="post-img map-sec" tabindex="0"
                           :aria-label="contact?.data?.field_sections?.[1]?.field_image?.field_media_image?.meta?.alt || ''"><img
-                            :src="contact?.data?.field_sections?.[1]?.field_image?.field_media_image?.image_style_uri?.procurement_supply_chain"
+                            :src="withDrupalIndexPrefix(contact?.data?.field_sections?.[1]?.field_image?.field_media_image?.image_style_uri?.procurement_supply_chain)"
                             class="img-fluid w-100"
                             :alt="contact?.data?.field_sections?.[1]?.field_image?.field_media_image?.meta?.alt || ''"></div>
                         <div class="aos-init aos-animate " data-aos="fade-up" data-aos-delay="400">
@@ -250,7 +250,7 @@
                           :aria-label="contact?.data?.field_sections?.[1]?.field_image?.field_media_image?.meta?.alt"
                           role="img">
                           <img
-                            :src="contact?.data?.field_sections?.[1]?.field_image?.field_media_image?.image_style_uri?.procurement_supply_chain"
+                            :src="withDrupalIndexPrefix(contact?.data?.field_sections?.[1]?.field_image?.field_media_image?.image_style_uri?.procurement_supply_chain)"
                             class="img-fluid w-100"
                             :alt="contact?.data?.field_sections?.[1]?.field_image?.field_media_image?.meta?.alt">
                         </div>

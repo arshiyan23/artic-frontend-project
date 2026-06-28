@@ -26,7 +26,7 @@
                 <!-- Cover -->
                  <div class="gsap_leadershipmessage_paperAnimation w-100">
                    <div class="leadershipmessage-thumb bg-gray p-5" tabindex="0" role="banner" aria-label="Sustainability Banner"
-                   :style="{ backgroundImage: 'url(' + sustainability?.data?.field_sections?.[0]?.field_image?.field_media_image?.image_style_uri?.sustainability_banner + ')' }">
+                   :style="{ backgroundImage: 'url(' + withDrupalIndexPrefix(sustainability?.data?.field_sections?.[0]?.field_image?.field_media_image?.image_style_uri?.sustainability_banner) + ')' }">
                   </div>
                 </div>
 

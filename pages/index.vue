@@ -23,7 +23,7 @@
               <!-- Banner -->
               <div v-if="homepage?.data?.field_video_image_banner?.field_media_image?.image_style_uri" class="header_parallax__container">
                 <div class="header_parallax__item"
-                  :style="{ backgroundImage: `url(${homepage?.data?.field_video_image_banner?.field_media_image?.image_style_uri?.portfolio_banner})` }"
+                  :style="{ backgroundImage: `url(${withDrupalIndexPrefix(homepage?.data?.field_video_image_banner?.field_media_image?.image_style_uri?.portfolio_banner)})` }"
                   role="img"
                   aria-label="A portfolio banner showing [briefly describe the objects and text in the image]">
                 </div>
@@ -107,7 +107,7 @@
                           <div class="post-img pb-1 gsapLatestNewsThumb" tabindex="0" role="img"
                             :aria-label="(newss.field_news_thumbnail?.field_media_image?.meta?.alt || '') + index">
                             <NuxtImg width="100%" height="100%" loading="lazy"
-                              :src="newss.field_news_thumbnail?.field_media_image?.image_style_uri?.home_news"
+                              :src="withDrupalIndexPrefix(newss.field_news_thumbnail?.field_media_image?.image_style_uri?.home_news)"
                               class="img-fluid  "
                               :alt="(newss.field_news_thumbnail?.field_media_image?.meta?.alt || '') + index" />
                           </div>
@@ -388,7 +388,7 @@
                           <div class="post-img d-lg-none pb-3">
                             <NuxtImg role="img" tabindex="0" width="100%" height="100%" sizes="(max-width: 645px) 100vw, 761px" :quality="75" loading="lazy"
                               aria-label="chairmain"
-                              :src="legacyy?.data?.[0]?.field_our_legacy_member_image?.field_media_image?.image_style_uri?.home_our_legacy"
+                              :src="withDrupalIndexPrefix(legacyy?.data?.[0]?.field_our_legacy_member_image?.field_media_image?.image_style_uri?.home_our_legacy)"
                               class="img-fluid h-md-100"
                               :alt="legacyy?.data?.[0]?.field_our_legacy_member_image?.field_media_image?.meta?.alt" />
                           </div>
@@ -450,7 +450,7 @@
                       <div class="post-box h-100 ps-lg-5">
                         <div class="post-img  Chairman-IMG  gsapChairManImg gsapPaperAnimationwrap">
                           <NuxtImg role="img" tabindex="0" width="100%" height="100%" loading="lazy"
-                            :src="legacyy?.data?.[0]?.field_our_legacy_member_image?.field_media_image?.image_style_uri?.home_our_legacy"
+                            :src="withDrupalIndexPrefix(legacyy?.data?.[0]?.field_our_legacy_member_image?.field_media_image?.image_style_uri?.home_our_legacy)"
                             :alt="legacyy?.data?.[0]?.field_our_legacy_member_image?.field_media_image?.meta?.alt" />
                         </div>
                       </div>
@@ -486,7 +486,7 @@
                           <div class="post-img pb-4 pb-lg-5 gsapPaperSlideEffect vice-chairman-IMG">
                             <NuxtImg role="img" tabindex="0" width="100%" height="100%" loading="lazy"
                               aria-label="Vice Chairman Image"
-                              :src="legacyy?.data?.[1]?.field_our_legacy_member_image?.field_media_image?.image_style_uri?.home_our_leadership || ''"
+                              :src="withDrupalIndexPrefix(legacyy?.data?.[1]?.field_our_legacy_member_image?.field_media_image?.image_style_uri?.home_our_leadership) || ''"
                               class="img-fluid"
                               :alt="legacyy?.data?.[1]?.field_our_legacy_member_image?.field_media_image?.meta?.alt" />
                           </div>
@@ -509,7 +509,7 @@
                         <div class="post-box">
                           <div class="post-img pb-4 pb-lg-5  gsapPaperSlideEffect ceo-IMG">
                             <NuxtImg role="img" tabindex="0" loading="lazy" class="img-fluid"
-                              :src="legacyy?.data?.[2]?.field_our_legacy_member_image?.field_media_image?.image_style_uri?.home_our_leadership || ''"
+                              :src="withDrupalIndexPrefix(legacyy?.data?.[2]?.field_our_legacy_member_image?.field_media_image?.image_style_uri?.home_our_leadership) || ''"
                               :aria-label="'Managing Director & CEO Image'"
                               :alt="legacyy?.data?.[2]?.field_our_legacy_member_image?.field_media_image?.meta?.alt" />
                           </div>
@@ -569,7 +569,7 @@
                     <div class="post-box d-flex flex-column align-items-stretch justify-between">
                       <div class="post-img pb-5 mb-md-5 closerLookImg1 gsapPaperAnimationwrap ">
                         <NuxtImg role="img" tabindex="0" width="100%" height="100%" loading="lazy"
-                          :src="homepage?.data?.field_sections?.[3]?.field_small_image?.field_media_image?.image_style_uri?.a_closer_look_1"
+                          :src="withDrupalIndexPrefix(homepage?.data?.field_sections?.[3]?.field_small_image?.field_media_image?.image_style_uri?.a_closer_look_1)"
                           class="img-fluid "
                           :alt="homepage?.data?.field_sections?.[3]?.field_small_image?.field_media_image?.meta?.alt" />
                       </div>
@@ -596,7 +596,7 @@
                     <div class="post-box">
                       <div class="post-img   closerLookImg2 gsapPaperAnimationwrap">
                         <NuxtImg role="img" tabindex="0" width="100%" height="100%" loading="lazy"
-                          :src="homepage?.data?.field_sections?.[3]?.field_big_image?.field_media_image?.image_style_uri?.a_closer_look_2"
+                          :src="withDrupalIndexPrefix(homepage?.data?.field_sections?.[3]?.field_big_image?.field_media_image?.image_style_uri?.a_closer_look_2)"
                           :alt="homepage?.data?.field_sections?.[3]?.field_big_image?.field_media_image?.meta?.alt"
                           class="img-fluid tile-img" />
                       </div>
@@ -622,7 +622,7 @@
           <div class="row">
             <div class="col-xxl-5 col-xl-5 col-lg-5 col-md-6 col-sm-12 img-popup">
               <NuxtImg role="img" tabindex="0" class="cursor-pointer h-100"
-                :src="legacyPopupData?.field_our_legacy_member_image?.field_media_image?.image_style_uri?.home_our_legacy"
+                :src="withDrupalIndexPrefix(legacyPopupData?.field_our_legacy_member_image?.field_media_image?.image_style_uri?.home_our_legacy)"
                 width="469" height="638" rel="preload" 
                 :alt="legacyPopupData?.field_our_legacy_member_image?.field_media_image?.meta?.alt" />
             </div>
@@ -922,7 +922,7 @@ const moveNext = () => {
       lat: currentMarker.field_latitude,
       long: currentMarker.field_longitude,
       image_alt: currentMarker.field_image?.field_media_image?.meta?.alt || "",
-      image_url: currentMarker.field_image?.field_media_image?.image_style_uri?.map_image || "",
+      image_url: withDrupalIndexPrefix(currentMarker.field_image?.field_media_image?.image_style_uri?.map_image) || "",
       website: currentMarker.field_website_link || "",
     };
   }
@@ -962,11 +962,13 @@ const movePrev = () => {
       lat: currentMarker.field_latitude,
       long: currentMarker.field_longitude,
       image_alt: currentMarker.field_image?.field_media_image?.meta?.alt || "",
-      image_url: currentMarker.field_image?.field_media_image?.image_style_uri?.map_image || "",
+      image_url: withDrupalIndexPrefix(currentMarker.field_image?.field_media_image?.image_style_uri?.map_image) || "",
       website: currentMarker.field_website_link || "",
     };
   }
 };
+
+
 
 // console.log('error:', error.value)
 const secondLeader = computed(() => {
